@@ -19,9 +19,9 @@
 ## Description
 
 
-<div align="justify"> GEDSpy is python library for biological data analysis uses. It is helpful for RNAseq, single-cell RNAseq, proteomic and other OMIC high-throughput biological analysis where are obtained lots of differential expressed genes or proteins. </div>
+<div align="justify"> GEDSpy is the python library for biological data analysis uses. It is helpful for RNAseq, single-cell RNAseq, proteomics, and other OMIC high-throughput biological analysis where are obtained lots of differentials expressed genes or proteins. </div>
 
-<div align="justify"> GEDSpy is based on Gene Ontology [GO], PANTHER, KEGG and reactoma information. For potential drug searching were used ZINC platform. </div>
+<div align="justify"> GEDSpy is based on Gene Ontology [GO], PANTHER, KEGG and Reactome information. For potential drugs searching was used ZINC platform. </div>
 
 Used data bases:
 * Gene Ontology [http://geneontology.org/]
