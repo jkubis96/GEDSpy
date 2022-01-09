@@ -34,4 +34,6 @@
 <div align="justify"> </div>
 
 
+<html>
 https://github.com/jkubis96/GEDSpy/blob/main/fig/gene_relatione.html
+</html>
