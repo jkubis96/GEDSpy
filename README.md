@@ -69,7 +69,7 @@ import gedspy
 ```
 res1 = fun.gopa_enrichment(gene_list)
 ```
-Out: Data frame with gene ontology and pathways information
+##### Out: Data frame with gene ontology and pathways information
 
 #### 3. Statistic for gene infomration
 
