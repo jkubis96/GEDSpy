@@ -22,6 +22,17 @@
 
 <br />
 
+## Installation
+
+In command line write:
+
+```
+
+pip install gedspy
+
+```
+
+
 <p align="center">
 <img  src="https://github.com/jkubis96/GEDSpy/blob/main/fig/pathways_pathway.png?raw=true" alt="drawing" width="600" />
 </p>
