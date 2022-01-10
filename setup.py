@@ -6,13 +6,13 @@ LONG_DESCRIPTION = 'GEDSpy is the python library for gene list enrichment with g
 
 # Setting up
 setup(
-        name="GEDSpy", 
+        name="src", 
         version=VERSION,
         author="Jakub Kubis",
         author_email="jbiosystem@gmail.com",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
-        packages=find_packages('src'),
+        packages=find_packages(),
         install_requires=['requests', 'bioservices', 'pandas', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'networkx', 'pyvis'],       
         keywords=['python', 'GO', 'pathways', 'drug', 'gene ontology'],
         license = 'MIT',
