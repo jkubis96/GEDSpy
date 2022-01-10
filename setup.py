@@ -13,9 +13,7 @@ setup(
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
-        install_requires=['requests', 'ast', 'json', 'bioservices', 'pandas', 'datatime', 
-        'collections', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'nrtworkx', 'pyvis'], 
-        
+        install_requires=['requests', 'json', 'bioservices', 'pandas', 'collections', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'networkx', 'pyvis'],       
         keywords=['python', 'GO', 'pathways', 'drug', 'gene ontology'],
         license = 'MIT',
         classifiers = [
