@@ -1,2 +1,2 @@
-import GEDSpy.GOPa.GOPa
-import GEDSpy.zinc.zinc
+from GEDSpy.zinc import zinc
+from GEDSpy.GOPa import GOPa
