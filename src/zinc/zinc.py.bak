@@ -7,7 +7,8 @@ def zinc_drug(genes_list, zinc_type:str = 'all'):
     from tqdm import tqdm
     import numpy as np
     
- 
+    if not os.path.exists('results'):
+        os.mkdir('results')
     
     genes_list = list(np.unique(genes_list))
     df_zinc = pd.DataFrame(columns = ['ortholog_name', 'zinc_id', 'gene_name', 'affinity','chembldocid', 'type'])
