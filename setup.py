@@ -6,7 +6,7 @@ LONG_DESCRIPTION = 'GEDSpy is the python library for gene list enrichment with g
 
 # Setting up
 setup(
-        name="src", 
+        name="GEDSpy", 
         version=VERSION,
         author="Jakub Kubis",
         author_email="jbiosystem@gmail.com",
