@@ -7,6 +7,8 @@ def zinc_drug(genes_list, zinc_type:str = 'all'):
     from tqdm import tqdm
     import numpy as np
     
+    genes_list = genes_list.upper()
+    
     if not os.path.exists('results'):
         os.mkdir('results')
     

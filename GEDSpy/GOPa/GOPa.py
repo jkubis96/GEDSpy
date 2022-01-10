@@ -6,6 +6,7 @@ def gopa_enrichment(genes_list):
     import collections
     from tqdm import tqdm
 
+    genes_list = genes_list.upper()
     
     name_dict = {
          "GO:0008150":"biological_process",
