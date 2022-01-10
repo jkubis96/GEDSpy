@@ -74,7 +74,7 @@ res1 = GEDSpy.GOPa.gopa_enrichment(gene_list)
 #### 3. Statistic for gene infomration
 
 ```
-res2 = GEDSpy.GOPa.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results/pathways_pathway.png')
+res2 = GEDSpy.GOPa.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results')
 ```
 * p_val - lower threshold for significant p-value. Default: 0.05 
 * adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: None

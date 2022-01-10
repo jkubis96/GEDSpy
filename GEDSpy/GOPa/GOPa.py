@@ -16,7 +16,7 @@ from pyvis.network import Network
 
 
 
-def gopa_enrichment(genes_list): 
+def gopa_enrichment(genes_list:list): 
 
     genes_list = [gen.upper() for gen in genes_list ]
     
@@ -156,7 +156,7 @@ def gopa_enrichment(genes_list):
     return df3
 
 
-def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
+def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', path:str = 'results'):
     
     adj = adj.upper()
     
@@ -205,7 +205,7 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
             plt.xlabel('Percent of enrichment [%]')
             plt.ylabel(' ')
             plt.title(typ.capitalize())
-            plt.savefig('results/pathways_'+typ+'.png',  bbox_inches='tight',  dpi = 300)
+            plt.savefig(path+'/pathways_'+typ+'.png',  bbox_inches='tight',  dpi = 300)
             plt.clf()
             plt.close()
         else:
@@ -225,7 +225,7 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
 
 #Network genes
 
-def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/gene_relatione.html'):
+def gene_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', path:str = 'results/gene_relatione.html'):
     
     adj = adj.upper()
     
@@ -294,7 +294,7 @@ def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/
 
 #Network_GOPa
 
-def gopa_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/gopa_network.html' ):
+def gopa_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', path:str = 'results/gopa_network.html' ):
   
     adj = adj.upper()
     

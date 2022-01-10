@@ -12,7 +12,7 @@ from scipy import stats
 import seaborn
     
     
-def zinc_drug(genes_list, zinc_type:str = 'all'):
+def zinc_drug(genes_list:list, zinc_type:str = 'all'):
 
     genes_list = [gen.upper() for gen in genes_list ]
     
@@ -63,7 +63,7 @@ def zinc_drug(genes_list, zinc_type:str = 'all'):
     return df_zinc 
 
 
-def zinc_plot(res_zinc, p_val, adj:str = 'None', path = 'results/drugs.png'):
+def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', path:str = 'results/drugs.png'):
 
     adj = adj.upper()
     
