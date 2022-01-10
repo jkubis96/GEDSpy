@@ -17,8 +17,8 @@ setup(
         'collections', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'nrtworkx', 'pyvis'], 
         
         keywords=['python', 'GO', 'pathways', 'drug', 'gene ontology'],
-        license 'MIT',
-        classifiers= [
+        license = 'MIT',
+        classifiers = [
             "Development Status :: 3 - Alpha",
             "Programming Language :: Python :: 3",
             "Operating System :: MacOS :: MacOS X",
