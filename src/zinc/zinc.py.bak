@@ -1,6 +1,3 @@
-import numpy as np
-import pandas as pd
-import os
 
 def zinc_drug(genes_list, zinc_type:str = 'all'):
     import requests
