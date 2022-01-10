@@ -1,10 +1,7 @@
-import numpy as np
-import pandas as pd
-import os
-
 def gopa_enrichment(genes_list):
     import requests, sys, ast, json
     from bioservices import KEGG
+    import pandas as pd
     from datetime import datetime
     import collections
     from tqdm import tqdm
@@ -147,7 +144,10 @@ def gopa_enrichment(genes_list):
 
 
 def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
+    import os
     import seaborn
+    import pandas as pd
+    import numpy as np
     import matplotlib.pyplot as plt
     from tqdm import tqdm
     from scipy import stats
@@ -221,12 +221,14 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
 
 def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/gene_relatione.html'):
     import networkx as nx
+    import numpy as np
+    import pandas as pd
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
     from pyvis.network import Network
     from tqdm import tqdm
     from scipy import stats
-
+    import os
     
     adj = adj.upper()
     
@@ -298,11 +300,14 @@ def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/
 
 def gopa_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/gopa_network.html' ):
     import networkx as nx
+    import numpy as np
+    import pandas as pd
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
     from pyvis.network import Network
     from tqdm import tqdm
     from scipy import stats
+    import os
   
     adj = adj.upper()
     
