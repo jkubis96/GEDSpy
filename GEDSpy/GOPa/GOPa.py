@@ -18,7 +18,7 @@ from pyvis.network import Network
 
 def gopa_enrichment(genes_list): 
 
-    genes_list = genes_list.upper()
+    genes_list = [gen.upper() for gen in genes_list ]
     
     name_dict = {
          "GO:0008150":"biological_process",

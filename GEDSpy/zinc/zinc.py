@@ -14,7 +14,7 @@ import seaborn
     
 def zinc_drug(genes_list, zinc_type:str = 'all'):
 
-    genes_list = genes_list.upper()
+    genes_list = [gen.upper() for gen in genes_list ]
     
     if not os.path.exists('results'):
         os.mkdir('results')
