@@ -35,7 +35,7 @@ Used data bases:
 #### In command line write:
 
 ```
-pip install gedspy
+pip install GEDSpy
 ```
 
 ## Usage
@@ -61,20 +61,20 @@ gene_list = ['CACNA1I','CALD1','CAMK1G','CAMK2N1','CAMSAP1','CCL15','CCL16','CCN
 #### 1. Import library
 
 ```
-import gedspy
+import GEDSpy
 ```
 
 #### 2. Download gene ontology and pathways information
 
 ```
-res1 = fun.gopa_enrichment(gene_list)
+res1 = GEDSpy.GOPa.gopa_enrichment(gene_list)
 ```
 ##### Out: Data frame with gene ontology and pathways information
 
 #### 3. Statistic for gene infomration
 
 ```
-res2 = fun.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results/pathways_pathway.png')
+res2 = GEDSpy.GOPa.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results/pathways_pathway.png')
 ```
 * p_val - lower threshold for significant p-value. Default: 0.05 
 * adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: None
@@ -91,7 +91,7 @@ res2 = fun.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results/pathways_pa
 #### 4. Searcheing interactions among genes based on mutual pathways and ontology
 
 ```
-res3 = fun.gene_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gopa_network.html')
+res3 = GEDSpy.GOPa.gene_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gopa_network.html')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
@@ -109,7 +109,7 @@ res3 = fun.gene_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gopa_ne
 #### 5. Searcheing interactions among pathways and ontology based on mutual genes
 
 ```
-res4 = fun.gopa_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gene_relatione.html')
+res4 = GEDSpy.GOPa.gopa_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gene_relatione.html')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
@@ -137,7 +137,7 @@ zinc_gene_list = list(res3['Gen1']) + list(res3['Gen2'])
 #### 6. Searcheing potential drugs
 
 ```
-res5 = fun.zinc_drug(zinc_gene_list, zinc_type = 'all')
+res5 = GEDSpy.zinc.zinc_drug(zinc_gene_list, zinc_type = 'all')
 ```
 
 * zinc_type - type of substances from ZINC db: ['all'] | ['observations'] | ['substances'] | ['purchasable']. Default: all
@@ -147,7 +147,7 @@ res5 = fun.zinc_drug(zinc_gene_list, zinc_type = 'all')
 #### 6. Statistic analysis for potential drugs
 
 ```
-res6 = fun.zinc_plot(res5, p_val = 0.05, adj = 'None',  path = 'results/drugs.png')
+res6 = GEDSpy.zinc.zinc_plot(res5, p_val = 0.05, adj = 'None',  path = 'results/drugs.png')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
