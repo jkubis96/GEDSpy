@@ -1,12 +1,19 @@
-def zinc_drug(genes_list, zinc_type:str = 'all'):
-    import requests
-    from io import StringIO
-    import pandas as pd
-    import sys
-    import os
-    from tqdm import tqdm
-    import numpy as np
+import requests
+from io import StringIO
+import pandas as pd
+import sys
+import os
+from tqdm import tqdm
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+from pyvis.network import Network
+from scipy import stats
+import seaborn
     
+    
+def zinc_drug(genes_list, zinc_type:str = 'all'):
+
     genes_list = genes_list.upper()
     
     if not os.path.exists('results'):
@@ -57,16 +64,6 @@ def zinc_drug(genes_list, zinc_type:str = 'all'):
 
 
 def zinc_plot(res_zinc, p_val, adj:str = 'None', path = 'results/drugs.png'):
-    import networkx as nx
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
-    from pyvis.network import Network
-    from tqdm import tqdm
-    from scipy import stats
-    import os
-    import seaborn
 
     adj = adj.upper()
     

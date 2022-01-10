@@ -1,10 +1,22 @@
-def gopa_enrichment(genes_list):
-    import requests, sys, ast, json
-    from bioservices import KEGG
-    import pandas as pd
-    from datetime import datetime
-    import collections
-    from tqdm import tqdm
+import requests
+import json
+import sys
+from bioservices import KEGG
+import pandas as pd
+import numpy as np
+from datetime import datetime
+import collections
+from tqdm import tqdm
+import os
+import seaborn
+import matplotlib.pyplot as plt
+from scipy import stats
+import networkx as nx
+from pyvis.network import Network
+
+
+
+def gopa_enrichment(genes_list): 
 
     genes_list = genes_list.upper()
     
@@ -145,13 +157,6 @@ def gopa_enrichment(genes_list):
 
 
 def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
-    import os
-    import seaborn
-    import pandas as pd
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from tqdm import tqdm
-    from scipy import stats
     
     adj = adj.upper()
     
@@ -221,15 +226,6 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None'):
 #Network genes
 
 def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/gene_relatione.html'):
-    import networkx as nx
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
-    from pyvis.network import Network
-    from tqdm import tqdm
-    from scipy import stats
-    import os
     
     adj = adj.upper()
     
@@ -287,7 +283,6 @@ def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/
     for i in range(0,len(net_df['Gen1'])):
         G.add_edge(net_df.iloc[i,0], net_df.iloc[i,1], weight = net_df.iloc[i,3])
     
-    from pyvis.network import Network
     net = Network(notebook=True, height = '800px', width = '1000px')
     net.from_nx(G)
     net.repulsion(node_distance=120, spring_length=220)
@@ -300,15 +295,6 @@ def gene_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/
 #Network_GOPa
 
 def gopa_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/gopa_network.html' ):
-    import networkx as nx
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
-    from pyvis.network import Network
-    from tqdm import tqdm
-    from scipy import stats
-    import os
   
     adj = adj.upper()
     
@@ -663,7 +649,6 @@ def gopa_network(gopa_df, p_val:float = 0.05, adj:str = 'None', path = 'results/
                             
     
     
-    from pyvis.network import Network
     net = Network(notebook=True, height = '800px', width = '1000px')
     net.from_nx(combine_nx)
     net.repulsion(node_distance=120, spring_length=220)
