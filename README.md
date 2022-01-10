@@ -137,8 +137,10 @@ zinc_gene_list = list(res3['Gen1']) + list(res3['Gen2'])
 #### 6. Searcheing potential drugs
 
 ```
-res5 = fun.zinc_drug(zinc_gene_list)
+res5 = fun.zinc_drug(zinc_gene_list, zinc_type = 'all')
 ```
+
+* zinc_type - type of substances from ZINC db: ['all'] | ['observations'] | ['substances'] | ['purchasable']. Default: all
 
 ##### Out: Data frame with drugs information
 
