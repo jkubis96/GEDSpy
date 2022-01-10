@@ -12,7 +12,7 @@ setup(
         author_email="jbiosystem@gmail.com",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
-        packages=find_packages(include=['GEDSpy']),
+        packages=find_packages(),
         install_requires=['requests', 'bioservices', 'pandas', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'networkx', 'pyvis'],       
         keywords=['python', 'GO', 'pathways', 'drug', 'gene ontology'],
         license = 'MIT',
