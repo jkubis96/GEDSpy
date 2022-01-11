@@ -21,7 +21,7 @@ setup(
             "Programming Language :: Python :: 3",
             "Operating System :: MacOS :: MacOS X",
             "Operating System :: Microsoft :: Windows",
-            "Operating System :: Linux :: Ubuntu",
+            "Operating System :: POSIX :: Linux",
         ],
         python_requires='>=3.6',
 )
