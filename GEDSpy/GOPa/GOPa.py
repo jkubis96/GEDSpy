@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 from scipy import stats
 import networkx as nx
 from pyvis.network import Network
+import warnings
+
+warnings.filterwarnings('ignore')
 
 
 
@@ -181,7 +184,7 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', path:str = 'results
     
     
 
-        count['%'] = count['n']/len(count['n'])*100
+        count['%'] = count['n']/sum(count['n'])*100
         count['p-val'] = None
     
         for n, p in enumerate(count['n']):   

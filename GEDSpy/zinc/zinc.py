@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 from pyvis.network import Network
 from scipy import stats
 import seaborn
+import warnings
+
+warnings.filterwarnings('ignore')
     
     
 def zinc_drug(genes_list:list, zinc_type:str = 'all'):
@@ -84,7 +87,7 @@ def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', path:str = 'result
 
 
 
-    count['%'] = count['n']/len(count['n'])*100
+    count['%'] = count['n']/sum(count['n'])*100
     count['p-val'] = None
 
     for n, p in enumerate(count['n']):   
