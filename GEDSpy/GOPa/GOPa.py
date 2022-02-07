@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 
 ms hs
 
-def gopa_enrichment(genes_list:list, str:species): 
+def gopa_enrichment(genes_list:list, species:str = 'hs'): 
     if species == 'hs':
         tax_id = '9606'
         tax = 'hsa:'
