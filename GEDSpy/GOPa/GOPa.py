@@ -19,7 +19,6 @@ from pathlib import Path
 
 warnings.filterwarnings('ignore')
 
-ms hs
 
 def gopa_enrichment(genes_list:list, species:str = 'hs'): 
     if species == 'hs':
