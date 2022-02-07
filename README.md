@@ -67,18 +67,23 @@ import GEDSpy
 #### 2. Download gene ontology and pathways information
 
 ```
-res1 = GEDSpy.GOPa.gopa_enrichment(gene_list)
+res1 = GEDSpy.GOPa.gopa_enrichment(gene_list, species = 'hs')
 ```
+
+* gene_list - list of analyzed genes
+* species - ['ms'] mouse | ['hs'] homo sapiens. Default: 'hs'
+
 ##### Out: Data frame with gene ontology and pathways information
 
 #### 3. Statistic for gene infomration
 
 ```
-res2 = GEDSpy.GOPa.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results')
+res2 = GEDSpy.GOPa.gopa_stat(res1, p_val = 0.05, adj = 'BF', dir = 'results', name = 'GOPa')
 ```
 * p_val - lower threshold for significant p-value. Default: 0.05 
-* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: None
-* path - graph saveing place. Default: `CWD/results`
+* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: 'None'
+* dir - graph saveing place. Default: `CWD/results`
+* name - graph name prefix. Default: 'GOPa'
 
 ##### Out: Data frame with dtatistic for gene ontology and pathways information
 
@@ -91,12 +96,13 @@ res2 = GEDSpy.GOPa.gopa_stat(res1, p_val = 0.05, adj = 'BF', path = 'results')
 #### 4. Searcheing interactions among genes based on mutual pathways and ontology
 
 ```
-res3 = GEDSpy.GOPa.gene_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gopa_network.html')
+res3 = GEDSpy.GOPa.gene_network(res2, p_val = 0.05, adj = 'BF',  dir = 'results' , name = 'gene_relation')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
-* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: None
-* path - graph saveing place. Default: `CWD/results`
+* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: 'None'
+* dir - graph saveing place. Default: `CWD/results`
+* name - graph name. Default: 'gene_relation'
 
 ##### Out: Data frame with gene interactions
 
@@ -109,12 +115,13 @@ res3 = GEDSpy.GOPa.gene_network(res2, p_val = 0.05, adj = 'BF',  path = 'results
 #### 5. Searcheing interactions among pathways and ontology based on mutual genes
 
 ```
-res4 = GEDSpy.GOPa.gopa_network(res2, p_val = 0.05, adj = 'BF',  path = 'results/gene_relatione.html')
+res4 = GEDSpy.GOPa.gopa_network(res2, p_val = 0.05, adj = 'BF', dir:str = 'results', name:str = 'GOPa_network')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
-* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: None
-* path - graph saveing place. Default: `CWD/results`
+* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: 'None'
+* dir - graph saveing place. Default: `CWD/results`
+* name - graph name. Default: 'GOPa_network'
 
 ##### Out: Data frame with gene interactions
 
@@ -137,22 +144,25 @@ zinc_gene_list = list(res3['Gen1']) + list(res3['Gen2'])
 #### 6. Searcheing potential drugs
 
 ```
-res5 = GEDSpy.zinc.zinc_drug(zinc_gene_list, zinc_type = 'all')
+res5 = GEDSpy.zinc.zinc_drug(zinc_gene_list, zinc_type = 'all', , species:str = 'all')
 ```
 
-* zinc_type - type of substances from ZINC db: ['all'] | ['observations'] | ['substances'] | ['purchasable']. Default: all
+* zinc_gene_list - list of analyzed genes
+* zinc_type - type of substances from ZINC db: ['all'] | ['observations'] | ['substances'] | ['purchasable']. Default: 'all'
+* species - ['ms'] mouse | ['hs'] homo sapiens | ['all'] both species. Default: 'all'
 
 ##### Out: Data frame with drugs information
 
 #### 6. Statistic analysis for potential drugs
 
 ```
-res6 = GEDSpy.zinc.zinc_plot(res5, p_val = 0.05, adj = 'None',  path = 'results/drugs.png')
+res6 = GEDSpy.zinc.zinc_plot(res5, p_val = 0.05, adj = 'None',  dir = 'results', name = 'drugs')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
-* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: None
-* path - graph saveing place. Default: `CWD/results`
+* adj - ['BF'] Bonferroni adjusted of p-value or ['None'] lack of adjusting. Default: 'None'
+* dir - graph saveing place. Default: `CWD/results`
+* name - graph name. Default: 'drugs'
 
 ##### Out: Data frame with drugs statistic
 

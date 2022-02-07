@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
-VERSION = '1.0.2' 
+VERSION = '1.0.3' 
 DESCRIPTION = 'GEDSpy'
-LONG_DESCRIPTION = 'GEDSpy is the python library for gene list enrichment with genes ontology, pathways and potential drugs'
+LONG_DESCRIPTION = 'GEDSpy is the python library for gene list enrichment with genes ontology, pathways and potential drugs. Package description  on https://github.com/jkubis96/GEDSpy'
 
 # Setting up
 setup(

@@ -11,11 +11,14 @@ from pyvis.network import Network
 from scipy import stats
 import seaborn
 import warnings
+from pathlib import Path
+import re
+
 
 warnings.filterwarnings('ignore')
     
     
-def zinc_drug(genes_list:list, zinc_type:str = 'all'):
+def zinc_drug(genes_list:list, zinc_type:str = 'all', species:str = 'all'):
 
     genes_list = [gen.upper() for gen in genes_list ]
     
@@ -63,10 +66,17 @@ def zinc_drug(genes_list:list, zinc_type:str = 'all'):
                     df['gene_name'] = gen
                 df_zinc = pd.concat([df_zinc, df], axis=0)
     
+    df_zinc['species'] = [re.sub('.*_', '', i) for i in df_zinc['ortholog_name']]
+    
+    if species == 'hs':
+        df_zinc = df_zinc[df_zinc['species'] == 'HUMAN']
+    elif species == 'ms':
+        df_zinc = df_zinc[df_zinc['species'] == 'MOUSE']   
+        
     return df_zinc 
 
 
-def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', path:str = 'results/drugs.png'):
+def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', dir:str = 'results', name:str = 'drugs'):
 
     adj = adj.upper()
     
@@ -108,11 +118,11 @@ def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', path:str = 'result
         plt.xlabel('Drugs [n]')
         plt.ylabel(' ')
         plt.title('Zinc_drugs')
-        plt.savefig(path,  bbox_inches='tight',  dpi = 300)
-        plot = plt.show()
+        plt.savefig(Path(dir, str(name + '.png')),  bbox_inches='tight',  dpi = 300)
+        plt.savefig(Path(dir, str(name + '.svg')))
         plt.clf()
         plt.close()
     else:
-        print('n\ No significient drugs found')
+        print('','No significient drugs found', sep='\n')
         
     return count

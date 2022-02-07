@@ -14,13 +14,21 @@ from scipy import stats
 import networkx as nx
 from pyvis.network import Network
 import warnings
+from pathlib import Path
+
 
 warnings.filterwarnings('ignore')
 
+ms hs
 
-
-def gopa_enrichment(genes_list:list): 
-
+def gopa_enrichment(genes_list:list, str:species): 
+    if species == 'hs':
+        tax_id = '9606'
+        tax = 'hsa:'
+    elif species == 'ms':
+        tax_id = '10090 '
+        tax = 'mmu:'
+        
     genes_list = [gen.upper() for gen in genes_list ]
     
     name_dict = {
@@ -39,7 +47,7 @@ def gopa_enrichment(genes_list:list):
     
         #KEGG path download
         k = KEGG(verbose=False)
-        tmp = k.get("hsa:" + str(gen))
+        tmp = k.get(str(tax) + str(gen))
         if tmp != 404:
             dict_data = k.parse(tmp)
             if 'PATHWAY' in dict_data.keys():
@@ -52,7 +60,7 @@ def gopa_enrichment(genes_list:list):
                 df['GOPa'].append(path_list)
                 df['type'].append('pathway')
         #GOPanther 
-        requestURL = "http://pantherdb.org/services/oai/pantherdb/geneinfo?geneInputList="+gen+"&organism=9606"
+        requestURL = "http://pantherdb.org/services/oai/pantherdb/geneinfo?geneInputList="+gen+"&organism="+tax_id
         r = requests.get(requestURL, headers={ "Accept" : "application/json"})
         if not r.ok:
           r.raise_for_status()
@@ -159,12 +167,12 @@ def gopa_enrichment(genes_list:list):
     return df3
 
 
-def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', path:str = 'results'):
+def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', dir:str = 'results', name:str = 'GOPa'):
     
     adj = adj.upper()
     
-    if not os.path.exists('results'):
-        os.mkdir('results')
+    if not os.path.exists(dir):
+        os.mkdir(dir)
         
     df3 = gopa_df
     df4 = pd.DataFrame()     
@@ -208,11 +216,12 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', path:str = 'results
             plt.xlabel('Percent of enrichment [%]')
             plt.ylabel(' ')
             plt.title(typ.capitalize())
-            plt.savefig(path+'/pathways_'+typ+'.png',  bbox_inches='tight',  dpi = 300)
+            plt.savefig(Path(dir, str(name + '_' + typ + '.png')),  bbox_inches='tight',  dpi = 300)
+            plt.savefig(Path(dir, str(name + '_' + typ + '.svg')))
             plt.clf()
             plt.close()
         else:
-            print('n\ No significient results for ' + str(typ))
+            print('','No significient results for ' + str(typ), sep='\n')
     
         if len(df4) == 0:
             df4 = count
@@ -228,12 +237,12 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', path:str = 'results
 
 #Network genes
 
-def gene_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', path:str = 'results/gene_relatione.html'):
+def gene_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', dir:str = 'results' , name:str = 'gene_relation'):
     
     adj = adj.upper()
     
-    if not os.path.exists('results'):
-        os.mkdir('results')
+    if not os.path.exists(dir):
+        os.mkdir(dir)
     
     df7 = gopa_df.pivot_table(index = "GOPa", columns = 'gen', values = 'n',  fill_value = 0)
                
@@ -286,18 +295,19 @@ def gene_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', pat
     for i in range(0,len(net_df['Gen1'])):
         G.add_edge(net_df.iloc[i,0], net_df.iloc[i,1], weight = net_df.iloc[i,3])
     
-    net = Network(notebook=True, height = '800px', width = '1000px')
+    net = Network(notebook=True, height = '1000px', width = '1200px')
     net.from_nx(G)
     net.repulsion(node_distance=120, spring_length=220)
     net.show_buttons(filter_=['nodes', 'physics'])
-    net.show(path)
+    net.show(Path(dir, str(name + '.html')))
+
     
     return net_df
 
 
 #Network_GOPa
 
-def gopa_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', path:str = 'results/gopa_network.html' ):
+def gopa_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', dir:str = 'results', name:str = 'gopa_network'):
   
     adj = adj.upper()
     
@@ -652,10 +662,10 @@ def gopa_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', pat
                             
     
     
-    net = Network(notebook=True, height = '800px', width = '1000px')
+    net = Network(notebook=True, height = '1000px', width = '1200px')
     net.from_nx(combine_nx)
     net.repulsion(node_distance=120, spring_length=220)
     net.show_buttons(filter_=['nodes', 'physics'])
-    net.show(path)
+    net.show(Path(dir, str(name + '.html')))
 
     return return_df
