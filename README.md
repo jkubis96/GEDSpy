@@ -115,7 +115,7 @@ res3 = GEDSpy.GOPa.gene_network(res2, p_val = 0.05, adj = 'BF',  dir = 'results'
 #### 5. Searcheing interactions among pathways and ontology based on mutual genes
 
 ```
-res4 = GEDSpy.GOPa.gopa_network(res2, p_val = 0.05, adj = 'BF', dir:str = 'results', name:str = 'GOPa_network')
+res4 = GEDSpy.GOPa.gopa_network(res2, p_val = 0.05, adj = 'BF', dir = 'results', name = 'GOPa_network')
 ```
 
 * p_val - lower threshold for significant p-value. Default: 0.05 
@@ -144,7 +144,7 @@ zinc_gene_list = list(res3['Gen1']) + list(res3['Gen2'])
 #### 6. Searcheing potential drugs
 
 ```
-res5 = GEDSpy.zinc.zinc_drug(zinc_gene_list, zinc_type = 'all', , species:str = 'all')
+res5 = GEDSpy.zinc.zinc_drug(zinc_gene_list, zinc_type = 'all', species = 'all')
 ```
 
 * zinc_gene_list - list of analyzed genes

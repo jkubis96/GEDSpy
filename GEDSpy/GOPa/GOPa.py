@@ -15,6 +15,8 @@ import networkx as nx
 from pyvis.network import Network
 import warnings
 from pathlib import Path
+import re
+import string
 
 
 warnings.filterwarnings('ignore')
@@ -47,17 +49,22 @@ def gopa_enrichment(genes_list:list, species:str = 'hs'):
         #KEGG path download
         k = KEGG(verbose=False)
         tmp = k.get(str(tax) + str(gen))
-        if tmp != 404:
-            dict_data = k.parse(tmp)
-            if 'PATHWAY' in dict_data.keys():
-                path = dict_data['PATHWAY']
-                path_list = []
-                keys = path.keys()
-                for key in keys:
-                    path_list.append(path.get(key))
+        if tmp != 404 and 'PATHWAY' in tmp:
+            tmp2 = tmp.split('\n')
+            tmp3 = str()
+            for i in tmp2: 
+                tmp3 = tmp3 + str(i)
+
+            tmp3 = re.sub(r'^.*?PATHWAY', '' , str(tmp3))
+            tmp3 = re.sub('BRITE.*', '' , str(tmp3))
+            tmp3 = tmp3.split('            ')
+            tmp4 = [re.sub('.*  ', '' , str(i)) for i in tmp3]
+            del(tmp, tmp2, tmp3)
+            for path in tmp4:
                 df['gen'].append(gen)   
-                df['GOPa'].append(path_list)
+                df['GOPa'].append(path)
                 df['type'].append('pathway')
+            del(tmp4)
         #GOPanther 
         requestURL = "http://pantherdb.org/services/oai/pantherdb/geneinfo?geneInputList="+gen+"&organism="+tax_id
         r = requests.get(requestURL, headers={ "Accept" : "application/json"})
