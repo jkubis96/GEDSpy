@@ -1,5 +1,5 @@
 print()
-print('Welcome in GEDSpy v.1.1.0 library')
+print('Welcome in GEDSpy v.1.3.2 library')
 print('')
 print('Loading required  packages...')
 

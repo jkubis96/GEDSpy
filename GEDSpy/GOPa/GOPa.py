@@ -57,12 +57,19 @@ def gopa_enrichment(genes_list:list, species:str = 'hs'):
 
             tmp3 = re.sub(r'^.*?PATHWAY', '' , str(tmp3))
             tmp3 = re.sub('BRITE.*', '' , str(tmp3))
+            tmp3 = re.sub('NETWORK.*', '' , str(tmp3))
+            tmp3 = re.sub('ELEMENT.*', '' , str(tmp3))
+            tmp3 = re.sub('DISEASE.*', '' , str(tmp3))
+            tmp3 = re.sub('AASEQ.*', '' , str(tmp3))
+            tmp3 = re.sub('MOTIF.*', '' , str(tmp3))
+            tmp3 = re.sub('DBLINKS.*', '' , str(tmp3))
+            tmp3 = re.sub('NTSEQ.*', '' , str(tmp3))
             tmp3 = tmp3.split('            ')
             tmp4 = [re.sub('.*  ', '' , str(i)) for i in tmp3]
             del(tmp, tmp2, tmp3)
             for path in tmp4:
                 df['gen'].append(gen)   
-                df['GOPa'].append(path)
+                df['GOPa'].append([path])
                 df['type'].append('pathway')
             del(tmp4)
         #GOPanther 
@@ -178,7 +185,7 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', dir:str = 'results'
     adj = adj.upper()
     
     if not os.path.exists(dir):
-        os.mkdir(dir)
+        os.makedirs(dir)
         
     df3 = gopa_df
     df4 = pd.DataFrame()     
@@ -223,7 +230,7 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', dir:str = 'results'
             plt.ylabel(' ')
             plt.title(typ.capitalize())
             plt.savefig(Path(dir, str(name + '_' + typ + '.png')),  bbox_inches='tight',  dpi = 300)
-            plt.savefig(Path(dir, str(name + '_' + typ + '.svg')))
+            plt.savefig(Path(dir, str(name + '_' + typ + '.svg')), bbox_inches='tight')
             plt.clf()
             plt.close()
         else:
@@ -248,7 +255,7 @@ def gene_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', dir
     adj = adj.upper()
     
     if not os.path.exists(dir):
-        os.mkdir(dir)
+        os.makedirs(dir)
     
     df7 = gopa_df.pivot_table(index = "GOPa", columns = 'gen', values = 'n',  fill_value = 0)
                
@@ -301,11 +308,11 @@ def gene_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', dir
     for i in range(0,len(net_df['Gen1'])):
         G.add_edge(net_df.iloc[i,0], net_df.iloc[i,1], weight = net_df.iloc[i,3])
     
-    net = Network(notebook=True, height = '1000px', width = '1200px')
+    net = Network(notebook=True, height = '1000px', width = '1600px')
     net.from_nx(G)
-    net.repulsion(node_distance=120, spring_length=220)
+    net.repulsion(node_distance=130, spring_length=230)
     net.show_buttons(filter_=['nodes', 'physics'])
-    net.show(Path(dir, str(name + '.html')))
+    net.show(str(dir + str('/' + name + '.html')))
 
     
     return net_df
@@ -317,8 +324,8 @@ def gopa_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', dir
   
     adj = adj.upper()
     
-    if not os.path.exists('results'):
-        os.mkdir('results')
+    if not os.path.exists(dir):
+        os.makedirs(dir)
         
     df6 = gopa_df
     pathways = df6[df6['type'] == 'pathway']
@@ -668,10 +675,10 @@ def gopa_network(gopa_df:pd.DataFrame, p_val:float = 0.05, adj:str = 'None', dir
                             
     
     
-    net = Network(notebook=True, height = '1000px', width = '1200px')
+    net = Network(notebook=True, height = '1000px', width = '1600px')
     net.from_nx(combine_nx)
-    net.repulsion(node_distance=120, spring_length=220)
+    net.repulsion(node_distance=130, spring_length=230)
     net.show_buttons(filter_=['nodes', 'physics'])
-    net.show(Path(dir, str(name + '.html')))
+    net.show(str(dir + str('/' + name + '.html')))
 
     return return_df
