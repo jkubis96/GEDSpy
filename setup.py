@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '1.3.2' 
+VERSION = '1.3.3' 
 DESCRIPTION = 'GEDSpy'
 LONG_DESCRIPTION = 'GEDSpy is the python library for gene list enrichment with genes ontology, pathways and potential drugs. Package description  on https://github.com/jkubis96/GEDSpy'
 
@@ -13,7 +13,7 @@ setup(
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
-        install_requires=['requests', 'bioservices', 'pandas', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'networkx', 'pyvis'],       
+        install_requires=['requests', 'bioservices', 'pandas', 'tqdm', 'seaborn', 'matplotlib', 'scipy', 'networkx', 'pyvis', 'numpy'],       
         keywords=['python', 'GO', 'pathways', 'drug', 'gene ontology'],
         license = 'MIT',
         classifiers = [

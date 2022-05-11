@@ -205,7 +205,7 @@ def gopa_stat(gopa_df, p_val:float = 0.05, adj:str = 'None', dir:str = 'results'
     
     
 
-        count['%'] = count['n']/sum(count['n'])*100
+        count['%'] = count['n']/len(np.unique(df3['gen']))*100
         count['p-val'] = None
     
         for n, p in enumerate(count['n']):   

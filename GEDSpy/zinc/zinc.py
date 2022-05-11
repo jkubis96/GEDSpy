@@ -65,7 +65,8 @@ def zinc_drug(genes_list:list, zinc_type:str = 'all', species:str = 'all'):
                 if True not in np.unique(df.columns == 'gene_name'):
                     df['gene_name'] = gen
                 df_zinc = pd.concat([df_zinc, df], axis=0)
-    
+                
+    df_zinc['ortholog_name'][pd.isnull(df_zinc['ortholog_name'])] = 'NaN'
     df_zinc['species'] = [re.sub('.*_', '', i) for i in df_zinc['ortholog_name']]
     
     if species == 'hs':
@@ -80,8 +81,8 @@ def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', dir:str = 'results
 
     adj = adj.upper()
     
-    if not os.path.exists('results'):
-        os.mkdir('results')
+    if not os.path.exists(dir):
+        os.makedirs(dir)
 
     df3 = res_zinc[['zinc_id', 'gene_name']]
     df3 = df3.drop_duplicates()
@@ -97,7 +98,7 @@ def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', dir:str = 'results
 
 
 
-    count['%'] = count['n']/sum(count['n'])*100
+    count['%'] = count['n']/len(np.unique(df3['gene_name']))*100
     count['p-val'] = None
 
     for n, p in enumerate(count['n']):   
@@ -112,14 +113,14 @@ def zinc_plot(res_zinc:pd.DataFrame, p_val, adj:str = 'None', dir:str = 'results
     else:
         count = count[count['p-val'] < p_val]
 
-    if len(count[count['p-adj[BF]'] < p_val]) > 0:
+    if len(count['p-adj[BF]']) > 0:
         plt.figure(figsize=(10, len(count['zinc_id'])/3))
         seaborn.barplot(count['n'], count['zinc_id'])
         plt.xlabel('Drugs [n]')
         plt.ylabel(' ')
         plt.title('Zinc_drugs')
         plt.savefig(Path(dir, str(name + '.png')),  bbox_inches='tight',  dpi = 300)
-        plt.savefig(Path(dir, str(name + '.svg')))
+        plt.savefig(Path(dir, str(name + '.svg')), bbox_inches='tight')
         plt.clf()
         plt.close()
     else:
