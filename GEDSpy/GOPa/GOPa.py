@@ -27,7 +27,7 @@ def gopa_enrichment(genes_list:list, species:str = 'hs'):
         tax_id = '9606'
         tax = 'hsa:'
     elif species == 'ms':
-        tax_id = '10090 '
+        tax_id = '10090'
         tax = 'mmu:'
         
     genes_list = [gen.upper() for gen in genes_list ]
