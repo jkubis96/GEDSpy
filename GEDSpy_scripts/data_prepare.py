@@ -28,8 +28,15 @@ from matplotlib.lines import Line2D
 from scipy.cluster.hierarchy import linkage, dendrogram
 import math
 import gdown
+import sqlite3
+import pandas as pd
 
 
+
+# poprawić import
+
+from enrichment import PathMetadata
+from enrichment import GetData
 
 
    
@@ -37,35 +44,9 @@ import gdown
 pd.options.mode.chained_assignment = None
 warnings.filterwarnings("ignore")
     
-#Geta data directory
-
-
-class PathMetadata:
-    def __init__(self):
-        
-        def get_package_directory():
-            return pkg_resources.resource_filename(__name__, '')
-        
-        self._cwd = get_package_directory()
-        self.path_inside = os.path.join(self._cwd, 'data')
-        self.path_in_inside = os.path.join(self._cwd, 'data', 'in_use')
-        self.path_tmp = os.path.join(self._cwd, 'data', 'tmp')
-        
-        os.makedirs(self.path_inside, exist_ok=True)
-        os.makedirs(self.path_in_inside, exist_ok=True)
-        os.makedirs(self.path_tmp, exist_ok=True)
-
-    def __repr__(self):
-        return (f"PathMetadata(\n"
-                f"  path_inside='{self.path_inside}',\n"
-                f"  path_in_inside='{self.path_in_inside}',\n"
-                f"  path_tmp='{self.path_tmp}'\n"
-                f")")
-
 
 
 #Fucntions for data preparing
-
 
 
 #Data downloading
@@ -1734,8 +1715,7 @@ class Donwload(PathMetadata):
 
 
 
-
-class DataAdjustment(PathMetadata):
+class DataAdjustment(GetData, PathMetadata):
     
     def __init__(self):
        super().__init__()
@@ -2394,7 +2374,7 @@ class DataAdjustment(PathMetadata):
         
         from collections import Counter
         
-        dup = (Counter(synonymes))
+        dup = Counter(synonymes)
         
         
         dup = pd.DataFrame(dup.items(), columns=['value', 'count'])
@@ -3254,6 +3234,7 @@ class DataAdjustment(PathMetadata):
         string.loc[string['textmining_transferred'] > 0, 'source'] = string.loc[string['textmining_transferred'] > 0, 'source'].apply(lambda x: x + ['textmining_transferred'])    
         
         string = string.drop('textmining_transferred', axis = 1)
+        
     
         string = string.to_dict(orient = 'list')
        
@@ -3374,7 +3355,7 @@ class DataAdjustment(PathMetadata):
         gene_dictionary = pd.DataFrame(gene_dictionary).reset_index(drop = True)
     
         for inx, gene in enumerate(tqdm(fetures_id['found_genes'])):
-            idr = list(set(jdci['id'][jdci['names'] == fetures_id['found_genes'][inx]]))  
+            idr = list(set(jdci['id'][jdci['names'] == fetures_id['found_genes'][inx]]))[0]
             gene_dictionary['id_cell_int'][fetures_id['found_ids'][inx][0]] = idr
             gene_dictionary['primary_cell_inc_gene'][fetures_id['found_ids'][inx][0]] = gene
     
@@ -3587,19 +3568,173 @@ class DataAdjustment(PathMetadata):
             json.dump(mutual, json_file)
         
        
+        gene_dictionary = self.gene_dict
+        gene_dictionary = pd.DataFrame(gene_dictionary).reset_index(drop = True)
+        gene_dictionary['sid'] = list(gene_dictionary.index)
             
         with open(os.path.join(self.path_in_inside, 'gene_dictionary_jbio_annotated.json'), 'w') as json_file:
-            json.dump(self.gene_dict, json_file)
+            json.dump(gene_dictionary.to_dict(orient = 'list'), json_file)
         
         
-        del  cell_talk, cell_phone, mutual
+        del  cell_talk, cell_phone, mutual, gene_dictionary
         
     
             
         print('\n')
         print('Process has finished...')
 
+    
 
+    def serialize_data(self, value):
+        if isinstance(value, (list)): 
+            return json.dumps(value) 
+        return value  
+
+    def create_SQL(self):
+       
+        print('\nDatabase creation...')
+
+        conn = sqlite3.connect(os.path.join(self.path_in_inside, 'GEDS_db.db'))
+        
+        
+        print('\nAdding REACTOME to DB...')
+
+        reactome = pd.DataFrame(self.get_REACTOME())
+        
+        reactome = reactome.applymap(self.serialize_data)
+
+        reactome.to_sql('REACTOME', conn, if_exists='replace', index=False)
+       
+        del reactome
+            
+
+        print('\nAdding RefGenome to DB...')
+
+        ref_gen = pd.DataFrame(self.get_REF_GEN())
+        
+        
+        ref_gen = ref_gen.applymap(self.serialize_data)
+
+            
+        ref_gen.to_sql('RefGenome', conn, if_exists='replace', index=False)
+          
+        del ref_gen
+       
+
+        print('\nAdding HPA to DB...')
+
+        HPA = self.get_HPA()
+        
+        for i in HPA.keys():
+            
+            
+            tmp_HPA = pd.DataFrame(HPA[i])
+            
+            tmp_HPA = tmp_HPA.applymap(self.serialize_data)
+            
+            tmp_HPA.to_sql('HPA_' + i, conn, if_exists='replace', index=False)
+          
+        del HPA, tmp_HPA
+       
+        print('\nAdding Diseases to DB...')
+
+        disease = pd.DataFrame(self.get_DISEASES())
+        
+        disease = disease.applymap(self.serialize_data)
+        
+        disease.to_sql('disease', conn, if_exists='replace', index=False)
+          
+        del disease
+             
+
+        print('\nAdding ViMIC to DB...')
+
+        vimic = pd.DataFrame(self.get_ViMIC())
+        
+        vimic = vimic.applymap(self.serialize_data)
+        
+        vimic.to_sql('ViMIC', conn, if_exists='replace', index=False)
+        
+        del vimic
+             
+        
+        print('\nAdding KEGG to DB...')
+
+
+        kegg = pd.DataFrame(self.get_KEGG())
+        
+        kegg = kegg.applymap(self.serialize_data)
+        
+        kegg.to_sql('KEGG', conn, if_exists='replace', index=False)
+        
+        del kegg
+             
+             
+        print('\nAdding GO-TERM to DB...')
+
+
+        go = self.get_GO()
+        
+        for i in go.keys():
+                        
+            tmp_GO = pd.DataFrame(go[i])
+            
+            tmp_GO = tmp_GO.applymap(self.serialize_data)
+            
+            tmp_GO.to_sql('GO_' + i, conn, if_exists='replace', index=False)
+        
+        del go, tmp_GO
+             
+        
+        print('\nAdding IntAct to DB...')
+
+
+        intact = self.get_IntAct()
+        
+        for i in intact.keys():
+            
+            tmp_IntAct = pd.DataFrame(intact[i])
+            
+            tmp_IntAct = tmp_IntAct.applymap(self.serialize_data)
+            
+            tmp_IntAct.to_sql('IntAct_' + i, conn, if_exists='replace', index=False)
+        
+        del intact, tmp_IntAct
+             
+        
+
+        print('\nAdding STRING to DB...')
+
+        string = pd.DataFrame(self.get_STRING())
+        
+        string = string.applymap(self.serialize_data)
+        
+        string.to_sql('STRING', conn, if_exists='replace', index=False)
+        
+        del string
+        
+        
+        
+        interactions = pd.DataFrame(self.get_interactions())
+        
+        interactions = interactions.explode("Species")
+        interactions = interactions.explode("protein_id_1")
+        interactions = interactions.explode("protein_id_2")
+
+
+        interactions = interactions.reset_index(drop = True)
+        
+        interactions = interactions.applymap(self.serialize_data)
+        
+        interactions.to_sql('CellInteractions', conn, if_exists='replace', index=False)
+        
+        del interactions
+             
+        
+        conn.close()
+        
+        
+        
         
     def ZIP(self):
         # Create a zip compressed file
@@ -3622,6 +3757,7 @@ class DataAdjustment(PathMetadata):
         shutil.move(source_path, destination_path)
     
     
+
 
 
     

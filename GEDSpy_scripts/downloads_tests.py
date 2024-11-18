@@ -164,6 +164,8 @@ da = DataAdjustment()
 
 da.update_to_data()
 
+da.create_SQL()
+
 
 # zip data
 
@@ -174,6 +176,9 @@ da.ZIP()
 import os
 
 da.get_ZIP(path = os.getcwd())
+
+
+
 
 
 
