@@ -3364,7 +3364,7 @@ class DataAdjustment(GetData, PathMetadata):
         gene_dictionary = gene_dictionary.to_dict(orient = 'list')
         
         full_cell_inc = full_cell_inc.drop(['protein_1', 'protein_2'], axis = 1)
-        
+
         self.gene_dict = gene_dictionary
 
         
@@ -3591,6 +3591,7 @@ class DataAdjustment(GetData, PathMetadata):
         return value  
 
     def create_SQL(self):
+        
        
         print('\nDatabase creation...')
 
@@ -3604,6 +3605,7 @@ class DataAdjustment(GetData, PathMetadata):
         reactome = reactome.applymap(self.serialize_data)
 
         reactome.to_sql('REACTOME', conn, if_exists='replace', index=False)
+        
        
         del reactome
             
@@ -3612,11 +3614,29 @@ class DataAdjustment(GetData, PathMetadata):
 
         ref_gen = pd.DataFrame(self.get_REF_GEN())
         
+        occ_dict = {}
+
+        occ_dict['HPA'] = len(ref_gen['id_HPA'][ref_gen['id_HPA'].notna()])
+        occ_dict['REACTOME'] = len(ref_gen['id_reactome'][ref_gen['id_reactome'].notna()])
+        occ_dict['GO-TERM'] = len(ref_gen['id_GO'][ref_gen['id_GO'].notna()])
+        occ_dict['ViMIC'] = len(ref_gen['id_viral_diseases'][ref_gen['id_viral_diseases'].notna()])
+        occ_dict['DISEASES'] = len(ref_gen['id_diseases'][ref_gen['id_diseases'].notna()])
+        occ_dict['IntAct'] = len(ref_gen['id_IntAct'][ref_gen['id_IntAct'].notna()])
+        occ_dict['CellConnections'] = len(ref_gen['id_cell_int'][ref_gen['id_cell_int'].notna()])
+        occ_dict['DISEASES'] = len(ref_gen['id_diseases'][ref_gen['id_diseases'].notna()])
+        occ_dict['Genes_Mus_musculus'] = len(ref_gen['gene_Mus_musculus'][ref_gen['gene_Mus_musculus'].notna()])
+        occ_dict['Genes_Homo_sapiens'] = len(ref_gen['gene_Homo_sapiens'][ref_gen['gene_Homo_sapiens'].notna()])
+        occ_dict['Genes_Rattus_norvegicus'] = len(ref_gen['gene_Rattus_norvegicus'][ref_gen['gene_Rattus_norvegicus'].notna()])
+
+        with open(os.path.join(self.path_in_inside, 'occ_dict.json'), 'w') as json_file:
+            json.dump(occ_dict, json_file)
+        
         
         ref_gen = ref_gen.applymap(self.serialize_data)
-
             
         ref_gen.to_sql('RefGenome', conn, if_exists='replace', index=False)
+        
+        occ_dict['RefGenome'] = int(len(set(ref_gen['sid'])))
           
         del ref_gen
        
@@ -3624,6 +3644,8 @@ class DataAdjustment(GetData, PathMetadata):
         print('\nAdding HPA to DB...')
 
         HPA = self.get_HPA()
+        
+
         
         for i in HPA.keys():
             
@@ -3714,7 +3736,8 @@ class DataAdjustment(GetData, PathMetadata):
         del string
         
         
-        
+        print('\nAdding CellTalk/CellPhone to DB...')
+
         interactions = pd.DataFrame(self.get_interactions())
         
         interactions = interactions.explode("Species")
