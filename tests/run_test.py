@@ -170,7 +170,6 @@ def DataPrepare_tests():
     return errored
     
 
-DataPrepare_tests()
 
 
 
@@ -326,11 +325,9 @@ def EnrichmentGetRaw_tests():
     return errored
 
 
-EnrichmentGetRaw_tests()
 
 
 ###############################################################################
-
 
 
 
@@ -469,7 +466,6 @@ def EnrichmentGetData_tests():
     return errored
     
 
-EnrichmentGetData_tests()
 
 
 
@@ -635,8 +631,6 @@ def Enrichment_tests():
 
 
 
-
-Enrichment_tests()
 
 
 
@@ -1135,7 +1129,6 @@ def AnVis_tests():
 
 
 
-AnVis_tests()
 
 
 
@@ -1171,8 +1164,6 @@ def AnDESVis_tests():
 
 
 
-
-    
     # ENRICHMENT
     
     from Enrichment import Enrichment
@@ -1189,9 +1180,13 @@ def AnDESVis_tests():
     
     enr.full_enrichment()
     
+    results1 = None 
     
     results1 = enr.get_results
-
+    
+    if not isinstance(results1, dict):
+        errored.append('full_enrichment')
+        
 
     ans = Analysis(results1)
     
@@ -1209,7 +1204,13 @@ def AnDESVis_tests():
     ans.full_analysis()
     
     
+    results1 = None 
+    
     results1 = ans.get_full_results
+    
+    if not isinstance(results1, dict):
+        errored.append('full_analysis')
+        
 
 
 
@@ -1223,10 +1224,13 @@ def AnDESVis_tests():
     
     enr.full_enrichment()
     
+    results2 = None
     
     results2 = enr.get_results
-    
-    
+      
+    if not isinstance(results1, dict):
+        errored.append('full_enrichment')
+        
     
     ans = Analysis(results2)
     
@@ -1243,11 +1247,14 @@ def AnDESVis_tests():
     
     ans.full_analysis()
     
+    results2 = None
     
     results2 = ans.get_full_results
-
-
-
+    
+    if not isinstance(results2, dict):
+        errored.append('full_analysis')
+        
+    
 
     from Enrichment import DSA
 
@@ -1259,43 +1266,80 @@ def AnDESVis_tests():
 
     dsa_compare.GO_diff()
     
+    
+    tmp = None
+    
     tmp = dsa_compare.get_GO_diff
+    
+    if not isinstance(tmp, dict):
+        errored.append('GO_diff')
+        
 
     print('\nKEGG differential analysis...')
 
     dsa_compare.KEGG_diff()
     
+    tmp = None
+    
     tmp = dsa_compare.get_KEGG_diff
+    
+    if not isinstance(tmp, dict):
+        errored.append('KEGG_diff')
     
     print('\nREACTOME differential analysis...')
 
     dsa_compare.REACTOME_diff()
     
+    tmp = None
+    
     tmp = dsa_compare.get_REACTOME_diff
+    
+    if not isinstance(tmp, dict):
+        errored.append('REACTOME_diff')
 
     print('\nSpecificity differential analysis...')
 
     dsa_compare.spec_diff()
     
+    tmp = None
+    
     tmp = dsa_compare.get_specificity_diff
+    
+    if not isinstance(tmp, dict):
+        errored.append('spec_diff')
     
     print('\nGene Interactions (GI) differential analysis...')
 
     dsa_compare.gi_diff()
     
+    tmp = None
+    
     tmp = dsa_compare.get_GI_diff
+    
+    if not isinstance(tmp, dict):
+        errored.append('gi_diff')
     
     print('\nNetworks differential analysis...')
 
     dsa_compare.network_diff()
     
+    tmp = None
+    
     tmp = dsa_compare.get_networks_diff
+    
+    if not isinstance(tmp, dict):
+        errored.append('network_diff')
     
     print('\nInter Terms (IT) searching...')
 
     dsa_compare.inter_processes()
     
+    tmp = None 
+    
     tmp = dsa_compare.get_inter_terms
+    
+    if not isinstance(tmp, dict):
+        errored.append('inter_processes')
     
     
     print('\nInter CellConnections (ICC) searching...')
@@ -1304,11 +1348,10 @@ def AnDESVis_tests():
     
     tmp = dsa_compare.get_set_to_set_con
     
+    if not isinstance(tmp, dict):
+        errored.append('connections_diff')
     
-    
-    
-
-    
+    del tmp
     
     
     
@@ -1317,9 +1360,262 @@ def AnDESVis_tests():
 
     results3 = dsa_compare.get_results
     
+    from Enrichment import VisualizationDES
+
+
+    vis_des = VisualizationDES(results3)
     
     
-    del enr
+    from matplotlib import figure
+
+    
+    plot = None
+    
+    plot  =  vis_des.diff_SPECIFICITY_plot(   
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 6, 
+                        min_terms = 1,
+                        selected_set = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'p_val')
+    
+    
+    
+    if not isinstance(plot, figure.Figure):
+        errored.append('diff_SPECIFICITY_plot')
+        
+    del plot
+
+
+    plot = None
+
+    plot  =  vis_des.diff_gene_type_plot( 
+                            set1_name = 'Set 1', 
+                            set2_name = 'Set 2', 
+                            image_width = 12, 
+                            image_high = 6, 
+                            font_size = 15)
+    
+    
+    if not isinstance(plot, figure.Figure):
+        errored.append('diff_gene_type_plot')
+        
+    del plot
+    
+    
+    plot = None
+
+    
+    plot  =  vis_des.diff_GO_plot(   
+                p_val = 0.05, 
+                test = 'FISH', 
+                adj = 'BH', 
+                n = 25, 
+                min_terms = 5,
+                selected_parent = [],
+                width = 10, 
+                bar_width = 0.5, 
+                stat = 'p_val')
+    
+     
+    
+    if not isinstance(plot, figure.Figure):
+        errored.append('diff_GO_plot')
+        
+    del plot
+    
+    
+    plot = None
+    
+
+    plot  =  vis_des.diff_KEGG_plot(   
+                    p_val = 0.05, 
+                    test = 'FISH', 
+                    adj = 'BH', 
+                    n = 25, 
+                    min_terms = 5,
+                    selected_parent = [],
+                    width = 10, 
+                    bar_width = 0.5, 
+                    stat = 'p_val')
+    
+    
+    if not isinstance(plot, figure.Figure):
+        errored.append('diff_KEGG_plot')
+        
+    del plot
+    
+
+
+    plot = None
+
+
+    plot  =  vis_des.diff_REACTOME_plot(   
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 25, 
+                        min_terms = 5,
+                        selected_parent = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'n')
+    
+    
+    if not isinstance(plot, figure.Figure):
+        errored.append('diff_REACTOME_plot')
+        
+    del plot
+    
+    
+    
+    
+    plot = None
+
+
+    plot  =  vis_des.diff_SPECIFICITY_plot(   
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 5, 
+                        min_terms = 1,
+                        selected_set = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'p_val')
+    
+    
+    if not isinstance(plot, figure.Figure):
+        errored.append('diff_SPECIFICITY_plot')
+        
+    del plot
+    
+    
+    
+    
+
+    import networkx as nx
+
+    go = None
+
+    go = vis_des.diff_GOPa_network_create(data_set = 'GO-TERM', 
+                            genes_inc = 10, 
+                            gene_int = True, 
+                            genes_only = True, 
+                            min_con = 2, 
+                            children_con = False,
+                            include_childrend = True,
+                            selected_parents = [],
+                            selected_genes = [])
+
+
+    if not isinstance(go, nx.Graph):
+        errored.append('diff_GOPa_network_create-GO-TERM')
+        
+    del go
+    
+    
+    
+
+    kegg = None
+
+    kegg = vis_des.diff_GOPa_network_create(data_set = 'KEGG', 
+                            genes_inc = 10, 
+                            gene_int = True, 
+                            genes_only = True, 
+                            min_con = 2, 
+                            children_con = False,
+                            include_childrend = True,
+                            selected_parents = [],
+                            selected_genes = [])
+
+
+    if not isinstance(kegg, nx.Graph):
+        errored.append('diff_GOPa_network_create-KEGG')
+        
+    del kegg
+    
+    
+    
+    reactome = None
+
+    reactome = vis_des.diff_GOPa_network_create(data_set = 'REACTOME', 
+                            genes_inc = 10, 
+                            gene_int = True, 
+                            genes_only = True, 
+                            min_con = 2, 
+                            children_con = False,
+                            include_childrend = True,
+                            selected_parents = [],
+                            selected_genes = [])
+
+
+    if not isinstance(reactome, nx.Graph):
+        errored.append('diff_GOPa_network_create-REACTOME')
+        
+    del reactome
+    
+    
+    
+    gi = None
+
+    gi = vis_des.diff_GI_network_create(min_con = 2)
+    
+    
+    if not isinstance(gi, nx.Graph):
+        errored.append('diff_GI_network_create')
+        
+    del gi
+    
+    
+    
+    
+    aml = None
+    
+    aml = vis_des.diff_AUTO_ML_network( 
+                        genes_inc = 10, 
+                        gene_int = True, 
+                        genes_only = True, 
+                        min_con = 2, 
+                        children_con = False, 
+                        include_childrend = False,
+                        selected_parents = [],
+                        selected_genes = [])
+        
+        
+    if not isinstance(aml, nx.Graph):
+        errored.append('diff_AUTO_ML_network')
+         
+    del aml
+    
+    
+    
+    
+    dgs = None
+    
+    dgs = vis_des.diff_gene_scatter( 
+                     set_num = 1,
+                     colors = 'viridis', 
+                     species = 'human', 
+                     hclust = 'complete', 
+                     img_width = None, 
+                     img_high = None, 
+                     label_size = None, 
+                     x_lab = 'Genes', 
+                     legend_lab = 'log(TPM + 1)',
+                     selected_list = [])
+    
+       
+    if not isinstance(dgs, dict):
+        errored.append('diff_gene_scatter')
+         
+    del dgs
+    
+    
+    
     
     if len(errored) == 0:
         
@@ -1338,55 +1634,65 @@ def AnDESVis_tests():
     
 
  
+
+
+def testing_mode():
     
+    import os 
+    import shutil
+
+    print('\nTesting mode start...')
+    
+    print('\nTesting - DataPrepare...')
+
+    data_prepare_errors = DataPrepare_tests()
+    
+    print('\nTesting - GetRaw...')
+
+    enrichment_raw_errors = EnrichmentGetRaw_tests()
+    
+    print('\nTesting - GetData...')
+
+    enrichment_data_errors = EnrichmentGetData_tests()
+    
+    print('\nTesting - Enrichment...')
+
+    enrichment_errors = Enrichment_tests()
+    
+    print('\nTesting - Visualization...')
+
+    avis = AnVis_tests()
+    
+    print('\nTesting - VisualizationDES...')
+
+    adevis = AnDESVis_tests()
+    
+    full = data_prepare_errors + enrichment_raw_errors + enrichment_data_errors + enrichment_errors + avis + adevis
+    
+    
+    if len(full) == 0:
+        
+        print('\nAll tests passed! Data and scripts working properly!')
+        
+        _curr = os.getcwd()
+        _des = os.path.dirname(_curr)
+
+        shutil.copy(os.path.join(_curr, 'Enrichment.py'), os.path.join(_des,'GEDSpy', 'Enrichment.py')) 
+        shutil.copy(os.path.join(_curr, 'DataPrepare.py'), os.path.join(_des,'GEDSpy', 'DataPrepare.py')) 
+        
+        
+    
+    else:
+        
+        print('\nAll tests not passed! Data and scripts working wrong! Check all functions or data!')
+
+
+  
+
+
+if __name__ == "__main__":
+    input("Press Enter to start testing mode...")
+    testing_mode()
+
+        
  
-    
- 
-    
-
-# d.GO_diff()
-
-# t = d.get_GO_diff
-
-# d.KEGG_diff()
-
-# d.get_KEGG_diff
-
-# d.REACTOME_diff()
-
-# d.get_REACTOME_diff
-
-# d.spec_diff()
-
-# d.get_specificity_diff
-
-# d.gi_diff()
-
-# d.get_GI_diff
-
-# d.network_diff()
-
-
-# d.get_networks_diff
-
-# d.inter_processes()
-
-
-
-
-
-
-with open('set1_set2.json', 'w') as json_file:
-    json.dump(results3, json_file)
-
-
-
-
-
-import json
-
-with open('set1_set2.json', 'r') as json_file:
-    results3 = (json.load(json_file))
-
-
-input_data = results3

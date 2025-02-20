@@ -39,9 +39,6 @@ rc("svg", fonttype='path')
 
 
 
-
-   
-
 pd.options.mode.chained_assignment = None
 warnings.filterwarnings("ignore")
 
@@ -3721,7 +3718,7 @@ class Visualization():
     def __init__(self, input_data:dict):
         
         self.input_data = input_data
-               
+        self.show_plot = False
         
         super().__init__()
 
@@ -3817,6 +3814,12 @@ class Visualization():
         elif side == 'left':
             ax.invert_xaxis()
         
+        
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig_1)
+            
         try:
             return fig_1
         except:
@@ -3876,6 +3879,12 @@ class Visualization():
            elif side == 'left':
                ax.invert_xaxis()
            
+            
+           if self.show_plot == True:
+               plt.show()
+           elif self.show_plot == False:
+               plt.close(fig_1)
+               
            try:
                return fig_1
            except:
@@ -4014,7 +4023,10 @@ class Visualization():
         p=plt.gcf()
         p.gca().add_artist(circle2)
         
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
                 
         return fig
               
@@ -4166,7 +4178,10 @@ class Visualization():
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         return fig
     
@@ -4323,8 +4338,10 @@ class Visualization():
             )
 
 
-        plt.show()
-        
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         return fig
     
@@ -4493,7 +4510,10 @@ class Visualization():
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -4644,7 +4664,10 @@ class Visualization():
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -4726,7 +4749,10 @@ class Visualization():
         )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -4805,7 +4831,10 @@ class Visualization():
         )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -4907,7 +4936,10 @@ class Visualization():
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         return fig
         
@@ -5655,7 +5687,11 @@ class Visualization():
             ax.xaxis.set_tick_params(length=0,labelbottom=True)
             ax.yaxis.set_tick_params(length=0,labelbottom=True)
             ax.grid(False)
-        
+            
+            if self.show_plot == True:
+                plt.show()
+            elif self.show_plot == False:
+                plt.close(fig)
         
             return_dict[i] = fig
             
@@ -5863,7 +5899,7 @@ class DSA(PathMetadata):
         This method returns the network Differential Set Analysis (DSA)
     
         Returns:  
-            Returns `self.networks` contains GO-TERM DSA obtained using the `self.get_networks_diff` method.
+            Returns `self.networks` contains network DSA obtained using the `self.get_networks_diff` method.
         '''
         
         return self.networks
@@ -5871,6 +5907,13 @@ class DSA(PathMetadata):
      
     @property
     def get_inter_terms(self):
+        
+        '''
+        This method returns the Inter Terms analysis results.
+        
+        Returns:  
+            Returns `self.inter_terms` contains Inter Terms analysis results obtained using the `self.inter_processes` method.
+        '''
         
         return self.inter_terms
 
@@ -6612,7 +6655,7 @@ class DSA(PathMetadata):
             This method assesses differences between set1 and set2 by identifying gene/protein occurrences that are enriched in the combined data of set1 and set2, but are not present independently in either set1 or set2.
         
         Returns:
-            Updates `self.networks` with Reactome DSA data.
+            Updates `self.networks` with network DSA data.
             To retrieve the results, use the `self.get_networks_diff` method.
         '''
         
@@ -6719,6 +6762,19 @@ class DSA(PathMetadata):
         
         
     def inter_processes(self):
+        
+        '''
+        This method performs Differential Set Analysis (DSA) to compare two datasets (set1 and set2).  
+        It identifies new terms or pathways in the combined set1 and set2 data, enabling enrichment analysis and presenting inter terms for:
+            - GO-TERM
+            - KEGG
+            - Reactome
+            - specificity (HPA)
+        
+        Returns:
+            Updates `self.inter_terms` with Inter Terms DSA data.
+            To retrieve the results, use the `self.get_inter_terms` method.
+        '''
         
         s1_genes = self.set_1['enrichment']['gene_info']['found_names']
         s2_genes = self.set_2['enrichment']['gene_info']['found_names']
@@ -6929,23 +6985,19 @@ class DSA(PathMetadata):
     def full_analysis(self):
         
         '''
-        This method conducts a full analysis of `Enrichment` class results obtained using the `self.get_results` method:
-
-            * DSA:
-                - Human Protein Atlas (HPA) [see self.features_specificity() method]  
-                - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see self.KEGG_overrepresentation() method]  
-                - GeneOntology (GO-TERM) [see self.GO_overrepresentation() method]  
-                - Reactome [see self.REACTOME_overrepresentation() method]  
-                - Human Diseases [see self.DISEASES_overrepresentation() method]  
-                - Viral Diseases (ViMIC) [see self.ViMIC_overrepresentation() method]  
-             * networks:
-                 - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see self.KEGG_network() method]  
-                 - GeneOntology (GO-TERM) [see self.GO_network() method]  
-                 - Reactome [see self.REACTOME_network() method]  
-                
+         This method performs a full Differential Set Analysis (DSA) to compare two sets (set1 and set2) based on:
+         
+            - Human Protein Atlas (HPA) [see self.spec_diff() method]  
+            - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see self.KEGG_diff() method]  
+            - GeneOntology (GO-TERM) [see self.GO_diff() method]  
+            - Reactome [see self.REACTOME_diff() method]  
+            - Inter Terms (IT) [see self.gi_diff() method]
+            - Genes Interactions (GI) [see self.gi_diff() method]
+            - Inter CellConnections (ICC) [see self.connections_diff() method]
+            - Networks (GO-TERM, KEGG, Reactome) [see self.network_diff() method]
                 
         Returns:  
-            To retrieve the results, use the `self.get_full_results` method. 
+            To retrieve the results, use the `self.get_results` method. 
         '''
         
         print('\nGO-TERM differential analysis...')
@@ -6985,6 +7037,28 @@ class DSA(PathMetadata):
           
     @property
     def get_results(self):
+        
+        '''
+        This method returns the full analysis dictionary containing on keys: 
+            * 'GI' - Genes Interactions (STRING / IntAct) [see `self.get_GI_diff` property]
+            * 'inter_cell_connections' - Inter CellConnections (CellTalk / CellPhone) [see `self.get_set_to_set_con` property]
+            * 'inter_terms' - Inter Terms (KEGG, REACTOME, GO-TERM) [see `self.get_networks_diff` property]
+            * 'networks' - Network data [see `self.get_inter_terms` property]:
+                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) 
+                - 'GO-TERM' - GeneOntology (GO-TERM) 
+                - 'REACTOME' - Reactome 
+            * 'regulations' - Terms / Pathways:
+                - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_diff' property]  
+                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_diff' property]  
+                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_diff' property]  
+                - 'REACTOME' - Reactome [see 'self.get_REACTOME_diff' property]  
+            * 'set1' - input dictionary with results of enrichment and statistical analysis for set1
+            * 'set2' - input dictionary with results of enrichment and statistical analysis for set2
+                
+            
+            Returns:  
+                dict (dict) - full analysis data
+        '''
         
         results = {}
         
@@ -7031,6 +7105,7 @@ class VisualizationDES(Visualization):
     def __init__(self, input_data:dict):
         
         self.input_data = input_data
+        self.show_plot = False
                
     
     ###########################################################################
@@ -7161,7 +7236,10 @@ class VisualizationDES(Visualization):
         p=plt.gcf()
         p.gca().add_artist(circle2)
         
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
                 
         return fig
           
@@ -7297,7 +7375,10 @@ class VisualizationDES(Visualization):
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         return fig
     
@@ -7450,7 +7531,10 @@ class VisualizationDES(Visualization):
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -7606,7 +7690,10 @@ class VisualizationDES(Visualization):
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -7748,7 +7835,10 @@ class VisualizationDES(Visualization):
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -7814,7 +7904,10 @@ class VisualizationDES(Visualization):
         )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -7879,7 +7972,10 @@ class VisualizationDES(Visualization):
         )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         
         return fig
@@ -7972,7 +8068,10 @@ class VisualizationDES(Visualization):
             )
 
 
-        plt.show()
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
         
         return fig
         
@@ -8278,7 +8377,7 @@ class VisualizationDES(Visualization):
         
        
          
-    def AUTO_ML_network(self, 
+    def set_AUTO_ML_network(self, 
                         set_num = 1,
                         genes_inc:int = 10, 
                         gene_int:bool = True, 
@@ -8601,7 +8700,6 @@ class VisualizationDES(Visualization):
                 Z = linkage(scatter_df, method=hclust)
         
         
-                # Get the order of features based on the dendrogram
                 order_of_features = dendrogram(Z, no_plot=True)['leaves']
         
                 indexes_sort = list(scatter_df.index)
@@ -8615,7 +8713,6 @@ class VisualizationDES(Visualization):
             
                 Z = linkage(scatter_df, method=hclust)
         
-                # Get the order of features based on the dendrogram
                 order_of_features = dendrogram(Z, no_plot=True)['leaves']
         
                 indexes_sort = list(scatter_df.index)
@@ -8638,7 +8735,6 @@ class VisualizationDES(Visualization):
                 
             scatter_df.insert(0, '  ', 0)
     
-            # Add a column of zeros at the end
             scatter_df[' '] = 0
                  
             fig, ax = plt.subplots(figsize=(img_width*cm,img_high*cm))
@@ -8700,6 +8796,10 @@ class VisualizationDES(Visualization):
             ax.yaxis.set_tick_params(length=0,labelbottom=True)
             ax.grid(False)
         
+            if self.show_plot == True:
+                plt.show()
+            elif self.show_plot == False:
+                plt.close(fig)
         
             return_dict[i] = fig
             
@@ -8713,13 +8813,11 @@ class VisualizationDES(Visualization):
     
     def bar_plot_diff(self,
         data,
-        n=25, 
         side='right', 
         color='blue', 
         width=10, 
         bar_width=0.5, 
         stat='p_val', 
-        sets='GO-TERM',
         column='name',
         x_max=None,
         show_axis=True,
@@ -8735,7 +8833,6 @@ class VisualizationDES(Visualization):
         elif stat.upper() == 'p_val'.upper():
             x_label = '-log(p-val)'
             values = tmp['-log(p-val)']
-            print(values)
         else:
             x_label = 'Number of genes'
             values = tmp['n']
@@ -8743,15 +8840,23 @@ class VisualizationDES(Visualization):
         if ax is None:
             fig_1, ax = plt.subplots(figsize=(width, float(len(tmp[column]) / 2.5)))
         
-        
-        if side == 'left':
-            ax.yaxis.tick_left()
-            x_offset = x_max if x_max is not None else values.max()  
-            ax.barh(tmp[column], values, color=color, height=bar_width, left=x_offset - values) 
 
+            
+        if side == 'left':
+            ax.barh(tmp[column], values, color=color, height=bar_width) 
+            ax.set_xlim(0, x_max)
+            ax.invert_xaxis()
+            ax.xaxis.set_major_locator(plt.MaxNLocator(integer=True))
+
+                        
+
+            
         else:  
-            ax.yaxis.tick_right()
             ax.barh(tmp[column], values, color=color, height=bar_width)
+            ax.set_xlim(0, x_max)
+            ax.xaxis.set_major_locator(plt.MaxNLocator(integer=True))
+
+            
 
         if show_axis:
             ax.set_xlabel(x_label)
@@ -8769,19 +8874,343 @@ class VisualizationDES(Visualization):
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
         
-        if x_max is not None:
-            ax.set_xlim(0, x_max)
+       
         
         if side == 'right':
             ax.set_title('')
             ax.yaxis.tick_right()
         
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig_1)
+            
         try:
             return fig_1
         except:
             return ax
-
     
+    
+    
+    def create_inter_df(self, data_1:pd.DataFrame, data_2:pd.DataFrame(), group_by:str, values:str, set_col = None):
+        
+        if isinstance(set_col, str):
+            data_1 = data_1[[group_by, values, set_col]]
+            data_2 = data_2[[group_by, values, set_col]]
+            
+            return_data = pd.DataFrame()
+            
+            iter_sters = set(list(data_1[set_col]) + list(data_2[set_col]))
+            
+            for s in iter_sters:
+                
+                tmp1 = data_1[data_1[set_col] == s]
+                tmp2 = data_2[data_2[set_col] == s]
+                
+                tmp_1_1 = tmp2[~tmp2[group_by].isin(tmp1[group_by])]
+                tmp_1_1[values] = 0
+                tmp_2_1 = tmp1[~tmp1[group_by].isin(tmp2[group_by])]
+                tmp_2_1[values] = 0
+                
+                tmp1 = pd.concat([tmp1, tmp_1_1])
+                tmp2 = pd.concat([tmp2, tmp_2_1])
+                
+                tmp1 = tmp1.drop(columns=[set_col])
+                tmp2 = tmp2.drop(columns=[set_col])
+
+                tmp_full = tmp1.merge(tmp2, on = group_by, how = 'left', suffixes=('_1', '_2'))
+                
+                tmp_full[set_col] = s
+                
+                return_data = pd.concat([return_data, tmp_full])
+
+        else:
+            
+            
+            data_1 = data_1[[group_by, values]]
+            data_2 = data_2[[group_by, values]]
+            
+            return_data = pd.DataFrame()
+
+            tmp1 = data_1
+            tmp2 = data_2
+            
+            tmp_1_1 = tmp2[~tmp2[group_by].isin(tmp1[group_by])]
+            tmp_1_1[values] = 0
+            tmp_2_1 = tmp1[~tmp1[group_by].isin(tmp2[group_by])]
+            tmp_2_1[values] = 0
+            
+            tmp1 = pd.concat([tmp1, tmp_1_1])
+            tmp2 = pd.concat([tmp2, tmp_2_1])
+
+
+            return_data = tmp1.merge(tmp2, on = group_by, how = 'left', suffixes=('_1', '_2'))
+                
+         
+            
+        return(return_data)
+    
+    
+    
+    def bivector_column(self, plot_bin_data:pd.DataFrame, bin_value:str, name_col:str, set_col, min_n, n_max , width, bar_width, selected_set = [], inter_focus = False, s1_color = 'blue', s2_color = 'red', sep_factor = 15):
+        
+        if bin_value.upper() == 'perc'.upper():
+            val = 'pct'
+        elif bin_value.upper() == 'p_val'.upper():
+            val = '-log(p-val)'
+        else:
+            val = 'n'
+
+
+
+        # select itteration
+        
+        iter_set = list(set(plot_bin_data[set_col]))
+                  
+          
+        if len(selected_set) > 0:
+            tmp_iter = []
+            for i in selected_set:
+                if i in iter_set:
+                    tmp_iter.append(i)
+                else:
+                    print(f'\nSet name: {i} was not found')
+            
+            iter_set = tmp_iter
+            
+            if len(iter_set) == 0:
+                raise ValueError('Nothing to return')
+
+
+
+        # select display data
+        
+        display_data = pd.DataFrame()
+        
+        for l, i in enumerate(iter_set):
+
+            
+            tmp = plot_bin_data[plot_bin_data[set_col] == i]
+            
+            q1_tmp = tmp[(tmp[val + '_1'] != 0) & (tmp[val + '_2'] == 0)]
+            q3_tmp = tmp[(tmp[val + '_2'] != 0) & (tmp[val + '_1'] == 0)]
+            q2_tmp = tmp[(tmp[val + '_2'] != 0) & (tmp[val + '_1'] != 0)]
+            
+            if len(tmp.index) >= min_n:
+                
+                
+                if len(tmp.index) > n_max:
+                    
+                   
+                    
+                    if inter_focus == True:
+                        
+                        if len(q2_tmp.index) >= n_max:
+                            
+                            q2_tmp = q2_tmp.sort_values(by=[val + '_1', val + '_2'], 
+                                                        ascending=[False, False]).reset_index(drop=True)
+                            
+                            tmp = q2_tmp.iloc[0:n_max, :]
+                            
+                        else:
+                            
+                            
+                            q2_n = len(q2_tmp.index)
+                            
+                            rest_n = n_max - q2_n
+                            
+                            if rest_n % 2 != 0:
+                                rest_n += 1
+                            
+                            q1_tmp = q1_tmp.sort_values(by=[val + '_1'], 
+                                                        ascending=[False]).reset_index(drop=True)
+                            
+                            q3_tmp = q3_tmp.sort_values(by=[val + '_2'], 
+                                                        ascending=[False]).reset_index(drop=True)
+                            
+                            
+                            tmp = pd.concat([q2_tmp, q1_tmp.iloc[0:rest_n/2, :], q3_tmp.iloc[0:rest_n/2, :]])
+                            
+                    else:
+                        
+                        q1_n = len(q1_tmp.index)
+                        q2_n = len(q2_tmp.index)
+                        q3_n = len(q3_tmp.index)
+                        
+                        
+                        q1_n = int(n_max * (q1_n / len(tmp.index)))
+                        q2_n = int(n_max * (q2_n / len(tmp.index)))
+                        q3_n = int(n_max * (q3_n / len(tmp.index)))
+
+                        
+                        
+                        
+                        q2_tmp = q2_tmp.sort_values(by=[val + '_1', val + '_2'], 
+                                                    ascending=[False, False]).reset_index(drop=True)
+                        
+                     
+                        q1_tmp = q1_tmp.sort_values(by=[val + '_1'], 
+                                                    ascending=[False]).reset_index(drop=True)
+                        
+                        q3_tmp = q3_tmp.sort_values(by=[val + '_2'], 
+                                                    ascending=[False]).reset_index(drop=True)
+                        
+                        
+                        tmp = pd.concat([q2_tmp.iloc[0:q2_n, :], q1_tmp.iloc[0:q1_n, :], q3_tmp.iloc[0:q3_n, :]])
+                        
+                        
+            tmp['sort_category'] = 1 
+            tmp.loc[(tmp[val + '_1'] != 0) & (tmp[val + '_2'] != 0), 'sort_category'] = 2
+            tmp.loc[tmp[val + '_1'] == 0, 'sort_category'] = 3
+            
+         
+            
+            tmp = tmp.sort_values(
+                by=['sort_category', val + '_1', val + '_2'], 
+                ascending=[True, False, True]
+            ).drop(columns=['sort_category']).reset_index(drop=True)
+                        
+                        
+            display_data = pd.concat([display_data, tmp])
+                        
+                        
+                    
+
+
+        # set queue
+        
+        tmp_q = display_data.copy()
+        tmp_q['sort'] = tmp_q[val + '_1'] + tmp_q[val + '_2']
+        
+
+        tmp_q = tmp_q[[set_col, 'sort']]
+        tmp_q = tmp_q.groupby(set_col, as_index=False).sum()
+        tmp_q = tmp_q.sort_values(by='sort', ascending=False).reset_index(drop=True)
+        
+        
+        iter_set = list(tmp_q[set_col])
+
+
+        # set plot distance
+        
+        hlist = []
+
+        valid_iter_set = []
+        
+        x_max = 0
+        
+        for l, i in enumerate(iter_set):
+            
+            tmp_in = display_data[display_data[set_col] == i]
+            
+            #
+            
+            if len(set(tmp_in[name_col])) >= min_n:
+                
+                valid_iter_set.append(i)
+                x_max = np.max([x_max] + list(tmp_in[val + '_1']) + list(tmp_in[val + '_2']))
+                
+                if float(len(set(tmp_in[name_col]))) > n_max:
+
+                    tn = n_max
+                    if tn < 6:
+                        if tn < 2:
+                            hlist.append(tn/(3.25 + ((6-tn)/10)))
+                        else:
+                            hlist.append(tn/(2.12 + ((6-tn)/10)))
+                    else:
+                        hlist.append(tn/2.1)
+
+                else:
+
+                    tn = float(len(set(tmp_in[name_col])))
+                    
+                    if tn < 6:
+                        if tn < 2:
+                            hlist.append(tn/(3.25 + ((6-tn)/10)))
+                        else:
+                            hlist.append(tn/(2.12 + ((6-tn)/10)))
+
+                    else:
+                        hlist.append(tn/2.1)
+            
+            
+        iter_set_final = valid_iter_set
+
+
+        fig = plt.figure(figsize=(width, sum(hlist)))
+
+
+        gs = GridSpec(len(hlist), 2, height_ratios=hlist)  
+        
+        plt.subplots_adjust(wspace=0.05) 
+
+        gs.update(hspace=len(hlist)/sep_factor)
+
+
+        for l, i in enumerate(iter_set_final):
+            
+            ax1 = fig.add_subplot(gs[l, 0])
+            ax2 = fig.add_subplot(gs[l, 1]) 
+            ax1.tick_params(axis='y', which='both', left=False, right=False, labelleft=False, labelright=False, colors='white')
+               
+           
+            tmp = display_data[display_data[set_col] == i]
+            
+        
+            tmp1 = tmp[[name_col, val + '_1']]
+            tmp1.rename(columns={val + '_1': val}, inplace=True)
+            tmp2 = tmp[[name_col, val + '_2']]
+            tmp2.rename(columns={val + '_2': val}, inplace=True)
+
+            
+            # plots creating
+            
+            show_axis = (l + 1 == len(iter_set_final))  
+            
+            self.bar_plot_diff(
+                data=tmp1,
+                side='left', 
+                color=s1_color, 
+                width=width, 
+                bar_width=bar_width, 
+                stat=bin_value, 
+                column=name_col,
+                x_max=x_max,
+                show_axis=show_axis,
+                title=i,  
+                ax=ax1
+            )
+            
+
+            
+            self.bar_plot_diff(
+                data=tmp2,
+                side='right', 
+                color=s2_color, 
+                width=width, 
+                bar_width=bar_width, 
+                stat=bin_value, 
+                column=name_col,
+                x_max=x_max,
+                show_axis=show_axis,
+                title=i,  
+                ax=ax2
+            )
+            
+            
+
+        plt.tight_layout()
+        
+        
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
+        
+        return fig
+    
+   
 
     
     def diff_GO_plot(self,   
@@ -8793,12 +9222,33 @@ class VisualizationDES(Visualization):
                 selected_parent:list = [],
                 width = 10, 
                 bar_width = 0.5, 
-                stat = 'p_val'
+                stat = 'p_val',
+                sep_factor = 15,
                 ):
+        
+        '''
+        This method generates a bar plot for Gene Ontology (GO) Differential Set Analysis (DES) of enrichment and statistical analysis.
+        Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
+        
+            Args:
+                p_val (float) - significance threshold for p-values. Default is 0.05
+                test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+                adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+                n (int) - maximum number of terms to display per category. Default is 25
+                min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
+                selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
+                side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+                color (str) - color of the bars in the plot. Default is 'blue'
+                width (int) - width of the plot in inches. Default is 10
+                bar_width (float / int) - width of individual bars. Default is 0.5
+                stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+        
+            Returns:
+                fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        '''
         
         
         sets = 'GO-TERM'
-        column = 'child_name'    
        
         
         test_string = self.select_test(test, adj)
@@ -8853,252 +9303,42 @@ class VisualizationDES(Visualization):
         tmp_in_2 = tmp_in_2[tmp_in_2['parent_name'].isin(parent) | tmp_in_2['child_name'].isin(child)]
 
         
-        t1 = list(tmp_in_1['parent_name']) + list(tmp_in_1['child_name'])
-        t2 = list(tmp_in_2['parent_name']) + list(tmp_in_2['child_name'])
+        ##############################################################################
 
-        metadata = metadata[metadata['term'].isin(t1 + t2)]
-
-        
         if stat.upper() == 'perc'.upper():
-            x_max = np.max(list(tmp_in_1['pct']) + list(tmp_in_2['pct']))
-            
+            val = 'pct'
         elif stat.upper() == 'p_val'.upper():
-            x_max = np.max(list(tmp_in_1['-log(p-val)']) + list(tmp_in_2['-log(p-val)']))
-            
+            val = '-log(p-val)'
         else:
-            x_max = np.max(list(tmp_in_1['n']) + list(tmp_in_2['n']))
+            val = 'n'
 
-            
-        metadata_parent = metadata[metadata['type'] == 'parent']
 
+
+        plot_bin_data =  self.create_inter_df(data_1 = tmp_in_1, 
+                                           data_2 = tmp_in_2, 
+                                           group_by = 'child_name', 
+                                           values = val, 
+                                           set_col = 'parent_name')
+
+
+
+
+        plot = self.bivector_column(plot_bin_data = plot_bin_data, 
+                               bin_value = stat , 
+                               name_col = 'child_name', 
+                               set_col = 'parent_name', 
+                               min_n = min_terms, n_max = n, 
+                               width = width,
+                               bar_width = bar_width,
+                               selected_set = selected_parent, 
+                               inter_focus = False,
+                               s1_color = 'lightblue',
+                               s2_color = 'blue',
+                               sep_factor = sep_factor)
+
+        ##############################################################################
         
-        metadata_parent = metadata_parent.sort_values('FC',  ascending = False)
-            
-       
-        iter_set = list(metadata_parent['term'])
-        
-          
-        if len(selected_parent) > 0:
-            tmp_iter = []
-            for i in selected_parent:
-                if i in iter_set:
-                    tmp_iter.append(i)
-                else:
-                    print(f'\nParent term name: {i} was not found')
-            
-            iter_set = tmp_iter
-            
-            if len(iter_set) == 0:
-                raise ValueError('Nothing to return')
-        
-        hlist = []
-        
-        valid_iter_set = []
-        
-        for l, i in enumerate(iter_set):
-            
-            tmp_in = pd.DataFrame()
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['parent_name'][x]] 
-            tmp = tmp_in_1.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['parent_name'][x]] 
-            tmp = tmp_in_2.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if len(set(tmp_in[column])) >= min_terms:
-                valid_iter_set.append(i)
-                
-                if float(len(set(tmp_in[column]))) > n:
-
-                    tn = n
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-                    else:
-                        hlist.append(tn/2.1)
-    
-                else:
-
-                    tn = float(len(set(tmp_in[column])))
-                    
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-    
-                    else:
-                        hlist.append(tn/2.1)
-            
-        iter_set = valid_iter_set
-        
-        fig = plt.figure(figsize=(width, sum(hlist)))
-
-
-        gs = GridSpec(len(hlist), 2, height_ratios=hlist)  
-        
-        gs.update(hspace=len(hlist)/50)
-
-        
-        for l, i in enumerate(iter_set):
-            
-            ax1 = fig.add_subplot(gs[l, 0])
-            ax2 = fig.add_subplot(gs[l, 1]) 
-            ax1.tick_params(axis='y', which='both', left=False, right=False, labelleft=False, labelright=False, colors='white')
-
-            # 1
-            tmp_in = pd.DataFrame()
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['parent_name'][x]] 
-
-            tmp = tmp_in_1.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['parent_name'][x]] 
-            inx = [x for x in inx if tmp_in_2['child_name'][x] not in list(tmp_in_1['child_name'])]
-
-            tmp = tmp_in_2.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            
-            tmp1 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if stat.upper() == 'perc'.upper():
-                tmp1 = tmp1.sort_values(by='pct', ascending=False).reset_index(drop=True)
-
-            elif stat.upper() == 'p_val'.upper():
-                tmp1 = tmp1.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-
-            else:
-                tmp1 = tmp1.sort_values(by='n', ascending=False).reset_index(drop=True)
-
-
-            # 2
-            tmp_in = pd.DataFrame()
-        
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['parent_name'][x]] 
-
-            tmp = tmp_in_2.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['parent_name'][x]]
-            inx = [x for x in inx if tmp_in_1['child_name'][x] not in list(tmp_in_2['child_name'])]
-
-            
-            tmp = tmp_in_1.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            tmp2 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            # 3
-            sort_order = tmp1['child_name'][tmp1['pct'] > 0]
-            eq_order = [x for x in sort_order if x in list(tmp2['child_name'][tmp2['pct'] > 0])]
-            sort_order = [x for x in sort_order if x in list(tmp2['child_name'][tmp2['pct'] == 0])]
-            
-            tmp2_1 = tmp2[tmp2['child_name'].isin(sort_order)].copy()
-            tmp2_eq = tmp2[tmp2['child_name'].isin(eq_order)].copy()
-            tmp2_2 = tmp2[~tmp2['child_name'].isin(sort_order + eq_order)].copy()
-
-
-            tmp2_1['sort'] = pd.Categorical(tmp2_1['child_name'], categories=sort_order, ordered=True)
-            
-            tmp2_1 = tmp2_1.sort_values('sort')
-            
-            tmp2_1.pop('sort')
-            
-            if stat.upper() == 'perc'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='pct', ascending=False).reset_index(drop=True)
-
-            elif stat.upper() == 'p_val'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-
-            else:
-                tmp2_2 = tmp2_2.sort_values(by='n', ascending=False).reset_index(drop=True)
-                
-            
-            mut_len = len(tmp2_1.index) + len(tmp2_2.index) + len(tmp2_eq.index)
-            if  mut_len > n:
-                if len(tmp2_eq.index) < 25:
-                    eq_len = len(tmp2_eq.index)
-                    tmp2_1_n = int((25 - eq_len)*(len(tmp2_1.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_2_n = int((25 - eq_len)*(len(tmp2_2.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_1 = tmp2_1.iloc[0:tmp2_1_n, :]
-                    tmp2_2 = tmp2_2.iloc[0:tmp2_2_n, :]
-                    tmp2 = pd.concat([pd.DataFrame(tmp2_1), pd.DataFrame(tmp2_eq), pd.DataFrame(tmp2_2)])
-                else:
-                    tmp2 = tmp2_eq.iloc[0:n, :]
-
-                
-            del tmp2_1, tmp2_2, tmp2_eq
-            
-            sort_order = tmp2['child_name']
-            tmp1 = tmp1[tmp1['child_name'].isin(list(sort_order))]
-            tmp1['sort'] = pd.Categorical(tmp1['child_name'], categories=sort_order, ordered=True)
-            
-            tmp1 = tmp1.sort_values('sort')
-            
-            tmp1.pop('sort')
-            
-
-            
-            
-            # plots creating
-            
-            show_axis = (l + 1 == len(iter_set))  
-            
-            self.bar_plot_diff(
-                data=tmp1,
-                n=n, 
-                side='left', 
-                color='lightblue', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='GO-TERM',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax1
-            )
-            
-
-            
-            self.bar_plot_diff(
-                data=tmp2,
-                n=n, 
-                side='right', 
-                color='blue', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='GO-TERM',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax2
-            )
-            
-            
-        
-        plt.tight_layout()
-
-        plt.show()
-        
-        return fig
+        return plot
     
     
     
@@ -9112,12 +9352,33 @@ class VisualizationDES(Visualization):
                 selected_parent:list = [],
                 width = 10, 
                 bar_width = 0.5, 
-                stat = 'p_val'
+                stat = 'p_val',
+                sep_factor = 15
                 ):
         
         
+        '''
+        This method generates a bar plot for KEGG Differential Set Analysis (DES) of enrichment and statistical analysis.
+        Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
+       
+        Args:
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 25
+            min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
+            selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'orange'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+    
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        '''
+        
         sets = 'KEGG'
-        column = '3rd'    
        
         
         test_string = self.select_test(test, adj)
@@ -9172,255 +9433,42 @@ class VisualizationDES(Visualization):
         tmp_in_2 = tmp_in_2[tmp_in_2['2nd'].isin(parent) | tmp_in_2['3rd'].isin(child)]
 
         
-        t1 = list(tmp_in_1['2nd']) + list(tmp_in_1['3rd'])
-        t2 = list(tmp_in_2['2nd']) + list(tmp_in_2['3rd'])
+        ##############################################################################
 
-        metadata = metadata[metadata['term'].isin(t1 + t2)]
-
-        
         if stat.upper() == 'perc'.upper():
-            x_max = np.max(list(tmp_in_1['pct']) + list(tmp_in_2['pct']))
-            
+            val = 'pct'
         elif stat.upper() == 'p_val'.upper():
-            x_max = np.max(list(tmp_in_1['-log(p-val)']) + list(tmp_in_2['-log(p-val)']))
-            
+            val = '-log(p-val)'
         else:
-            x_max = np.max(list(tmp_in_1['n']) + list(tmp_in_2['n']))
+            val = 'n'
 
-            
-        metadata_parent = metadata[metadata['type'] == 'parent']
 
+
+        plot_bin_data =  self.create_inter_df(data_1 = tmp_in_1, 
+                                           data_2 = tmp_in_2, 
+                                           group_by = '3rd', 
+                                           values = val, 
+                                           set_col = '2nd')
+
+
+
+
+        plot = self.bivector_column(plot_bin_data = plot_bin_data, 
+                               bin_value = stat , 
+                               name_col = '3rd', 
+                               set_col = '2nd', 
+                               min_n = min_terms, n_max = n, 
+                               width = width,
+                               bar_width = bar_width,
+                               selected_set = selected_parent, 
+                               inter_focus = False,
+                               s1_color = 'moccasin',
+                               s2_color = 'orange',
+                               sep_factor = sep_factor)
+
+        ##############################################################################
         
-        metadata_parent = metadata_parent.sort_values('FC',  ascending = False)
-            
-       
-        iter_set = list(metadata_parent['term'])
-        
-        if len(selected_parent) > 0:
-            tmp_iter = []
-            for i in selected_parent:
-                if i in iter_set:
-                    tmp_iter.append(i)
-                else:
-                    print(f'\nParent term name: {i} was not found')
-            
-            iter_set = tmp_iter
-            
-            if len(iter_set) == 0:
-                raise ValueError('Nothing to return')
-
-        
-        
-        hlist = []
-        
-        valid_iter_set = []
-        
-        for l, i in enumerate(iter_set):
-            
-            tmp_in = pd.DataFrame()
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['2nd'][x]] 
-            tmp = tmp_in_1.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['2nd'][x]] 
-            tmp = tmp_in_2.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if len(set(tmp_in[column])) >= min_terms:
-                valid_iter_set.append(i)
-                
-                if float(len(set(tmp_in[column]))) > n:
-
-                    tn = n
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-                    else:
-                        hlist.append(tn/2.1)
-    
-                else:
-
-                    tn = float(len(set(tmp_in[column])))
-                    
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-    
-                    else:
-                        hlist.append(tn/2.1)
-            
-        iter_set = valid_iter_set
-        
-
-        
-        fig = plt.figure(figsize=(width, sum(hlist)))
-
-
-        gs = GridSpec(len(hlist), 2, height_ratios=hlist)  
-        
-        gs.update(hspace=len(hlist)/50)
-
-        
-        for l, i in enumerate(iter_set):
-            
-            ax1 = fig.add_subplot(gs[l, 0])
-            ax2 = fig.add_subplot(gs[l, 1]) 
-            ax1.tick_params(axis='y', which='both', left=False, right=False, labelleft=False, labelright=False, colors='white')
-
-            # 1
-            tmp_in = pd.DataFrame()
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['2nd'][x]] 
-
-            tmp = tmp_in_1.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['2nd'][x]] 
-            inx = [x for x in inx if tmp_in_2['3rd'][x] not in list(tmp_in_1['3rd'])]
-
-            tmp = tmp_in_2.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            
-            tmp1 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if stat.upper() == 'perc'.upper():
-                tmp1 = tmp1.sort_values(by='pct', ascending=False).reset_index(drop=True)
-
-            elif stat.upper() == 'p_val'.upper():
-                tmp1 = tmp1.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-
-            else:
-                tmp1 = tmp1.sort_values(by='n', ascending=False).reset_index(drop=True)
-
-
-            # 2
-            tmp_in = pd.DataFrame()
-        
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['2nd'][x]] 
-
-            tmp = tmp_in_2.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['2nd'][x]]
-            inx = [x for x in inx if tmp_in_1['3rd'][x] not in list(tmp_in_2['3rd'])]
-
-            
-            tmp = tmp_in_1.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            tmp2 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            # 3
-            sort_order = tmp1['3rd'][tmp1['pct'] > 0]
-            eq_order = [x for x in sort_order if x in list(tmp2['3rd'][tmp2['pct'] > 0])]
-            sort_order = [x for x in sort_order if x in list(tmp2['3rd'][tmp2['pct'] == 0])]
-            
-            tmp2_1 = tmp2[tmp2['3rd'].isin(sort_order)].copy()
-            tmp2_eq = tmp2[tmp2['3rd'].isin(eq_order)].copy()
-            tmp2_2 = tmp2[~tmp2['3rd'].isin(sort_order + eq_order)].copy()
-
-
-            tmp2_1['sort'] = pd.Categorical(tmp2_1['3rd'], categories=sort_order, ordered=True)
-            
-            tmp2_1 = tmp2_1.sort_values('sort')
-            
-            tmp2_1.pop('sort')
-            
-            if stat.upper() == 'perc'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='pct', ascending=False).reset_index(drop=True)
-
-            elif stat.upper() == 'p_val'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-
-            else:
-                tmp2_2 = tmp2_2.sort_values(by='n', ascending=False).reset_index(drop=True)
-                
-            
-            mut_len = len(tmp2_1.index) + len(tmp2_2.index) + len(tmp2_eq.index)
-            if  mut_len > n:
-                if len(tmp2_eq.index) < 25:
-                    eq_len = len(tmp2_eq.index)
-                    tmp2_1_n = int((25 - eq_len)*(len(tmp2_1.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_2_n = int((25 - eq_len)*(len(tmp2_2.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_1 = tmp2_1.iloc[0:tmp2_1_n, :]
-                    tmp2_2 = tmp2_2.iloc[0:tmp2_2_n, :]
-                    tmp2 = pd.concat([pd.DataFrame(tmp2_1), pd.DataFrame(tmp2_eq), pd.DataFrame(tmp2_2)])
-                else:
-                    tmp2 = tmp2_eq.iloc[0:n, :]
-
-                
-            del tmp2_1, tmp2_2, tmp2_eq
-            
-            sort_order = tmp2['3rd']
-            tmp1 = tmp1[tmp1['3rd'].isin(list(sort_order))]
-            tmp1['sort'] = pd.Categorical(tmp1['3rd'], categories=sort_order, ordered=True)
-            
-            tmp1 = tmp1.sort_values('sort')
-            
-            tmp1.pop('sort')
-            
-
-            
-            
-            # plots creating
-            
-            show_axis = (l + 1 == len(iter_set))  
-            
-            self.bar_plot_diff(
-                data=tmp1,
-                n=n, 
-                side='left', 
-                color='moccasin', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='KEGG',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax1
-            )
-            
-
-            
-            self.bar_plot_diff(
-                data=tmp2,
-                n=n, 
-                side='right', 
-                color='orange', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='KEGG',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax2
-            )
-            
-            
-        
-        plt.tight_layout()
-
-        plt.show()
-        
-        return fig
+        return plot
     
     
      
@@ -9433,13 +9481,33 @@ class VisualizationDES(Visualization):
                 selected_parent:list = [],
                 width = 10, 
                 bar_width = 0.5, 
-                stat = 'p_val'
+                stat = 'p_val',
+                sep_factor = 15
                 ):
         
         
-        sets = 'REACTOME'
-        column = 'pathway'    
-       
+        '''
+        This method generates a bar plot for Reactome Differential Set Analysis (DES) of enrichment and statistical analysis.
+        Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
+
+        Args:
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 25
+            min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
+            selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'silver'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+    
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        '''
+        
+        sets = 'REACTOME'       
         
         test_string = self.select_test(test, adj)
         
@@ -9493,252 +9561,42 @@ class VisualizationDES(Visualization):
         tmp_in_2 = tmp_in_2[tmp_in_2['top_level_pathway'].isin(parent) | tmp_in_2['pathway'].isin(child)]
     
         
-        t1 = list(tmp_in_1['top_level_pathway']) + list(tmp_in_1['pathway'])
-        t2 = list(tmp_in_2['top_level_pathway']) + list(tmp_in_2['pathway'])
-    
-        metadata = metadata[metadata['term'].isin(t1 + t2)]
-    
-        
+        ##############################################################################
+
         if stat.upper() == 'perc'.upper():
-            x_max = np.max(list(tmp_in_1['pct']) + list(tmp_in_2['pct']))
-            
+            val = 'pct'
         elif stat.upper() == 'p_val'.upper():
-            x_max = np.max(list(tmp_in_1['-log(p-val)']) + list(tmp_in_2['-log(p-val)']))
-            
+            val = '-log(p-val)'
         else:
-            x_max = np.max(list(tmp_in_1['n']) + list(tmp_in_2['n']))
-    
-            
-        metadata_parent = metadata[metadata['type'] == 'parent']
-    
+            val = 'n'
+
+
+
+        plot_bin_data =  self.create_inter_df(data_1 = tmp_in_1, 
+                                           data_2 = tmp_in_2, 
+                                           group_by = 'pathway', 
+                                           values = val, 
+                                           set_col = 'top_level_pathway')
+
+
+
+
+        plot = self.bivector_column(plot_bin_data = plot_bin_data, 
+                               bin_value = stat , 
+                               name_col = 'pathway', 
+                               set_col = 'top_level_pathway', 
+                               min_n = min_terms, n_max = n, 
+                               width = width,
+                               bar_width = bar_width,
+                               selected_set = selected_parent, 
+                               inter_focus = False,
+                               s1_color = 'lightgray',
+                               s2_color = 'darkgray',
+                               sep_factor = sep_factor)
+
+        ##############################################################################
         
-        metadata_parent = metadata_parent.sort_values('FC',  ascending = False)
-            
-       
-        iter_set = list(metadata_parent['term'])
-        
-          
-        if len(selected_parent) > 0:
-            tmp_iter = []
-            for i in selected_parent:
-                if i in iter_set:
-                    tmp_iter.append(i)
-                else:
-                    print(f'\nParent term name: {i} was not found')
-            
-            iter_set = tmp_iter
-            
-            if len(iter_set) == 0:
-                raise ValueError('Nothing to return')
-        
-        hlist = []
-        
-        valid_iter_set = []
-        
-        for l, i in enumerate(iter_set):
-            
-            tmp_in = pd.DataFrame()
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['top_level_pathway'][x]] 
-            tmp = tmp_in_1.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['top_level_pathway'][x]] 
-            tmp = tmp_in_2.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if len(set(tmp_in[column])) >= min_terms:
-                valid_iter_set.append(i)
-                
-                if float(len(set(tmp_in[column]))) > n:
-    
-                    tn = n
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-                    else:
-                        hlist.append(tn/2.1)
-    
-                else:
-    
-                    tn = float(len(set(tmp_in[column])))
-                    
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-    
-                    else:
-                        hlist.append(tn/2.1)
-            
-        iter_set = valid_iter_set
-        
-        fig = plt.figure(figsize=(width, sum(hlist)))
-    
-    
-        gs = GridSpec(len(hlist), 2, height_ratios=hlist)  
-        
-        gs.update(hspace=len(hlist)/50)
-    
-        
-        for l, i in enumerate(iter_set):
-            
-            ax1 = fig.add_subplot(gs[l, 0])
-            ax2 = fig.add_subplot(gs[l, 1]) 
-            ax1.tick_params(axis='y', which='both', left=False, right=False, labelleft=False, labelright=False, colors='white')
-    
-            # 1
-            tmp_in = pd.DataFrame()
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['top_level_pathway'][x]] 
-    
-            tmp = tmp_in_1.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['top_level_pathway'][x]] 
-            inx = [x for x in inx if tmp_in_2['pathway'][x] not in list(tmp_in_1['pathway'])]
-    
-            tmp = tmp_in_2.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            
-            tmp1 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if stat.upper() == 'perc'.upper():
-                tmp1 = tmp1.sort_values(by='pct', ascending=False).reset_index(drop=True)
-    
-            elif stat.upper() == 'p_val'.upper():
-                tmp1 = tmp1.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-    
-            else:
-                tmp1 = tmp1.sort_values(by='n', ascending=False).reset_index(drop=True)
-    
-    
-            # 2
-            tmp_in = pd.DataFrame()
-        
-            inx = [x for x in tmp_in_2.index if i in tmp_in_2['top_level_pathway'][x]] 
-    
-            tmp = tmp_in_2.loc[inx]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            inx = [x for x in tmp_in_1.index if i in tmp_in_1['top_level_pathway'][x]]
-            inx = [x for x in inx if tmp_in_1['pathway'][x] not in list(tmp_in_2['pathway'])]
-    
-            
-            tmp = tmp_in_1.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            tmp2 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            # 3
-            sort_order = tmp1['pathway'][tmp1['pct'] > 0]
-            eq_order = [x for x in sort_order if x in list(tmp2['pathway'][tmp2['pct'] > 0])]
-            sort_order = [x for x in sort_order if x in list(tmp2['pathway'][tmp2['pct'] == 0])]
-            
-            tmp2_1 = tmp2[tmp2['pathway'].isin(sort_order)].copy()
-            tmp2_eq = tmp2[tmp2['pathway'].isin(eq_order)].copy()
-            tmp2_2 = tmp2[~tmp2['pathway'].isin(sort_order + eq_order)].copy()
-    
-    
-            tmp2_1['sort'] = pd.Categorical(tmp2_1['pathway'], categories=sort_order, ordered=True)
-            
-            tmp2_1 = tmp2_1.sort_values('sort')
-            
-            tmp2_1.pop('sort')
-            
-            if stat.upper() == 'perc'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='pct', ascending=False).reset_index(drop=True)
-    
-            elif stat.upper() == 'p_val'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-    
-            else:
-                tmp2_2 = tmp2_2.sort_values(by='n', ascending=False).reset_index(drop=True)
-                
-            
-            mut_len = len(tmp2_1.index) + len(tmp2_2.index) + len(tmp2_eq.index)
-            if  mut_len > n:
-                if len(tmp2_eq.index) < 25:
-                    eq_len = len(tmp2_eq.index)
-                    tmp2_1_n = int((25 - eq_len)*(len(tmp2_1.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_2_n = int((25 - eq_len)*(len(tmp2_2.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_1 = tmp2_1.iloc[0:tmp2_1_n, :]
-                    tmp2_2 = tmp2_2.iloc[0:tmp2_2_n, :]
-                    tmp2 = pd.concat([pd.DataFrame(tmp2_1), pd.DataFrame(tmp2_eq), pd.DataFrame(tmp2_2)])
-                else:
-                    tmp2 = tmp2_eq.iloc[0:n, :]
-    
-                
-            del tmp2_1, tmp2_2, tmp2_eq
-            
-            sort_order = tmp2['pathway']
-            tmp1 = tmp1[tmp1['pathway'].isin(list(sort_order))]
-            tmp1['sort'] = pd.Categorical(tmp1['pathway'], categories=sort_order, ordered=True)
-            
-            tmp1 = tmp1.sort_values('sort')
-            
-            tmp1.pop('sort')
-            
-    
-            
-            
-            # plots creating
-            
-            show_axis = (l + 1 == len(iter_set))  
-            
-            self.bar_plot_diff(
-                data=tmp1,
-                n=n, 
-                side='left', 
-                color='lightgray', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='REACTOME',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax1
-            )
-            
-    
-            
-            self.bar_plot_diff(
-                data=tmp2,
-                n=n, 
-                side='right', 
-                color='darkgray', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='REACTOME',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax2
-            )
-            
-            
-        
-        plt.tight_layout()
-    
-        plt.show()
-        
-        return fig
+        return plot
      
     
     
@@ -9752,12 +9610,30 @@ class VisualizationDES(Visualization):
                 selected_set:list = [],
                 width = 10, 
                 bar_width = 0.5, 
-                stat = 'p_val'
-            
+                stat = 'p_val',
+                sep_factor = 15            
                 ):
         
+        '''
+        This method generates a bar plot for tissue specificity [Human Protein Atlas (HPA)] Differential Set Analysis (DES) of enrichment and statistical analysis.
+        Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
+   
+        Args:
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 5
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'bisque'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+    
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        '''
+        
         sets = 'specificity'
-        column = 'specificity'
         
       
         test_string = self.select_test(test, adj)
@@ -9811,274 +9687,48 @@ class VisualizationDES(Visualization):
             tmp_in_2 = tmp_in_2[tmp_in_2['specificity'].isin(terms)]
             
             tmp_in_2['set'] = si
-    
-            
-            if stat.upper() == 'perc'.upper():
-                x_max = np.max(list(tmp_in_1['pct']) + list(tmp_in_2['pct']))
-                
-            elif stat.upper() == 'p_val'.upper():
-                x_max = np.max(list(tmp_in_1['-log(p-val)']) + list(tmp_in_2['-log(p-val)']))
-                
-            else:
-                x_max = np.max(list(tmp_in_1['n']) + list(tmp_in_2['n']))
-    
-         
-             
+                 
          
             full_df_1 = pd.concat([pd.DataFrame(full_df_1), pd.DataFrame(tmp_in_1)])
             full_df_2 = pd.concat([pd.DataFrame(full_df_2), pd.DataFrame(tmp_in_2)])
     
         
-        tmp_count = pd.concat([full_df_1, full_df_2])
         
+        ##############################################################################
+
         if stat.upper() == 'perc'.upper():
-            tmp_count = tmp_count[['set', 'pct']]
-            tmp_count = tmp_count.groupby('set', as_index=False).sum()
-            tmp_count = tmp_count.sort_values(by='pct', ascending=False).reset_index(drop=True)
-
-
+            val = 'pct'
         elif stat.upper() == 'p_val'.upper():
-            tmp_count = tmp_count[['set', '-log(p-val)']]
-            tmp_count = tmp_count.groupby('set', as_index=False).sum()
-            tmp_count = tmp_count.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-
+            val = '-log(p-val)'
         else:
-            tmp_count = tmp_count[['set', 'n']]
-            tmp_count = tmp_count.groupby('set', as_index=False).sum()
-            tmp_count = tmp_count.sort_values(by='n', ascending=False).reset_index(drop=True)
+            val = 'n'
+
+
+        plot_bin_data =  self.create_inter_df(data_1 = full_df_1, 
+                                           data_2 = full_df_2, 
+                                           group_by = 'specificity', 
+                                           values = val, 
+                                           set_col = 'set')
+
+
+
+        plot = self.bivector_column(plot_bin_data = plot_bin_data, 
+                               bin_value = stat , 
+                               name_col = 'specificity', 
+                               set_col = 'set', 
+                               min_n = min_terms, n_max = n, 
+                               width = width,
+                               bar_width = bar_width,
+                               selected_set = selected_set, 
+                               inter_focus = False,
+                               s1_color = 'bisque',
+                               s2_color = 'wheat',
+                               sep_factor = sep_factor)
+
+        ##############################################################################
 
         
-        
-        
-        iter_set = list(tmp_count['set'])
-                  
-          
-        if len(selected_set) > 0:
-            tmp_iter = []
-            for i in selected_set:
-                if i in iter_set:
-                    tmp_iter.append(i)
-                else:
-                    print(f'\nSet name: {i} was not found')
-            
-            iter_set = tmp_iter
-            
-            if len(iter_set) == 0:
-                raise ValueError('Nothing to return')
-        
-        
-        hlist = []
-        
-        valid_iter_set = []
-        
-        for l, i in enumerate(iter_set):
-            
-            tmp_in = pd.DataFrame()
-            
-            tmp = full_df_1[full_df_1['set'] == i]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            tmp = full_df_2[full_df_2['set'] == i]
-            
-            tmp_in = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            if len(set(tmp_in[column])) >= min_terms:
-                valid_iter_set.append(i)
-                
-                if float(len(set(tmp_in[column]))) > n:
-   
-                    tn = n
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-                    else:
-                        hlist.append(tn/2.1)
-    
-                else:
-   
-                    tn = float(len(set(tmp_in[column])))
-                    
-                    if tn < 6:
-                        if tn < 2:
-                            hlist.append(tn/(2.5 + ((6-tn)/10)))
-                        else:
-                            hlist.append(tn/(2.12 + ((6-tn)/10)))
-    
-                    else:
-                        hlist.append(tn/2.1)
-            
-        iter_set = valid_iter_set
-        
-        
-        fig = plt.figure(figsize=(width, sum(hlist)))
-   
-   
-        gs = GridSpec(len(hlist), 2, height_ratios=hlist)  
-        
-        gs.update(hspace=len(hlist)/50)
-   
-        
-        for l, i in enumerate(iter_set):
-            
-            ax1 = fig.add_subplot(gs[l, 0])
-            ax2 = fig.add_subplot(gs[l, 1]) 
-            ax1.tick_params(axis='y', which='both', left=False, right=False, labelleft=False, labelright=False, colors='white')
-   
-            # meta
-            
-            metadata = pd.DataFrame(full_metadata[full_metadata['set'] == si])
-               
-            
-            tmp_in_1 = full_df_1[full_df_1['set'] == i]
-            tmp_in_2 = full_df_2[full_df_2['set'] == i]
-            
-            t1 = list(tmp_in_1['specificity']) 
-            t2 = list(tmp_in_2['specificity'])
-   
-            metadata = metadata[metadata['term'].isin(t1 + t2)]
-   
-            
-            # 1
-            
-            
-            tmp_in = pd.DataFrame(tmp_in_1)
-            
-            inx = [x for x in tmp_in_2.index if tmp_in_2['specificity'][x] not in list(tmp_in_1['specificity'])]
-   
-            tmp = tmp_in_2.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            
-            tmp1 = pd.concat([pd.DataFrame(tmp_in), pd.DataFrame(tmp)])
-            
-            if stat.upper() == 'perc'.upper():
-                tmp1 = tmp1.sort_values(by='pct', ascending=False).reset_index(drop=True)
-   
-            elif stat.upper() == 'p_val'.upper():
-                tmp1 = tmp1.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-   
-            else:
-                tmp1 = tmp1.sort_values(by='n', ascending=False).reset_index(drop=True)
-   
-   
-            # 2
-       
-            
-            
-            tmp_in = pd.DataFrame(tmp_in_2)
-            
-            inx = [x for x in tmp_in_1.index if tmp_in_1['specificity'][x] not in list(tmp_in_2['specificity'])]
-   
-   
-            
-            tmp = tmp_in_1.loc[inx]
-            tmp['-log(p-val)'] = 0
-            tmp['n'] = 0
-            tmp['pct'] = 0
-            
-            tmp2 = pd.concat([tmp_in, pd.DataFrame(tmp)])
-            
-            # 3
-            sort_order = tmp1['specificity'][tmp1['pct'] > 0]
-            eq_order = [x for x in sort_order if x in list(tmp2['specificity'][tmp2['pct'] > 0])]
-            sort_order = [x for x in sort_order if x in list(tmp2['specificity'][tmp2['pct'] == 0])]
-            
-            tmp2_1 = tmp2[tmp2['specificity'].isin(sort_order)].copy()
-            tmp2_eq = tmp2[tmp2['specificity'].isin(eq_order)].copy()
-            tmp2_2 = tmp2[~tmp2['specificity'].isin(sort_order + eq_order)].copy()
-   
-   
-            tmp2_1['sort'] = pd.Categorical(tmp2_1['specificity'], categories=sort_order, ordered=True)
-            
-            tmp2_1 = tmp2_1.sort_values('sort')
-            
-            tmp2_1.pop('sort')
-            
-            if stat.upper() == 'perc'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='pct', ascending=False).reset_index(drop=True)
-   
-            elif stat.upper() == 'p_val'.upper():
-                tmp2_2 = tmp2_2.sort_values(by='-log(p-val)', ascending=False).reset_index(drop=True)
-   
-            else:
-                tmp2_2 = tmp2_2.sort_values(by='n', ascending=False).reset_index(drop=True)
-                
-            
-            mut_len = len(tmp2_1.index) + len(tmp2_2.index) + len(tmp2_eq.index)
-            if  mut_len > n:
-                if len(tmp2_eq.index) < 25:
-                    eq_len = len(tmp2_eq.index)
-                    tmp2_1_n = int((25 - eq_len)*(len(tmp2_1.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_2_n = int((25 - eq_len)*(len(tmp2_2.index) / (len(tmp2_1.index) + len(tmp2_2.index))))
-                    tmp2_1 = tmp2_1.iloc[0:tmp2_1_n, :]
-                    tmp2_2 = tmp2_2.iloc[0:tmp2_2_n, :]
-                    tmp2 = pd.concat([pd.DataFrame(tmp2_1), pd.DataFrame(tmp2_eq), pd.DataFrame(tmp2_2)])
-                else:
-                    tmp2 = tmp2_eq.iloc[0:n, :]
-   
-                
-            del tmp2_1, tmp2_2, tmp2_eq
-            
-            sort_order = tmp2['specificity']
-            tmp1 = tmp1[tmp1['specificity'].isin(list(sort_order))]
-            tmp1['sort'] = pd.Categorical(tmp1['specificity'], categories=sort_order, ordered=True)
-            
-            tmp1 = tmp1.sort_values('sort')
-            
-            tmp1.pop('sort')
-            
-   
-            
-            
-            # plots creating
-            
-            show_axis = (l + 1 == len(iter_set))  
-            
-            self.bar_plot_diff(
-                data=tmp1,
-                n=n, 
-                side='left', 
-                color='bisque', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='specificity',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax1
-            )
-            
-   
-            
-            self.bar_plot_diff(
-                data=tmp2,
-                n=n, 
-                side='right', 
-                color='wheat', 
-                width=width, 
-                bar_width=bar_width, 
-                stat=stat, 
-                sets='specificity',
-                column=column,
-                x_max=x_max,
-                show_axis=show_axis,
-                title=i,  
-                ax=ax2
-            )
-            
-            
-        
-        plt.tight_layout()
-
-        
-        return fig
+        return plot
     
     
  
@@ -10862,14 +10512,36 @@ class VisualizationDES(Visualization):
             ax.yaxis.set_tick_params(length=0,labelbottom=True)
             ax.grid(False)
         
-        
+            if self.show_plot == True:
+                plt.show()
+            elif self.show_plot == False:
+                plt.close(fig)
+                
             return_dict[i] = fig
             
         return return_dict
         
     
-    def diff_gene_type_plot(self, set1_name:str = 'Set 1', set2_name:str = 'Set 2', image_width = 12, image_high = 6, font_size = 15):
+    def diff_gene_type_plot(self, 
+                            set1_name:str = 'Set 1', 
+                            set2_name:str = 'Set 2', 
+                            image_width = 12, 
+                            image_high = 6, 
+                            font_size = 15):
       
+        '''
+        This method generates a pie chart visualizing the distribution of gene types based on set1 and set2 enrichment data.
+
+        Args:
+            set1_name (str) - name for the set1 data. Default is 'Set 1', 
+            set2_name (str) - name for the set2 data. Default is 'Set 2', 
+            image_width (int) - width of the plot in inches. Default is 12
+            image_high (int) - height of the plot in inches. Default is 6
+            font_size (int) - font size. Default is 15
+    
+        Returns:
+            fig (matplotlib.figure.Figure) - figure object containing a pie chart that visualizes the distribution of gene type occurrences as percentages
+        '''
                 
         tmp_info = self.input_data['set_1']['enrichment']['gene_info']
         
@@ -11139,9 +10811,12 @@ class VisualizationDES(Visualization):
         ax2.add_artist(circle2)
         
         plt.tight_layout()
-        plt.show()
+        
+        if self.show_plot == True:
+            plt.show()
+        elif self.show_plot == False:
+            plt.close(fig)
 
-                
         return fig
         
 
