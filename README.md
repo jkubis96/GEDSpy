@@ -3243,7 +3243,7 @@ gene_info = enr.get_gene_info
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/gene_info.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/gene_info.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3261,7 +3261,7 @@ HPA = enr.get_HPA
 
 
 <p align="center">
-<img  src="fig/example_1/enr/hpa.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/hpa.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3275,7 +3275,7 @@ KEGG = enr.get_KEGG
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/kegg.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3289,7 +3289,7 @@ GOTERM = enr.get_GO_TERM
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/goterm.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/goterm.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3304,7 +3304,7 @@ REACTOME = enr.get_REACTOME
 
 
 <p align="center">
-<img  src="fig/example_1/enr/reactome.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3318,7 +3318,7 @@ DISEASES = enr.get_DISEASES
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/diseases.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/diseases.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3333,7 +3333,7 @@ ViMIC = enr.get_ViMIC
 
 
 <p align="center">
-<img  src="fig/example_1/enr/vimic.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/vimic.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3363,7 +3363,7 @@ STRING = enr.get_STRING
 
 
 <p align="center">
-<img  src="fig/example_1/enr/" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/" alt="drawing" width="500" />
 </p>
 
 <br />
@@ -3377,7 +3377,7 @@ CellConnections = enr.get_CellCon
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/cellcon.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/cellcon.bmp" alt="drawing" width="550" />
 </p>
 
 <br />
@@ -3408,7 +3408,7 @@ results = enr.get_results
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/fullenr.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/fullenr.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3453,7 +3453,7 @@ go = ans.get_GO_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/goterm.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/goterm.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3467,7 +3467,7 @@ kegg = ans.get_KEGG_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/kegg.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3482,7 +3482,7 @@ reactome = ans.get_REACTOME_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/reactome.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3497,7 +3497,7 @@ vimic = ans.get_ViMIC_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/vimic.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/vimic.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3512,7 +3512,7 @@ diseases = ans.get_DISEASE_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/humandiseases.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/humandiseases.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3527,7 +3527,7 @@ spec = ans.get_specificity_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/hpa.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/hpa.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3543,7 +3543,7 @@ inter = ans.get_features_interactions_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/inter.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/inter.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3558,7 +3558,7 @@ reactome_net = ans.get_REACTOME_network
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/reactomenx.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/reactomenx.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3573,7 +3573,7 @@ kegg_net = ans.get_KEGG_network
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/keggnet.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/keggnet.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3588,7 +3588,7 @@ go_net = ans.get_GO_network
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/gonet.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/ovr/gonet.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3661,7 +3661,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/go-term.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/go-term.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3684,7 +3684,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/spec.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/spec.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3707,7 +3707,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/kegg.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3730,7 +3730,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/reactome.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3753,7 +3753,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/human_diseases.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/human_diseases.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3776,7 +3776,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/vimic.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/vimic.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3791,7 +3791,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/blood.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/blood.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3815,7 +3815,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/gonet.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/vis/gonet.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3839,7 +3839,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/keggnet.bmp" alt="drawing" width="600" />
+<img  src="fig/example_1/vis/keggnet.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -3863,7 +3863,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/reactnet.bmp" alt="drawing" width="520" />
+<img  src="fig/example_1/vis/reactnet.bmp" alt="drawing" width="450" />
 </p>
 
 
@@ -3901,7 +3901,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/automl.bmp" alt="drawing" width="700" />
+<img  src="fig/example_1/vis/automl.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -4287,7 +4287,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/go.bmp" alt="drawing" width="800" />
+<img  src="fig/example_2/vis/go.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -4318,17 +4318,6 @@ graph.edit()
 </p>
 
 
-
-<br />
-
-```
-graph3 = JVG.MplEditor(seq['tissue_expression_fetal_development_circular'])
-graph3.edit()
-```
-
-<p align="center">
-<img  src="fig/example_1/vis/circular.bmp" alt="drawing" width="800" />
-</p>
 
 
 
@@ -4491,7 +4480,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/automl.bmp" alt="drawing" width="700" />
+<img  src="fig/example_2/vis/automl.bmp" alt="drawing" width="650" />
 </p>
 
 
