@@ -3349,7 +3349,7 @@ IntAct = enr.get_IntAct
 
 
 <p align="center">
-<img  src="fig/example_1/enr/intact.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/intact.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3378,7 +3378,7 @@ CellConnections = enr.get_CellCon
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/cellcon.bmp" alt="drawing" width="550" />
+<img  src="fig/example_1/enr/cellcon.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3392,7 +3392,7 @@ RNASEQ = enr.get_RNA_SEQ
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/rnaseq.bmp" alt="drawing" width="800" />
+<img  src="fig/example_1/enr/rnaseq.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
