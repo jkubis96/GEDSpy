@@ -3180,6 +3180,7 @@ up.update_library_database()
        
         Args:
             force (bool) - if True user force update of GEDS data independent of the GEDSpy version
+            URL (str) - provide URL of the database you wish to use. Default: URL for the newest db version
            
         Returns:
             Updated by the author the newest version of GEDS data base.
@@ -3363,7 +3364,7 @@ STRING = enr.get_STRING
 
 
 <p align="center">
-<img  src="fig/example_1/enr/" alt="drawing" width="500" />
+<img  src="fig/example_1/enr/string.bmp" alt="drawing" width="600" />
 </p>
 
 <br />
@@ -3661,7 +3662,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/go-term.bmp" alt="drawing" width="700" />
+<img  src="fig/example_1/vis/go-term.bmp" alt="drawing" width="650" />
 </p>
 
 
@@ -3684,7 +3685,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/spec.bmp" alt="drawing" width="700" />
+<img  src="fig/example_1/vis/spec.bmp" alt="drawing" width="650" />
 </p>
 
 
@@ -3753,7 +3754,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/human_diseases.bmp" alt="drawing" width="700" />
+<img  src="fig/example_1/vis/human_diseases.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3776,7 +3777,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/vimic.bmp" alt="drawing" width="600" />
+<img  src="fig/example_1/vis/vimic.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -3791,7 +3792,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/blood.bmp" alt="drawing" width="700" />
+<img  src="fig/example_1/vis/blood.bmp" alt="drawing" width="550" />
 </p>
 
 
@@ -4193,7 +4194,7 @@ inter_terms = dsa_compare.get_inter_terms
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/inter.bmp" alt="drawing" width="600" />
+<img  src="fig/example_2/dsa/inter.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4208,7 +4209,7 @@ connections = dsa_compare.get_set_to_set_con
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/interconn.bmp" alt="drawing" width="800" />
+<img  src="fig/example_2/dsa/interconn.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4226,7 +4227,7 @@ results3 = dsa_compare.get_results
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/" alt="drawing" width="800" />
+<img  src="fig/example_2/dsa/dsa.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4287,7 +4288,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/go.bmp" alt="drawing" width="600" />
+<img  src="fig/example_2/vis/go.bmp" alt="drawing" width="500" />
 </p>
 
 
