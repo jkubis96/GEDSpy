@@ -3228,7 +3228,7 @@ gene_list = ['CACNA1I','CALD1','CAMK1G','CAMK2N1','CAMSAP1','CCL15','CCL16','CCN
     
 from Enrichment import Enrichment
 
-# load class Enrichment
+# create instance of the Enrichment class
 enr = Enrichment()
 
 
@@ -3416,10 +3416,10 @@ results = enr.get_results
 
 
 ```
-# load class Analysis
+# import the Analysis class from the Enrichment module
 from Enrichment import Analysis
 
-# create class with results from get_results
+# create instance of the Analysis class with results from get_results
 ans = Analysis(results)
 
 # adjustment of analysis parameters
@@ -3615,13 +3615,13 @@ results2 = ans.get_full_results
 <br />
 
 ```
-# load class Visualization
+# import the Visualization class from the Enrichment module
 from Enrichment import Visualization
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
 
-# create class with results from get_full_results
+# create instance of the Visualization class with results from get_full_results
 vis = Visualization(results2)
 ```
 
@@ -3991,7 +3991,7 @@ gene_list2 = ['NCOA6','NCSTN','NDUFA4','NEK4', 'UDT2','NUP210','ORC3L','PAOX','P
               'TGOLN2','THPO', 'IMM13','TLK2','TMEM62','TNFSF14','TNK2','TNS1','TPI1','TRIB3','TRMT11','TTYH3']
 
 
-# load classes
+# import the Enrichment & Analysis classes from the Enrichment module
 from Enrichment import Enrichment
 from Enrichment import Analysis 
 ```
@@ -4002,7 +4002,7 @@ from Enrichment import Analysis
 ```
 #SET1
 
-# create class Enrichment
+# create instance of the Enrichment class
 enr = Enrichment()
 
 # select featrues from genes/proteins list for Homo sapiens / Mus musculus / Rattus norvegicus for first gene_list
@@ -4015,7 +4015,7 @@ enr.full_enrichment()
 results1 = enr.get_results
 
     
-# create class Analysis
+# create instance of the Analysis class
 ans = Analysis(results1)
 
 # set parameters or leave default - see manual on GitHub
@@ -4038,7 +4038,7 @@ results1 = ans.get_full_results
 <br />
 
 ```
-# create class Enrichment
+# create instance of the Enrichment class
 enr = Enrichment()
 
 # select featrues from genes/proteins list for Homo sapiens / Mus musculus / Rattus norvegicus for second gene_list
@@ -4051,7 +4051,7 @@ enr.full_enrichment()
 results2 = enr.get_results
 
 
-# create class Analysis
+# create instance of the Analysis class
 ans = Analysis(results2)
 
 
@@ -4076,10 +4076,10 @@ results2 = ans.get_full_results
 <br />
 
 ```
-# load class DSA
+# import the DSA class from the Enrichment module
 from Enrichment import DSA
 
-# create class with results from get_full_results for set1 and set2
+# create instance of the DSA class with results from get_full_results for set1 and set2
 dsa_compare = DSA(results1, results2)
 ```
 
@@ -4235,13 +4235,13 @@ results3 = dsa_compare.get_results
 <br />
 
 ```
-# load class VisualizationDES
+# import the VisualizationDES class from the Enrichment module
 from Enrichment import VisualizationDES
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
 
-# create class DAA with results from get_results for set1 and set2 DSA results
+# create instance of the VisualizationDES class with results from get_results for set1 and set2 DSA results
 vis_des = VisualizationDES(results3)
 ```
 

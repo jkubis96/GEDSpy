@@ -17,14 +17,14 @@ gene_list2 = ['NCOA6','NCSTN','NDUFA4','NEK4', 'UDT2','NUP210','ORC3L','PAOX','P
 
 
 
-# load classes
+# import the Enrichment & Analysis classes from the Enrichment module
 from GEDSpy.Enrichment import Enrichment
 from GEDSpy.Enrichment import Analysis
 
 
 #SET1
 
-# create class Enrichment
+# create instance of the Enrichment class
 enr = Enrichment()
 
 # select featrues from genes/proteins list for Homo sapiens / Mus musculus / Rattus norvegicus for first gene_list
@@ -37,7 +37,7 @@ enr.full_enrichment()
 results1 = enr.get_results
 
     
-# create class Analysis
+# create instance of the Analysis class
 ans = Analysis(results1)
 
 # set parameters or leave default - see manual on GitHub
@@ -57,7 +57,7 @@ results1 = ans.get_full_results
 
 #SET2
 
-# create class Enrichment
+# create instance of the Enrichment class
 enr = Enrichment()
 
 # select featrues from genes/proteins list for Homo sapiens / Mus musculus / Rattus norvegicus for second gene_list
@@ -70,7 +70,7 @@ enr.full_enrichment()
 results2 = enr.get_results
 
 
-# create class Analysis
+# create instance of the Analysis class
 ans = Analysis(results2)
 
 
@@ -90,10 +90,10 @@ results2 = ans.get_full_results
 
 
 
-# load class DSA
+# import the DSA class from the Enrichment module
 from GEDSpy.Enrichment import DSA
 
-# create class with results from get_full_results for set1 and set2
+# create instance of the DSA class with results from get_full_results for set1 and set2
 dsa_compare = DSA(results1, results2)
 
 
@@ -153,13 +153,13 @@ results3 = dsa_compare.get_results
 
 
 
-# load class VisualizationDES
+# import the VisualizationDES class from the Enrichment module
 from GEDSpy.Enrichment import VisualizationDES
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
 
-# create class DAA with results from get_results for set1 and set2 DSA results
+# create instance of the VisualizationDES class with results from get_results for set1 and set2 DSA results
 vis_des = VisualizationDES(results3)
 
 

@@ -8,10 +8,10 @@ gene_list = ['CACNA1I','CALD1','CAMK1G','CAMK2N1','CAMSAP1','CCL15','CCL16','CCN
 			 'MAPK13','MARCO','MAST2','MAT1A','MATR3','MCM8','MFSD10','MGAT5','MTMR10','MUSK','MYO9B','NBAS']
 
     
-    
+# import the Enrichment class from the Enrichment module
 from GEDSpy.Enrichment import Enrichment
 
-# load class Enrichment
+# create instance of the Enrichment class
 enr = Enrichment()
 
 
@@ -90,10 +90,10 @@ results = enr.get_results
  
 
 
-# load class Analysis
+# import the Analysis class from the Enrichment module
 from GEDSpy.Enrichment import Analysis
 
-# create class with results from get_results
+# create instance of the Analysis class with results from get_results
 ans = Analysis(results)
 
 # adjustment of analysis parameters
@@ -184,13 +184,13 @@ results2 = ans.get_full_results
 
 
 
-# load class Visualization
+# import the Visualization class from the Enrichment module
 from GEDSpy.Enrichment import Visualization
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
 
-# create class with results from get_full_results
+# create instance of the Visualization class with results from get_full_results
 vis = Visualization(results2)
 
 
