@@ -18,8 +18,8 @@ gene_list2 = ['NCOA6','NCSTN','NDUFA4','NEK4', 'UDT2','NUP210','ORC3L','PAOX','P
 
 
 # load classes
-from Enrichment import Enrichment
-from Enrichment import Analysis
+from GEDSpy.Enrichment import Enrichment
+from GEDSpy.Enrichment import Analysis
 
 
 #SET1
@@ -91,7 +91,7 @@ results2 = ans.get_full_results
 
 
 # load class DSA
-from Enrichment import DSA
+from GEDSpy.Enrichment import DSA
 
 # create class with results from get_full_results for set1 and set2
 dsa_compare = DSA(results1, results2)
@@ -154,7 +154,7 @@ results3 = dsa_compare.get_results
 
 
 # load class VisualizationDES
-from Enrichment import VisualizationDES
+from GEDSpy.Enrichment import VisualizationDES
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG

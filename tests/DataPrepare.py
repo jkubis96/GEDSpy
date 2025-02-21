@@ -33,10 +33,14 @@ import pandas as pd
 
 
 
-# poprawić import
+# loading for test or inside library
 
-from Enrichment import PathMetadata
-from Enrichment import GetData
+try:
+    from .Enrichment import PathMetadata
+    from .Enrichment import GetData
+except:
+    from Enrichment import PathMetadata
+    from Enrichment import GetData
 
 
    
@@ -3837,9 +3841,7 @@ class DataAdjustment(GetData, PathMetadata):
         
         
     def ZIP(self):
-        # Create a zip compressed file
         with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
-            # Walk through the directory and its subdirectories
             for folder, _, files in os.walk(self.path_inside):
                 for file in files:
                     file_path = os.path.join(folder, file)
@@ -3963,65 +3965,58 @@ class UpdatePanel(Donwload, DataAdjustment):
             return "Not installed"
             
         
-    def update_library_database(self, force = False):
+    def update_library_database(self, force = False, URL = 'https://drive.google.com/uc?id=1LQXI7zEXyvywjBz2TX1QBXN60Abia6WP', first = False):
         
         """
         This method checks if the newest version of GEDS data is available for the GEDSpy library and updates it.
        
         Args:
             force (bool) - if True user force update of GEDS data independent of the GEDSpy version
-           
+            URL (str) - provide URL of the database you wish to use. Default: URL for the newest db version
+            
         Returns:
             Updated by the author the newest version of GEDS data base.
         """
         
-        try:
-            
-            
-            URL = 'https://drive.google.com/uc?id=1LQXI7zEXyvywjBz2TX1QBXN60Abia6WP'
 
+        if force == True:
             
-                 
-            if force == True:
-                
-     
-                print('\nGEDSpy data update was forced by the user')
-                print('\nUpdate has started...')
-                gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                shutil.rmtree(self.path_inside)
-                os.makedirs(self.path_inside, exist_ok=True)
-                with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
-                    zipf.extractall(self.path_inside),
-                os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                
-                print('\n')
-                print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
-                print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
+            print('\nGEDSpy data update was forced by the user')
+            print('\nUpdate has started...')
+            gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            shutil.rmtree(self.path_inside, ignore_errors=True)
+            os.makedirs(self.path_inside, exist_ok=True)
+            with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
+                zipf.extractall(self.path_inside)
+            os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
             
-            
-            
-            elif self.get_latest_version('GEDSpy') == self.get_installed_version('GEDSpy'):
-                print('\n')
-                print('GEDSpy is up to date for its version. If you want to download the newest data from the original sources, you can use the update_from_sources() method.')    
-            
-            elif self.get_latest_version('GEDSpy') != self.get_installed_version('GEDSpy'):
-                
-              
-                print('\nUpdate has started...')
-                gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                shutil.rmtree(self.path_inside)
-                os.makedirs(self.path_inside, exist_ok=True)
-                with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
-                    zipf.extractall(self.path_inside),
-                os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                
-                print('\n')
-                print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
-                print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
-           
-        except:
             print('\n')
-            print("Something went wrong. Try again or use update_from_sources() function.")
+            print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
+            
+            if first == False:
+                
+                print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
+        
+        
+        
+        elif self.get_latest_version('GEDSpy') == self.get_installed_version('GEDSpy'):
+            print('\n')
+            print('GEDSpy is up to date for its version. If you want to download the newest data from the original sources, you can use the update_from_sources() method.')    
+        
+        elif self.get_latest_version('GEDSpy') != self.get_installed_version('GEDSpy'):
+            
+            
+            print('\nUpdate has started...')
+            gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            shutil.rmtree(self.path_inside, ignore_errors=True)
+            os.makedirs(self.path_inside, exist_ok=True)
+            with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
+                zipf.extractall(self.path_inside)
+            os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            
+            print('\n')
+            print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
+            print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
 
 
 

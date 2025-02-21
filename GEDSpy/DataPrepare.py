@@ -33,10 +33,14 @@ import pandas as pd
 
 
 
-# poprawić import
+# loading for test or inside library
 
-from enrichment import PathMetadata
-from enrichment import GetData
+try:
+    from .Enrichment import PathMetadata
+    from .Enrichment import GetData
+except:
+    from Enrichment import PathMetadata
+    from Enrichment import GetData
 
 
    
@@ -57,6 +61,15 @@ class Donwload(PathMetadata):
     #ref_gene
     def download_ref(self):
         
+        '''
+        This method downloads and returns combined human/rat/mice reference genome.
+        
+        Source: NCBI [https://www.ncbi.nlm.nih.gov/]
+        
+        Returns:
+            dict (dict) - ref_genome
+        '''
+        
         print('\n')
         print('REF-GENOME downloading...')
        
@@ -65,7 +78,7 @@ class Donwload(PathMetadata):
         with open(os.path.join(self.path_tmp, 'gene_dictionary_jbio.json'), 'r') as json_file:
             gene_dictionary = (json.load(json_file))
             
-        os.remove(self.path_tmp + '/gene_dictionary_jbio.json')
+        os.remove(os.path.join(self.path_tmp, 'gene_dictionary_jbio.json'))
     
         return gene_dictionary
         
@@ -73,6 +86,20 @@ class Donwload(PathMetadata):
     
     #ref_gene-RNA-SEQ
     def download_rns_seq(self):
+        
+                
+        '''
+        This method downloads and returns the tissue-specific RNA-SEQ data including:
+           -human_tissue_expression_HPA
+           -human_tissue_expression_RNA_total_tissue
+           -human_tissue_expression_fetal_development_circular
+
+        Source: NCBI [https://www.ncbi.nlm.nih.gov/]
+       
+        Returns:
+           dict (dict) - RNAseq data
+        '''
+        
         
         print('\n')
         print('RNA-SEQ data downloading...')
@@ -92,6 +119,15 @@ class Donwload(PathMetadata):
     
     #IntAct_download
     def download_IntAct(self):
+        
+        '''
+        This method downloads and returns IntAct data.
+
+        Source: https://www.ebi.ac.uk/intact/home
+    
+        Returns:
+            dict (dict) - IntAct data
+        '''
         
         
         print('\n')
@@ -631,13 +667,15 @@ class Donwload(PathMetadata):
     
     def download_IntAct_data(self):
         
-        """
-        This method retrieves data from the IntAct database 
+        '''
+        This method downloads and returns IntAct data.
+
+        Source: https://www.ebi.ac.uk/intact/home
     
         Returns:
-           dict: IntAct database file in dictionary format
-           
-        """
+            dict (dict) - IntAct data
+        '''
+        
         
         try:
         
@@ -654,26 +692,43 @@ class Donwload(PathMetadata):
     #DISEASE_download
     def download_diseases(self):
         
-        """
-        This function retrieves data from the DISEASES database 
+        '''
+        This method downloads and returns Diseases data.
+
+        Source: https://diseases.jensenlab.org/Search
+
     
-        Args:
-           path (str)- path to save
-           
         Returns:
-           dict: DISEASES database file in dictionary format
-           
-        """
+            dict (dict) - diseases data
+        '''
         
         print('\n')
         print('DISEASES data downloading...')
     
     
         try:
-            urllib.request.urlretrieve('https://download.jensenlab.org/human_disease_knowledge_filtered.tsv', os.path.join(self.path_tmp, 'knowledge_disease.tsv'))
-            urllib.request.urlretrieve('https://download.jensenlab.org/human_disease_textmining_filtered.tsv', os.path.join(self.path_tmp, 'mining_disease.tsv'))
-            urllib.request.urlretrieve('https://download.jensenlab.org/human_disease_experiments_filtered.tsv', os.path.join(self.path_tmp, 'experiments_disease.tsv'))
-                
+            
+            files_to_download = {
+            'knowledge_disease.tsv': 'https://download.jensenlab.org/human_disease_knowledge_filtered.tsv',
+            'mining_disease.tsv': 'https://download.jensenlab.org/human_disease_textmining_filtered.tsv',
+            'experiments_disease.tsv': 'https://download.jensenlab.org/human_disease_experiments_filtered.tsv'
+            }
+            
+            for file_name, url in files_to_download.items():
+                file_path = os.path.join(self.path_tmp, file_name)
+                try:
+                    # Create a request with headers
+                    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                    with urllib.request.urlopen(req) as response, open(file_path, 'wb') as out_file:
+                        out_file.write(response.read())
+                    print(f"Downloaded {file_name} successfully.")
+                except urllib.error.HTTPError as e:
+                    print(f"HTTP error occurred while downloading {file_name}: {e}")
+                except urllib.error.URLError as e:
+                    print(f"URL error occurred while downloading {file_name}: {e}")
+                except Exception as e:
+                    print(f"An unexpected error occurred while downloading {file_name}: {e}")
+                    
                 
             knowledge = pd.read_csv(os.path.join(self.path_tmp, 'knowledge_disease.tsv'), sep = '\t', header= None)
             experiment = pd.read_csv(os.path.join(self.path_tmp, 'experiments_disease.tsv'), sep = '\t', header= None)
@@ -710,13 +765,15 @@ class Donwload(PathMetadata):
     #VIRUSES_download
     def download_viral_deiseases(self):
         
-        """
-        This method retrieves data from the ViMIC database 
-     
+        '''
+        This method downloads and returns ViMIC (viruses) data.
+
+        Source: http://bmtongji.cn/ViMIC/index.php
+
+    
         Returns:
-           dict: ViMIC database file in dictionary format
-           
-        """
+            dict (dict) - viruses (ViMIC) data
+        '''
         
         print('\n')
         print('ViMIC data downloading...')
@@ -747,13 +804,16 @@ class Donwload(PathMetadata):
     #HPA download
     def download_HPA(self):
         
-        """
-        This method retrieves data from the Human Protein Atlas database 
-    
+        '''
+        This method downloads and returns Human Protein Atlas (HPA) tissue/cell data.
+      
+        Source: https://www.proteinatlas.org/
+      
+      
         Returns:
-           dict: Human Protein Atlas database file in dictionary format
-           
-        """
+            dict (dict) - HPA data
+        '''
+  
         
         print('\n')
         print('HPA data downloading...')
@@ -793,13 +853,16 @@ class Donwload(PathMetadata):
     #STRING
     def download_string(self):
         
-        """
-        This method retrieves data from the STRING database 
-           
+        '''
+        This method downloads and returns STRING human/mouse/rat interaction data.
+      
+        Source: https://string-db.org/
+        
+      
         Returns:
-           dict: STRING database file in dictionary format
-           
-        """
+            dict (dict) - STRING data
+        '''
+  
         
         print('\n')
         print('STRING data downloading...')
@@ -951,13 +1014,15 @@ class Donwload(PathMetadata):
     def download_kegg(self):
         
         
-        """
-        This method retrieves data from the KEGG database 
-    
+        '''
+        This method downloads and returns KEGG data.
+      
+        Source: https://www.genome.jp/kegg/
+        
+      
         Returns:
-           dict: KEGG database file in dictionary format
-           
-        """
+            dict (dict) - KEGG data
+        '''
         
         print('\n')
         print('KEGG data downloading...')
@@ -1030,13 +1095,17 @@ class Donwload(PathMetadata):
     
     def download_reactome(self):
         
-        """
-        This method retrieves data from the REACTOME database 
-           
+        
+        '''
+        This method downloads and returns REACTOME data.
+      
+        Source: https://reactome.org/
+        
+      
         Returns:
-           dict: REACTOME database file in dictionary format
-           
-        """
+            dict (dict) - REACTOME data
+        '''
+        
         
         print('\n')
         print('REACTOME data downloading...')
@@ -1456,13 +1525,17 @@ class Donwload(PathMetadata):
     
     def download_cell_talk(self):
         
-        """
-        This method retrieves data from the CellTalk database 
-           
+        
+        '''
+        This method downloads and returns CellTalk data.
+      
+        Source: https://tcm.zju.edu.cn/celltalkdb/
+        
+      
         Returns:
-           dict: CellTalk database file in dictionary format
-           
-        """
+            dict (dict) - CellTalk data
+        '''
+        
         
         print('\n')
         print('CellTalk data downloading...')
@@ -1494,13 +1567,17 @@ class Donwload(PathMetadata):
             
     def download_cell_phone(self):
         
-        """
-        This method retrieves data from the CellPhone database 
-           
+        
+        '''
+        This method downloads and returns CellPhone data.
+      
+        Source: https://www.cellphonedb.org/
+        
+      
         Returns:
-           dict: CellPhone database file in dictionary format
-           
-        """
+            dict (dict) - CellPhone data
+        '''
+        
         
         print('\n')
         print('CellPhone data downloading...')
@@ -1524,13 +1601,17 @@ class Donwload(PathMetadata):
             
     def download_go_term(self):
         
-        """
-        This method retrieves data from the GO-TERM database 
-    
+        
+        '''
+        This method downloads and returns GO-TERM data.
+          
+        Source: https://geneontology.org/
+            
+      
         Returns:
-           dict: GO-TERM database file in dictionary format
-           
-        """
+            dict (dict) - GO-TERM data
+        '''
+        
         
         print('\n')
         print('GO-TERM data downloading...')
@@ -1676,14 +1757,14 @@ class Donwload(PathMetadata):
         current_date = datetime.today().date()
         current_date = current_date.strftime("%d-%m-%Y")
         
-        text = 'The last GOPa update was done on ' + str(current_date)
+        text = 'The last GEDS update was done on ' + str(current_date)
     
         if password != None and password.upper() == 'JBS':
-            text = text + '\nThe GOPa data version authorized by JBS(C)'
-            text = text + '\nThe GOPa data version: GOPa-' + re.sub('-','/',current_date)
+            text = text + '\nThe GEDS data version authorized by JBS'
+            text = text + '\nThe GEDS data version: GEDS-' + re.sub('-','/',current_date)
         else:
-            text = text + '\nThe GOPa data version unauthorized'
-            text = text + '\nThe GOPa data version: User_custom-' + re.sub('-','/',current_date)
+            text = text + '\nThe GEDS data version unauthorized'
+            text = text + '\nThe GEDS data version: User_custom-' + re.sub('-','/',current_date)
     
             
         
@@ -1701,7 +1782,7 @@ class Donwload(PathMetadata):
     def check_last_update(self):
         
         """
-        This method checks the last udate of data used in this library
+        This method checks the last update of GEDS data used in this library
            
         Returns:
            date: Date of last update
@@ -3760,9 +3841,7 @@ class DataAdjustment(GetData, PathMetadata):
         
         
     def ZIP(self):
-        # Create a zip compressed file
         with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
-            # Walk through the directory and its subdirectories
             for folder, _, files in os.walk(self.path_inside):
                 for file in files:
                     file_path = os.path.join(folder, file)
@@ -3788,7 +3867,7 @@ class DataAdjustment(GetData, PathMetadata):
 class UpdatePanel(Donwload, DataAdjustment):
     
 
-    def update_from_sources(self):
+    def update_from_sources(self, **kwargs):
         
         """
         This function checks all source databases and updates the GEDSpy database without supervision from the library author's side.
@@ -3807,135 +3886,61 @@ class UpdatePanel(Donwload, DataAdjustment):
             
             print('\nPrevious data removeing!')
             
-            try:
-                os.remove(os.path.join(self.path_inside, 'cell_phone_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'cell_talk_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'diseases_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'gene_dictionary_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-             
-            try:
-                os.remove(os.path.join(self.path_inside, 'goterm_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
+            files_to_delete = [
+                'cell_phone_jbio.json',
+                'cell_talk_jbio.json',
+                'diseases_jbio.json',
+                'gene_dictionary_jbio.json',
+                'goterm_jbio.json',
+                'HPA_jbio.json',
+                'IntAct_jbio.json',
+                'kegg_jbio.json',
+                'reactome_jbio.json',
+                'string_jbio.json',
+                'update.dat',
+                'viral_diseases_jbio.json'
+            ]
+    
+    
+            for file_name in files_to_delete:
+                file_path = os.path.join(self.path_inside, file_name)
+                if os.path.exists(file_path):  # Check if file exists
+                    try:
+                        os.remove(file_path)
+                        print(f"The file {file_name} was removed successfully")
+                    except OSError as e:
+                        print(f"Error deleting the file {file_name}: {e}")
+                else:
+                    print(f"The file {file_name} does not exist, skipping...")
+                        
+                    
                      
-             
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'HPA_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                      
-                
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'IntAct_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                 
-            try:
-                os.remove(os.path.join(self.path_inside, 'kegg_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'reactome_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                  
-            try:
-                os.remove(os.path.join(self.path_inside, 'string_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-        
-            try:
-                os.remove(os.path.join(self.path_inside, 'update.dat'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-                
-            try:
-                os.remove(os.path.join(self.path_inside, 'viral_diseases_jbio.json'))
-               
-                print("The file was removed successfully")
-                
-            except OSError as e:
-                print(f"Error deleting the file: {e}")
-                
-            
-             
             files = [f for f in os.listdir(self.path_in_inside) if os.path.isfile(os.path.join(self.path_in_inside, f))]
             
             for f in files:
-                try:
+                if os.path.exists(os.path.join(self.path_in_inside, f)):
+                    
                     os.remove(os.path.join(self.path_in_inside, f))
                    
                     print("The file was removed successfully")
                     
-                except OSError as e:
-                    print(f"Error deleting the file: {e}")
+                else:
+                    print(f"Error deleting the file: {f}")
             
             
-            
-            self.check_last_update()
 
-            self.update_downloading(password = None)
+            if 'admin_user' in kwargs:
+                self.update_downloading(password = kwargs['admin_user'])
+            else:
+                self.update_downloading(password = None)
+
               
             self.update_to_data()
+            
+            self.create_SQL()
+
+            if 'admin_user' in kwargs:
+                self.ZIP()
 
 
                 
@@ -3960,60 +3965,60 @@ class UpdatePanel(Donwload, DataAdjustment):
             return "Not installed"
             
         
-    def update_library_database(self, force = False):
+    def update_library_database(self, force = False, URL = 'https://drive.google.com/uc?id=1LQXI7zEXyvywjBz2TX1QBXN60Abia6WP', first = False):
         
         """
-        This function checks if the newest version of GOPa data is available for the GEDSpy library and updates it.
+        This method checks if the newest version of GEDS data is available for the GEDSpy library and updates it.
        
         Args:
-            force (bool) - if True user force update of GOPa data independent of the GEDSpy version
-           
+            force (bool) - if True user force update of GEDS data independent of the GEDSpy version
+            URL (str) - provide URL of the database you wish to use. Default: URL for the newest db version
+            
         Returns:
-            Updated by the author the newest version of GOPa base.
+            Updated by the author the newest version of GEDS data base.
         """
         
-        try:
-            
-            
-            URL = 'https://drive.google.com/uc?id=1t-HVYiNmE99BlKOKSpkoz0hAKaLHB9J2'
 
+        if force == True:
             
-            if self.get_latest_version('GEDSpy') == self.get_installed_version('GEDSpy'):
-                print('\n')
-                print('GEDSpy is up to date for its version. If you want to download the newest data from the original sources, you can use the update_from_sources() method.')    
-            elif self.get_latest_version('GEDSpy') != self.get_installed_version('GEDSpy'):
-                
-              
-                print('\nUpdate has started...')
-                gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                shutil.rmtree(self.path_inside)
-                os.makedirs(self.path_inside, exist_ok=True)
-                with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
-                    zipf.extractall(self.path_inside),
-                os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                
-                print('\n')
-                print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
-                print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
-                
-            elif force == True:
-                
-     
-                print('\nGEDSpy data update was forced by the user')
-                print('\nUpdate has started...')
-                gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                shutil.rmtree(self.path_inside)
-                os.makedirs(self.path_inside, exist_ok=True)
-                with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
-                    zipf.extractall(self.path_inside),
-                os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
-                
-                print('\n')
-                print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
-                print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
-        except:
+            print('\nGEDSpy data update was forced by the user')
+            print('\nUpdate has started...')
+            gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            shutil.rmtree(self.path_inside, ignore_errors=True)
+            os.makedirs(self.path_inside, exist_ok=True)
+            with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
+                zipf.extractall(self.path_inside)
+            os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            
             print('\n')
-            print("Something went wrong. Try again or use update_from_sources() function.")
+            print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
+            
+            if first == False:
+                
+                print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
+        
+        
+        
+        elif self.get_latest_version('GEDSpy') == self.get_installed_version('GEDSpy'):
+            print('\n')
+            print('GEDSpy is up to date for its version. If you want to download the newest data from the original sources, you can use the update_from_sources() method.')    
+        
+        elif self.get_latest_version('GEDSpy') != self.get_installed_version('GEDSpy'):
+            
+            
+            print('\nUpdate has started...')
+            gdown.download(URL, os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            shutil.rmtree(self.path_inside, ignore_errors=True)
+            os.makedirs(self.path_inside, exist_ok=True)
+            with zipfile.ZipFile(os.path.join(os.path.dirname(self.path_inside), 'data.zip'), 'r') as zipf:
+                zipf.extractall(self.path_inside)
+            os.remove(os.path.join(os.path.dirname(self.path_inside), 'data.zip'))
+            
+            print('\n')
+            print('Update completed, if you want to check if the data version has changed, use "check_last_update()"')
+            print('In addition, we recommend upgrading the GEDSpy version via pip by typing pip install GEDSpy --upgrade.')
+        
+
 
 
 

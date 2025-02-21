@@ -188,7 +188,7 @@ Included data bases:
 #### In command line write:
 
 ```
-pip install GEDSpy>=2.0.0
+pip install GEDSpy>=2.1.6
 ```
 
 

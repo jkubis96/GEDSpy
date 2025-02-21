@@ -1,9 +1,42 @@
-print()
-print('Welcome in GEDSpy v.1.4.3 library')
-print('')
-print('Loading required  packages...')
+pattern = r"""
+        _  ____   _         _____              _                     
+       | ||  _ \ (_)       / ____|            | |                   
+       | || |_) | _   ___ | (___   _   _  ___ | |_  ___  _ __ ___   
+   _   | ||  _ < | | / _ \ \___ \ | | | |/ __|| __|/ _ \| '_ ` _ \  
+  | |__| || |_) || || (_) |____) || |_| |\__ \| |_|  __/| | | | | | 
+   \____/ |____/ |_| \___/|_____/  \__, ||___/ \__|\___||_| |_| |_|  
+                                    __/ |                                   
+                                   |___/                                   
+"""
 
-from GEDSpy.zinc import zinc
-from GEDSpy.GOPa import GOPa
+print(pattern)
+
+print()
+print('Welcome in GEDSpy v.2.1.6 library')
+print()
+print('Loading required packages...')     
+
+
+
+from GEDSpy.DataPrepare import UpdatePanel
+import os
+import pkg_resources
+
+
+def get_package_directory():
+    return pkg_resources.resource_filename(__name__, '')
+
+
+_libd = get_package_directory()
+
+
+if 'data' not in os.listdir(_libd):
+    up = UpdatePanel()
+    up.update_library_database(force = True, first = True)
+
+    del up
+
 
 print('GEDSpy is ready to use')
+
+
