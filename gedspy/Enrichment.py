@@ -5837,7 +5837,7 @@ class Visualization:
             if len(scatter_df) < 15:
                 len_bar = 0.65
 
-                cbar = plt.colorbar(sm)
+                cbar = fig.colorbar(sm, ax=ax)
                 cbar.ax.set_ylabel(str(legend_lab), fontsize=label_size * 0.9)
                 cbar.ax.yaxis.set_ticks_position("right")
                 cbar.ax.set_position(
@@ -5852,7 +5852,7 @@ class Visualization:
                 cbar.ax.yaxis.set_tick_params(labelsize=label_size * 0.8)
                 cbar.outline.set_edgecolor("none")
             else:
-                cbar = plt.colorbar(sm)
+                cbar = fig.colorbar(sm, ax=ax)
                 cbar.ax.set_ylabel(str(legend_lab), fontsize=label_size * 0.9)
                 cbar.ax.yaxis.set_ticks_position("right")
                 cbar.ax.set_position(
@@ -8883,7 +8883,7 @@ class VisualizationDES(Visualization):
             if len(scatter_df) < 15:
                 len_bar = 0.65
 
-                cbar = plt.colorbar(sm)
+                cbar = fig.colorbar(sm, ax=ax)
                 cbar.ax.set_ylabel(str(legend_lab), fontsize=label_size * 0.9)
                 cbar.ax.yaxis.set_ticks_position("right")
                 cbar.ax.set_position(
@@ -8898,7 +8898,7 @@ class VisualizationDES(Visualization):
                 cbar.ax.yaxis.set_tick_params(labelsize=label_size * 0.8)
                 cbar.outline.set_edgecolor("none")
             else:
-                cbar = plt.colorbar(sm)
+                cbar = fig.colorbar(sm, ax=ax)
                 cbar.ax.set_ylabel(str(legend_lab), fontsize=label_size * 0.9)
                 cbar.ax.yaxis.set_ticks_position("right")
                 cbar.ax.set_position(
@@ -10697,7 +10697,7 @@ class VisualizationDES(Visualization):
             if len(scatter_df) < 15:
                 len_bar = 0.65
 
-                cbar = plt.colorbar(sm)
+                cbar = fig.colorbar(sm, ax=ax)
                 cbar.ax.set_ylabel(str(legend_lab), fontsize=label_size * 0.9)
                 cbar.ax.yaxis.set_ticks_position("right")
                 cbar.ax.set_position(
@@ -10712,7 +10712,7 @@ class VisualizationDES(Visualization):
                 cbar.ax.yaxis.set_tick_params(labelsize=label_size * 0.8)
                 cbar.outline.set_edgecolor("none")
             else:
-                cbar = plt.colorbar(sm)
+                cbar = fig.colorbar(sm, ax=ax)
                 cbar.ax.set_ylabel(str(legend_lab), fontsize=label_size * 0.9)
                 cbar.ax.yaxis.set_ticks_position("right")
                 cbar.ax.set_position(
