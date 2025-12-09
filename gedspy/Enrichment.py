@@ -13,7 +13,8 @@ import pkg_resources
 from matplotlib import rc
 from matplotlib.gridspec import GridSpec
 from scipy.cluster.hierarchy import dendrogram, linkage
-from scipy.stats import binom_test, fisher_exact
+from scipy.stats import binomialtest, fisher_exact
+
 from tqdm import tqdm
 
 rc("svg", fonttype="path")
@@ -2379,7 +2380,7 @@ class Analysis(Enrichment):
 
         p_background = K / N
 
-        binomial_p_value = binom_test(k, n, p_background, alternative="greater")
+        binomial_p_value = binomialtest(k, n, p=p_background, alternative="greater").pvalue
 
         return {
             "fisher_p_value": fisher_p_value,
