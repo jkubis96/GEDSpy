@@ -29,7 +29,7 @@ GEDSpy is designed to streamline biological data interpretation, enabling resear
 
 
 <p align="center">
-<img  src="fig/hu_mu_ra.jpg" alt="drawing" width="500" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/hu_mu_ra.jpg" alt="drawing" width="500" />
 </p>
 
 
@@ -54,6 +54,8 @@ Included data bases:
 
 
 *If you use GEDSpy, please remember to cite both GEDSpy and the original sources of the data you utilized in your work.*
+
+In the case of enrichment analysis, it is recommended to use the  [JVectorGraph](https://github.com/jkubis96/JVectorGraph) library to easily adjust and customise graph and network visualisations from the Python side.
 
 
 <br />
@@ -188,7 +190,7 @@ Included data bases:
 #### In command line write:
 
 ```
-pip install GEDSpy>=2.1.6
+pip install gedspy
 ```
 
 
@@ -205,7 +207,7 @@ pip install GEDSpy>=2.1.6
 The data sets are annotated to the Ref_Genome (get_REF_GEN()) by ids
 
 ```
-from GEDSpy.Enrichment import Enrichment
+from gedspy import Enrichment
 
 # initiate class
 enr = Enrichment()
@@ -623,7 +625,7 @@ results = enr.get_results()
 ### 2. Single Gene Set Analysis<a id="ans2"></a>
 
 ```
-from GEDSpy.Enrichment import Analysis
+from gedspy import Analysis
 
 # initiate class
 ans = Analysis(input_data)
@@ -1192,7 +1194,7 @@ full_results = ans.get_full_results
 ### 3. Single Gene Set Visualisation<a id="sgs3"></a>
 
 ```
-from enrichment import Visualization
+from gedspy import Visualization
 
 # initiate class
 vis = Visualization(input_data)
@@ -1635,7 +1637,7 @@ plot  =  vis.gene_scatter(
 ### 4. Differential Set Analysis (DSA)<a id="dsa4"></a>
 
 ```
-from Enrichment import DSA
+from gedspy import DSA
 
 # initiate class
 dsa_compare = DSA(set1, set2)
@@ -2060,7 +2062,7 @@ full_dsa_results = dsa_compare.get_results
 ### 5. Differential Set Analysis (DSA) Visualisation <a id="dsav5"></a>
 
 ```
-from Enrichment import Visualization
+from gedspy import Visualization
 
 # initiate class
 vis_des = VisualizationDES(input_data)
@@ -2479,7 +2481,7 @@ plot  =  vis.gene_scatter(
 The data sets are annotated to the Ref_Genome (get_REF_GEN()) by ids
 
 ```
-from GEDSpy.Enrichment import GetData
+from gedspy import GetData
 
 # initiate class
 gd = GetData()
@@ -2690,7 +2692,7 @@ cell_interactions = gd.get_interactions()
 ### 7. GetRawData<a id="grd7"></a>
 
 ```
-from GEDSpy.Enrichment import GetRawData
+from gedspy import GetRawData
 
 # initiate class
 gdr = GetDataRaw()
@@ -2917,7 +2919,7 @@ cell_phone = gdr.get_raw_CellPhone()
 ### 8. DataDownloading<a id="grd8"></a>
 
 ```
-from GEDSpy.DataPrepare import DataDownloading
+from gedspy import DataDownloading
 
 # initiate class
 dw = Donwload()
@@ -3148,7 +3150,7 @@ cell_phone = dw.download_cell_phone()
 ### 9. UpdatePanel<a id="up9"></a>
 
 ```
-from GEDSpy.DataPrepare import UpdatePanel
+from gedspy import UpdatePanel
 
 # initiate class
 up = UpdatePanel()
@@ -3226,7 +3228,7 @@ gene_list = ['CACNA1I','CALD1','CAMK1G','CAMK2N1','CAMSAP1','CCL15','CCL16','CCN
 
     
     
-from Enrichment import Enrichment
+from gedspy import Enrichment
 
 # create instance of the Enrichment class
 enr = Enrichment()
@@ -3244,7 +3246,7 @@ gene_info = enr.get_gene_info
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/gene_info.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/gene_info.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3262,7 +3264,7 @@ HPA = enr.get_HPA
 
 
 <p align="center">
-<img  src="fig/example_1/enr/hpa.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/hpa.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3276,7 +3278,7 @@ KEGG = enr.get_KEGG
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/kegg.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3290,7 +3292,7 @@ GOTERM = enr.get_GO_TERM
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/goterm.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/goterm.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3305,7 +3307,7 @@ REACTOME = enr.get_REACTOME
 
 
 <p align="center">
-<img  src="fig/example_1/enr/reactome.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3319,7 +3321,7 @@ DISEASES = enr.get_DISEASES
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/diseases.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/diseases.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3334,7 +3336,7 @@ ViMIC = enr.get_ViMIC
 
 
 <p align="center">
-<img  src="fig/example_1/enr/vimic.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/vimic.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3349,7 +3351,7 @@ IntAct = enr.get_IntAct
 
 
 <p align="center">
-<img  src="fig/example_1/enr/intact.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/intact.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3364,7 +3366,7 @@ STRING = enr.get_STRING
 
 
 <p align="center">
-<img  src="fig/example_1/enr/string.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/string.bmp" alt="drawing" width="600" />
 </p>
 
 <br />
@@ -3378,7 +3380,7 @@ CellConnections = enr.get_CellCon
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/cellcon.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/cellcon.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3392,7 +3394,7 @@ RNASEQ = enr.get_RNA_SEQ
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/rnaseq.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/rnaseq.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3409,7 +3411,7 @@ results = enr.get_results
 ```
 
 <p align="center">
-<img  src="fig/example_1/enr/fullenr.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/enr/fullenr.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3417,7 +3419,7 @@ results = enr.get_results
 
 ```
 # import the Analysis class from the Enrichment module
-from Enrichment import Analysis
+from gedspy import Analysis
 
 # create instance of the Analysis class with results from get_results
 ans = Analysis(results)
@@ -3454,7 +3456,7 @@ go = ans.get_GO_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/goterm.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/goterm.bmp" alt="drawing" width="700" />
 </p>
 
 <br />
@@ -3468,7 +3470,7 @@ kegg = ans.get_KEGG_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/kegg.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3483,7 +3485,7 @@ reactome = ans.get_REACTOME_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/reactome.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3498,7 +3500,7 @@ vimic = ans.get_ViMIC_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/vimic.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/vimic.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3513,7 +3515,7 @@ diseases = ans.get_DISEASE_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/humandiseases.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/humandiseases.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3528,7 +3530,7 @@ spec = ans.get_specificity_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/hpa.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/hpa.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3544,7 +3546,7 @@ inter = ans.get_features_interactions_statistics
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/inter.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/inter.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3559,7 +3561,7 @@ reactome_net = ans.get_REACTOME_network
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/reactomenx.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/reactomenx.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3574,7 +3576,7 @@ kegg_net = ans.get_KEGG_network
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/keggnet.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/keggnet.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3589,7 +3591,7 @@ go_net = ans.get_GO_network
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/gonet.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/gonet.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3608,7 +3610,7 @@ results2 = ans.get_full_results
 ```
 
 <p align="center">
-<img  src="fig/example_1/ovr/full.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/ovr/full.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -3616,7 +3618,7 @@ results2 = ans.get_full_results
 
 ```
 # import the Visualization class from the Enrichment module
-from Enrichment import Visualization
+from gedspy import Visualization
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
@@ -3638,7 +3640,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/gtype.bmp" alt="drawing" width="400" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/gtype.bmp" alt="drawing" width="400" />
 </p>
 
 
@@ -3662,7 +3664,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/go-term.bmp" alt="drawing" width="650" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/go-term.bmp" alt="drawing" width="650" />
 </p>
 
 
@@ -3685,7 +3687,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/spec.bmp" alt="drawing" width="650" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/spec.bmp" alt="drawing" width="650" />
 </p>
 
 
@@ -3708,7 +3710,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/kegg.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3731,7 +3733,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/reactome.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3754,7 +3756,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/human_diseases.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/human_diseases.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3777,7 +3779,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/vimic.bmp" alt="drawing" width="500" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/vimic.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -3792,7 +3794,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/blood.bmp" alt="drawing" width="550" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/blood.bmp" alt="drawing" width="550" />
 </p>
 
 
@@ -3816,7 +3818,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/gonet.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/gonet.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3840,7 +3842,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/keggnet.bmp" alt="drawing" width="500" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/keggnet.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -3864,7 +3866,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/reactnet.bmp" alt="drawing" width="450" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/reactnet.bmp" alt="drawing" width="450" />
 </p>
 
 
@@ -3879,7 +3881,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/gi.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/gi.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -3902,7 +3904,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/automl.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/automl.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -3930,7 +3932,7 @@ graph1.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/hpa.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/hpa.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -3943,7 +3945,7 @@ graph2.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/RNAtotal.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/RNAtotal.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -3955,7 +3957,7 @@ graph3.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_1/vis/circular.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_1/vis/circular.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -3992,8 +3994,8 @@ gene_list2 = ['NCOA6','NCSTN','NDUFA4','NEK4', 'UDT2','NUP210','ORC3L','PAOX','P
 
 
 # import the Enrichment & Analysis classes from the Enrichment module
-from Enrichment import Enrichment
-from Enrichment import Analysis 
+from gedspy import Enrichment
+from gedspy import Analysis 
 ```
 
 
@@ -4077,7 +4079,7 @@ results2 = ans.get_full_results
 
 ```
 # import the DSA class from the Enrichment module
-from Enrichment import DSA
+from gedspy import DSA
 
 # create instance of the DSA class with results from get_full_results for set1 and set2
 dsa_compare = DSA(results1, results2)
@@ -4099,7 +4101,7 @@ go = dsa_compare.get_GO_diff
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/go.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/go.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4115,7 +4117,7 @@ kegg = dsa_compare.get_KEGG_diff
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/kegg.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/kegg.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4131,7 +4133,7 @@ reactome = dsa_compare.get_REACTOME_diff
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/reactome.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/reactome.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4147,7 +4149,7 @@ hpa = dsa_compare.get_specificity_diff
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/hpa.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/hpa.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4163,7 +4165,7 @@ GI = dsa_compare.get_GI_diff
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/gi.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/gi.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4179,7 +4181,7 @@ networks = dsa_compare.get_networks_diff
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/net.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/net.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4194,7 +4196,7 @@ inter_terms = dsa_compare.get_inter_terms
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/inter.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/inter.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4209,7 +4211,7 @@ connections = dsa_compare.get_set_to_set_con
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/interconn.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/interconn.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4227,7 +4229,7 @@ results3 = dsa_compare.get_results
 ```
 
 <p align="center">
-<img  src="fig/example_2/dsa/dsa.bmp" alt="drawing" width="700" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/dsa/dsa.bmp" alt="drawing" width="700" />
 </p>
 
 
@@ -4236,7 +4238,7 @@ results3 = dsa_compare.get_results
 
 ```
 # import the VisualizationDES class from the Enrichment module
-from Enrichment import VisualizationDES
+from gedspy import VisualizationDES
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
@@ -4262,7 +4264,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/genetype.bmp" alt="drawing" width="500" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/genetype.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -4288,7 +4290,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/go.bmp" alt="drawing" width="500" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/go.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -4315,7 +4317,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/kegg.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/kegg.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4343,7 +4345,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/reactome.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/reactome.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4369,7 +4371,7 @@ graph.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/hpa.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/hpa.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4394,7 +4396,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/gonet.bmp" alt="drawing" width="600" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/gonet.bmp" alt="drawing" width="600" />
 </p>
 
 
@@ -4417,7 +4419,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/keggnet.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/keggnet.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4441,7 +4443,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/reactnet.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/reactnet.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4457,7 +4459,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/ginet.bmp" alt="drawing" width="500" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/ginet.bmp" alt="drawing" width="500" />
 </p>
 
 
@@ -4481,7 +4483,7 @@ nt.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/automl.bmp" alt="drawing" width="650" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/automl.bmp" alt="drawing" width="650" />
 </p>
 
 
@@ -4514,7 +4516,7 @@ graph1.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/rnaseqhpa.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/rnaseqhpa.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4527,7 +4529,7 @@ graph2.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/rnaseqtotal.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/rnaseqtotal.bmp" alt="drawing" width="800" />
 </p>
 
 
@@ -4540,7 +4542,7 @@ graph3.edit()
 ```
 
 <p align="center">
-<img  src="fig/example_2/vis/rnaseqcirc.bmp" alt="drawing" width="800" />
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/example_2/vis/rnaseqcirc.bmp" alt="drawing" width="800" />
 </p>
 
 
