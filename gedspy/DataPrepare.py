@@ -1427,7 +1427,9 @@ class Donwload(PathMetadata):
                         if "is_a:" in l:
                             tmp_child.append(
                                 re.sub(
-                                    r"\[.*", "", re.sub('"', "", re.sub("is_a: ", "", l))
+                                    r"\[.*",
+                                    "",
+                                    re.sub('"', "", re.sub("is_a: ", "", l)),
                                 )
                             )
                         if "alt_id:" in l:
