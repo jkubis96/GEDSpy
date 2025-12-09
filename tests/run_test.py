@@ -1,6 +1,6 @@
 def DataPrepare_tests():
 
-    from DataPrepare import Donwload
+    from gedspy import Donwload
 
     errored = []
 
@@ -159,7 +159,7 @@ def DataPrepare_tests():
 
 def EnrichmentGetRaw_tests():
 
-    from Enrichment import GetDataRaw
+    from gedspy import GetDataRaw
 
     errored = []
 
@@ -294,7 +294,7 @@ def EnrichmentGetRaw_tests():
 
 def EnrichmentGetData_tests():
 
-    from Enrichment import GetData
+    from gedspy import GetData
 
     errored = []
 
@@ -595,7 +595,7 @@ def Enrichment_tests():
     half = len(gene_list) // 2
     list1 = gene_list[:half]
 
-    from Enrichment import Enrichment
+    from gedspy import Enrichment
 
     enr = Enrichment()
 
@@ -900,7 +900,7 @@ def AnVis_tests():
     half = len(gene_list) // 2
     list1 = gene_list[:half]
 
-    from Enrichment import Enrichment
+    from gedspy import Enrichment
 
     enr = Enrichment()
 
@@ -917,7 +917,7 @@ def AnVis_tests():
     if not isinstance(results, dict):
         errored.append("full_enrichment")
 
-    from Enrichment import Analysis
+    from gedspy import Analysis
 
     ans = Analysis(results)
 
@@ -1064,7 +1064,7 @@ def AnVis_tests():
 
     del results
 
-    from Enrichment import Visualization
+    from gedspy import Visualization
     from matplotlib import figure
 
     vis = Visualization(results2)
@@ -1513,7 +1513,7 @@ def AnDESVis_tests():
 
     # ENRICHMENT
 
-    from Enrichment import Analysis, Enrichment
+    from gedspy import Analysis, Enrichment
 
     # SET1
 
@@ -1583,7 +1583,7 @@ def AnDESVis_tests():
     if not isinstance(results2, dict):
         errored.append("full_analysis")
 
-    from Enrichment import DSA
+    from gedspy import DSA
 
     dsa_compare = DSA(results1, results2)
 
@@ -1679,7 +1679,7 @@ def AnDESVis_tests():
 
     results3 = dsa_compare.get_results
 
-    from Enrichment import VisualizationDES
+    from gedspy import VisualizationDES
 
     vis_des = VisualizationDES(results3)
 
@@ -1954,18 +1954,6 @@ def testing_mode():
     if len(full) == 0:
 
         print("\nAll tests passed! Data and scripts working properly!")
-
-        _curr = os.getcwd()
-        _des = os.path.dirname(_curr)
-
-        shutil.copy(
-            os.path.join(_curr, "Enrichment.py"),
-            os.path.join(_des, "GEDSpy", "Enrichment.py"),
-        )
-        shutil.copy(
-            os.path.join(_curr, "DataPrepare.py"),
-            os.path.join(_des, "GEDSpy", "DataPrepare.py"),
-        )
 
     else:
 

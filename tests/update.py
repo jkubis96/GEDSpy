@@ -1,6 +1,6 @@
 import os
 
-from DataPrepare import UpdatePanel
+from gedspy import UpdatePanel
 
 
 def run_update():
