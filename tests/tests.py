@@ -1,5 +1,3 @@
-import matplotlib.figure as fig
-import networkx as nx
 import pytest
 
 from gedspy import GetDataRaw
