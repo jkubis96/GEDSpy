@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies using Poetry
         run: |
           poetry install --with dev --no-interaction 
+          poetry run python -c "import gedspy"
 
       - name: Run tests with pytest
         run: |
