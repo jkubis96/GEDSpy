@@ -2,38 +2,21 @@ import matplotlib.figure as fig
 import networkx as nx
 import pytest
 
-from gedspy import (
-    DSA,
-    Analysis,
-    Enrichment,
-    GetData,
-    GetDataRaw,
-    Visualization,
-    VisualizationDES,
-)
+from gedspy import GetDataRaw
 
 
-@pytest.fixture
-def gdr():
-    return GetDataRaw()
+
+def test_GetDataRaw():
+
+    gdr = GetDataRaw()
+
+    recteome = None
+
+    recteome = gdr.get_raw_REACTOME()
+
+    assert  isinstance(recteome, dict)
+
+    del recteome
 
 
-@pytest.mark.parametrize(
-    "method_name",
-    [
-        "get_raw_REACTOME",
-       
-    ],
-)
-def test_GetDataRaw_methods_return_dict(gdr, method_name):
-    """Test that all GetDataRaw.* methods return a dict."""
-    method = getattr(gdr, method_name)
-    result = method()
-
-    assert isinstance(
-        result, dict
-    ), f"{method_name} should return dict, got {type(result)}"
-
-
-###############################################################################
 
