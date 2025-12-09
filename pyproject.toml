@@ -1,5 +1,5 @@
 [project]
-name = "GEDSpy"
+name = "gedspy"
 version = "2.1.7"
 description = "GEDSpy (Gene Enrichment for Drug Searching)"
 readme = "README.md"

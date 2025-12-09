@@ -12,7 +12,7 @@ pattern = r"""
 print(pattern)
 
 print()
-print("Welcome in GEDSpy v.2.1.6 library")
+print("Welcome in GEDSpy v.2.1.7 library")
 print()
 print("Loading required packages...")
 
@@ -20,7 +20,7 @@ import os
 
 import pkg_resources
 
-from .GEDSpy.Enrichment import *
+from .gedspy.Enrichment import *
 
 
 def get_package_directory():
@@ -31,7 +31,7 @@ _libd = get_package_directory()
 
 
 if "data" not in os.listdir(_libd):
-    from .GEDSpy.DataPrepare import UpdatePanel
+    from .gedspy.DataPrepare import UpdatePanel
 
     up = UpdatePanel()
     up.update_library_database(force=True, first=True)

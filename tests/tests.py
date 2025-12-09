@@ -2,7 +2,7 @@ import matplotlib.figure as fig
 import networkx as nx
 import pytest
 
-from GEDSpy import (
+from gedspy import (
     DSA,
     Analysis,
     Enrichment,
