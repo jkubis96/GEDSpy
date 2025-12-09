@@ -20,8 +20,8 @@ import os
 
 import pkg_resources
 
-from .Enrichment import *
 from .DataPrepare import *
+from .Enrichment import *
 
 
 def get_package_directory():

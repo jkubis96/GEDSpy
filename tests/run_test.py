@@ -1064,8 +1064,9 @@ def AnVis_tests():
 
     del results
 
-    from gedspy import Visualization
     from matplotlib import figure
+
+    from gedspy import Visualization
 
     vis = Visualization(results2)
 
