@@ -20,7 +20,7 @@ def test_GetDataRaw():
 
 
 
-def test_GetDataRaw():
+def test_GetData():
 
     gd = GetData()
 
@@ -33,9 +33,7 @@ def test_GetDataRaw():
     
 
 
-
-
-def Enrichment_tests():
+def test_Enrichment():
 
     errored = []
 
