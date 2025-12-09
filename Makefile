@@ -1,15 +1,15 @@
 .PHONY: format lint all
 
 format:
-	isort GEDSpy
-	black GEDSpy
+	isort gedspy
+	black gedspy
 	isort tests
 	black tests
 
 
 lint:
-	pylint --exit-zero GEDSpy/DataPrepare.py
-	pylint --exit-zero GEDSpy/Enrichment.py
+	pylint --exit-zero gedspy/DataPrepare.py
+	pylint --exit-zero gedspy/Enrichment.py
 
 
 
