@@ -1,4 +1,6 @@
 import matplotlib.figure as fig
+import matplotlib
+matplotlib.use("Agg")
 import networkx as nx
 import pytest
 
@@ -66,7 +68,7 @@ def gene_list():
         "HSP90AB1",
         "IER3IP1",
         "IGF2R",
-        "IL1R1"
+        "IL1R1",
     ]
 
 

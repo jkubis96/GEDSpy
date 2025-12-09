@@ -1190,21 +1190,21 @@ class Donwload(PathMetadata):
                                 break
 
                             first.append(
-                                re.sub("\d+", "", kegg["children"][n]["name"])[
+                                re.sub(r"\d+", "", kegg["children"][n]["name"])[
                                     1 : len(
-                                        re.sub("\d+", "", kegg["children"][n]["name"])
+                                        re.sub(r"\d+", "", kegg["children"][n]["name"])
                                     )
                                 ]
                             )
                             second.append(
                                 re.sub(
-                                    "\d+",
+                                    r"\d+",
                                     "",
                                     kegg["children"][n]["children"][i]["name"],
                                 )[
                                     1 : len(
                                         re.sub(
-                                            "\d+",
+                                            r"\d+",
                                             "",
                                             kegg["children"][n]["children"][i]["name"],
                                         )
@@ -1213,7 +1213,7 @@ class Donwload(PathMetadata):
                             )
                             third.append(
                                 re.sub(
-                                    " \[.*",
+                                    r" \[.*",
                                     "",
                                     str(
                                         kegg["children"][n]["children"][i]["children"][
@@ -1413,13 +1413,13 @@ class Donwload(PathMetadata):
                         if "def:" in l:
                             definition.append(
                                 re.sub(
-                                    "\[.*", "", re.sub('"', "", re.sub("def: ", "", l))
+                                    r"\[.*", "", re.sub('"', "", re.sub("def: ", "", l))
                                 )
                             )
                         if "synonym:" in l:
                             tmp_syn.append(
                                 re.sub(
-                                    "\[.*",
+                                    r"\[.*",
                                     "",
                                     re.sub('"', "", re.sub("synonym: ", "", l)),
                                 )
@@ -1427,13 +1427,13 @@ class Donwload(PathMetadata):
                         if "is_a:" in l:
                             tmp_child.append(
                                 re.sub(
-                                    "\[.*", "", re.sub('"', "", re.sub("is_a: ", "", l))
+                                    r"\[.*", "", re.sub('"', "", re.sub("is_a: ", "", l))
                                 )
                             )
                         if "alt_id:" in l:
                             tmp_alt.append(
                                 re.sub(
-                                    "\[.*",
+                                    r"\[.*",
                                     "",
                                     re.sub('"', "", re.sub("alt_id: ", "", l)),
                                 )
