@@ -21,6 +21,7 @@ import os
 import pkg_resources
 
 from .Enrichment import *
+from .DataPrepare import *
 
 
 def get_package_directory():
@@ -31,7 +32,6 @@ _libd = get_package_directory()
 
 
 if "data" not in os.listdir(_libd):
-    from .DataPrepare import UpdatePanel
 
     up = UpdatePanel()
     up.update_library_database(force=True, first=True)
