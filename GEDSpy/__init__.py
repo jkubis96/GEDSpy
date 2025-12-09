@@ -12,31 +12,31 @@ pattern = r"""
 print(pattern)
 
 print()
-print('Welcome in GEDSpy v.2.1.6 library')
+print("Welcome in GEDSpy v.2.1.6 library")
 print()
-print('Loading required packages...')     
+print("Loading required packages...")
 
-
-
-from GEDSpy.DataPrepare import UpdatePanel
 import os
+
 import pkg_resources
+
+from .GEDSpy.Enrichment import *
 
 
 def get_package_directory():
-    return pkg_resources.resource_filename(__name__, '')
+    return pkg_resources.resource_filename(__name__, "")
 
 
 _libd = get_package_directory()
 
 
-if 'data' not in os.listdir(_libd):
+if "data" not in os.listdir(_libd):
+    from .GEDSpy.DataPrepare import UpdatePanel
+
     up = UpdatePanel()
-    up.update_library_database(force = True, first = True)
+    up.update_library_database(force=True, first=True)
 
     del up
 
 
-print('GEDSpy is ready to use')
-
-
+print("GEDSpy is ready to use")
