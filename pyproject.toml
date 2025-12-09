@@ -3,7 +3,9 @@ name = "gedspy"
 version = "2.1.7"
 description = "GEDSpy (Gene Enrichment for Drug Searching)"
 readme = "README.md"
-
+packages = [
+    { include = "gedspy" }
+]
 authors = [
     { name = "Jakub Kubis - JBS", email = "jbiosystem@gmail.com" }
 ]
