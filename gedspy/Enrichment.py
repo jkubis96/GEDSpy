@@ -14,7 +14,6 @@ from matplotlib import rc
 from matplotlib.gridspec import GridSpec
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.stats import binomtest, fisher_exact
-
 from tqdm import tqdm
 
 rc("svg", fonttype="path")
@@ -5175,7 +5174,7 @@ class Visualization:
                 if p in list(GOPa["features"]):
                     to_select_genes.append(p)
                 else:
-                    print("\Could not find {p} gene!")
+                    print("\nCould not find {p} gene!")
 
             if len(to_select_genes) != 0:
                 GOPa = GOPa[GOPa["features"].isin(to_select_genes)]
@@ -5279,7 +5278,7 @@ class Visualization:
                                 to_select_genes.append(i)
 
                     else:
-                        print("\Could not find {p} parent term!")
+                        print("\nCould not find {p} parent term!")
 
                 if len(to_select) != 0:
                     GOPa = GOPa[
@@ -5499,7 +5498,7 @@ class Visualization:
                 if p in list(GOPa["features"]):
                     to_select_genes.append(p)
                 else:
-                    print("\Could not find {p} gene!")
+                    print("\nCould not find {p} gene!")
 
             if len(to_select_genes) != 0:
                 GOPa = GOPa[GOPa["features"].isin(to_select_genes)]
@@ -5618,7 +5617,7 @@ class Visualization:
                             to_select_genes.append(i)
 
                 else:
-                    print("\Could not find {p} parent term!")
+                    print("\nCould not find {p} parent term!")
 
             if len(to_select) != 0:
                 GOPa = GOPa[
@@ -8238,7 +8237,7 @@ class VisualizationDES(Visualization):
                 if p in list(GOPa["features"]):
                     to_select_genes.append(p)
                 else:
-                    print("\Could not find {p} gene!")
+                    print("\nCould not find {p} gene!")
 
             if len(to_select_genes) != 0:
                 GOPa = GOPa[GOPa["features"].isin(to_select_genes)]
@@ -8342,7 +8341,7 @@ class VisualizationDES(Visualization):
                                 to_select_genes.append(i)
 
                     else:
-                        print("\Could not find {p} parent term!")
+                        print("\nCould not find {p} parent term!")
 
                 if len(to_select) != 0:
                     GOPa = GOPa[
@@ -8548,7 +8547,7 @@ class VisualizationDES(Visualization):
                 if p in list(GOPa["features"]):
                     to_select_genes.append(p)
                 else:
-                    print("\Could not find {p} gene!")
+                    print("\nCould not find {p} gene!")
 
             if len(to_select_genes) != 0:
                 GOPa = GOPa[GOPa["features"].isin(to_select_genes)]
@@ -8667,7 +8666,7 @@ class VisualizationDES(Visualization):
                             to_select_genes.append(i)
 
                 else:
-                    print("\Could not find {p} parent term!")
+                    print("\nCould not find {p} parent term!")
 
             if len(to_select) != 0:
                 GOPa = GOPa[
@@ -9973,7 +9972,7 @@ class VisualizationDES(Visualization):
                 if p in list(GOPa["features"]):
                     to_select_genes.append(p)
                 else:
-                    print("\Could not find {p} gene!")
+                    print("\nCould not find {p} gene!")
 
             if len(to_select_genes) != 0:
                 GOPa = GOPa[GOPa["features"].isin(to_select_genes)]
@@ -10077,7 +10076,7 @@ class VisualizationDES(Visualization):
                                 to_select_genes.append(i)
 
                     else:
-                        print("\Could not find {p} parent term!")
+                        print("\nCould not find {p} parent term!")
 
                 if len(to_select) != 0:
                     GOPa = GOPa[
@@ -10329,7 +10328,7 @@ class VisualizationDES(Visualization):
                 if p in list(GOPa["features"]):
                     to_select_genes.append(p)
                 else:
-                    print("\Could not find {p} gene!")
+                    print("\nCould not find {p} gene!")
 
             if len(to_select_genes) != 0:
                 GOPa = GOPa[GOPa["features"].isin(to_select_genes)]
@@ -10448,7 +10447,7 @@ class VisualizationDES(Visualization):
                             to_select_genes.append(i)
 
                 else:
-                    print("\Could not find {p} parent term!")
+                    print("\nCould not find {p} parent term!")
 
             if len(to_select) != 0:
                 GOPa = GOPa[
