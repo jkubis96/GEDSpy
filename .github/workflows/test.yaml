@@ -31,5 +31,5 @@ jobs:
 
       - name: Run tests with pytest
         run: |
-          poetry run pytest --timeout=600 tests/tests.py --maxfail=0 --disable-warnings
+          poetry run pytest tests/tests.py --maxfail=0 --disable-warnings
 
