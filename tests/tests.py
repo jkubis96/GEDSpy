@@ -225,67 +225,67 @@ def test_Enrichment():
 
     enr.select_features(list1)
 
-    gene_info = enr.get_gene_info
+    gene_info = enr.get_gene_info()
 
     assert isinstance(gene_info, dict)
 
     enr.enriche_specificiti()
 
-    HPA = enr.get_HPA
+    HPA = enr.get_HPA()
 
     assert isinstance(HPA, dict)
 
     enr.enriche_KEGG()
 
-    KEGG = enr.get_KEGG
+    KEGG = enr.get_KEGG()
 
     assert isinstance(KEGG, dict)
 
     enr.enriche_GOTERM()
 
-    GOTERM = enr.get_GO_TERM
+    GOTERM = enr.get_GO_TERM()
 
     assert isinstance(GOTERM, dict)
 
     enr.enriche_REACTOME()
 
-    REACTOME = enr.get_REACTOME
+    REACTOME = enr.get_REACTOME()
 
     assert isinstance(REACTOME, dict)
 
     enr.enriche_DISEASES()
 
-    DISEASES = enr.get_DISEASES
+    DISEASES = enr.get_DISEASES()
 
     assert isinstance(DISEASES, dict)
 
     enr.enriche_ViMIC()
 
-    ViMIC = enr.get_ViMIC
+    ViMIC = enr.get_ViMIC()
 
     assert isinstance(ViMIC, dict)
 
     enr.enriche_IntAct()
 
-    IntAct = enr.get_IntAct
+    IntAct = enr.get_IntAct()
 
     assert isinstance(IntAct, dict)
 
     enr.enriche_STRING()
 
-    STRING = enr.get_STRING
+    STRING = enr.get_STRING()
 
     assert isinstance(STRING, dict)
 
     enr.enriche_CellCon()
 
-    CellConnections = enr.get_CellCon
+    CellConnections = enr.get_CellCon()
 
     assert isinstance(CellConnections, dict)
 
     enr.enriche_RNA_SEQ()
 
-    RNASEQ = enr.get_RNA_SEQ
+    RNASEQ = enr.get_RNA_SEQ()
 
     assert isinstance(RNASEQ, dict)
 
@@ -488,27 +488,27 @@ def test_AnVis():
 
     results = None
 
-    results = enr.get_results
+    results = enr.get_results()
 
     assert isinstance(results, dict)
 
     ans = Analysis(results)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
-    ans.interactions_metadata
+    ans.interactions_metadata()
 
     ans.set_p_value(value=0.05)
     ans.set_test(test="FISH")
     ans.set_correction(correction=None)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
     ans.GO_overrepresentation()
 
     go = None
 
-    go = ans.get_GO_statistics
+    go = ans.get_GO_statistics()
 
     assert isinstance(go, dict)
 
@@ -518,7 +518,7 @@ def test_AnVis():
 
     kegg = None
 
-    kegg = ans.get_KEGG_statistics
+    kegg = ans.get_KEGG_statistics()
 
     assert isinstance(kegg, dict)
 
@@ -528,7 +528,7 @@ def test_AnVis():
 
     reactome = None
 
-    reactome = ans.get_REACTOME_statistics
+    reactome = ans.get_REACTOME_statistics()
 
     assert isinstance(reactome, dict)
 
@@ -538,7 +538,7 @@ def test_AnVis():
 
     vimic = None
 
-    vimic = ans.get_ViMIC_statistics
+    vimic = ans.get_ViMIC_statistics()
 
     assert isinstance(vimic, dict)
 
@@ -548,7 +548,7 @@ def test_AnVis():
 
     diseases = None
 
-    diseases = ans.get_DISEASE_statistics
+    diseases = ans.get_DISEASE_statistics()
 
     assert isinstance(diseases, dict)
 
@@ -558,7 +558,7 @@ def test_AnVis():
 
     spec = None
 
-    spec = ans.get_specificity_statistics
+    spec = ans.get_specificity_statistics()
 
     assert isinstance(spec, dict)
 
@@ -568,7 +568,7 @@ def test_AnVis():
 
     inter = None
 
-    inter = ans.get_features_interactions_statistics
+    inter = ans.get_features_interactions_statistics()
 
     assert isinstance(inter, dict)
 
@@ -578,7 +578,7 @@ def test_AnVis():
 
     reactome_net = None
 
-    reactome_net = ans.get_REACTOME_network
+    reactome_net = ans.get_REACTOME_network()
 
     assert isinstance(reactome_net, dict)
 
@@ -588,7 +588,7 @@ def test_AnVis():
 
     kegg_net = None
 
-    kegg_net = ans.get_KEGG_network
+    kegg_net = ans.get_KEGG_network()
 
     assert isinstance(kegg_net, dict)
 
@@ -598,7 +598,7 @@ def test_AnVis():
 
     go_net = None
 
-    go_net = ans.get_GO_network
+    go_net = ans.get_GO_network()
 
     assert isinstance(go_net, dict)
 
@@ -610,7 +610,7 @@ def test_AnVis():
 
     results2 = None
 
-    results2 = ans.get_full_results
+    results2 = ans.get_full_results()
 
     assert isinstance(results2, dict)
 
@@ -1043,15 +1043,15 @@ def AnDESVis_tests():
 
     results1 = None
 
-    results1 = enr.get_results
+    results1 = enr.get_results()
 
     assert isinstance(results1, dict)
 
     ans = Analysis(results1)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
-    ans.interactions_metadata
+    ans.interactions_metadata()
 
     ans.set_p_value(value=0.05)
     ans.set_test(test="FISH")
@@ -1061,7 +1061,7 @@ def AnDESVis_tests():
 
     results1 = None
 
-    results1 = ans.get_full_results
+    results1 = ans.get_full_results()
 
     assert isinstance(results1, dict)
 
@@ -1075,15 +1075,15 @@ def AnDESVis_tests():
 
     results2 = None
 
-    results2 = enr.get_results
+    results2 = enr.get_results()
 
     assert isinstance(results1, dict)
 
     ans = Analysis(results2)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
-    ans.interactions_metadata
+    ans.interactions_metadata()
 
     ans.set_p_value(value=0.05)
     ans.set_test(test="FISH")
@@ -1093,7 +1093,7 @@ def AnDESVis_tests():
 
     results2 = None
 
-    results2 = ans.get_full_results
+    results2 = ans.get_full_results()
 
     assert isinstance(results2, dict)
 
@@ -1103,7 +1103,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_GO_diff
+    tmp = dsa_compare.get_GO_diff()
 
     assert isinstance(tmp, dict)
 
@@ -1111,7 +1111,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_KEGG_diff
+    tmp = dsa_compare.get_KEGG_diff()
 
     assert isinstance(tmp, dict)
 
@@ -1119,7 +1119,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_REACTOME_diff
+    tmp = dsa_compare.get_REACTOME_diff()
 
     assert isinstance(tmp, dict)
 
@@ -1127,7 +1127,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_specificity_diff
+    tmp = dsa_compare.get_specificity_diff()
 
     assert isinstance(tmp, dict)
 
@@ -1135,7 +1135,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_GI_diff
+    tmp = dsa_compare.get_GI_diff()
 
     assert isinstance(tmp, dict)
 
@@ -1143,7 +1143,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_networks_diff
+    tmp = dsa_compare.get_networks_diff()
 
     assert isinstance(tmp, dict)
 
@@ -1151,13 +1151,13 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_inter_terms
+    tmp = dsa_compare.get_inter_terms()
 
     assert isinstance(tmp, dict)
 
     dsa_compare.connections_diff()
 
-    tmp = dsa_compare.get_set_to_set_con
+    tmp = dsa_compare.get_set_to_set_con()
 
     assert isinstance(tmp, dict)
 
@@ -1165,7 +1165,7 @@ def AnDESVis_tests():
 
     dsa_compare.full_analysis()
 
-    results3 = dsa_compare.get_results
+    results3 = dsa_compare.get_results()
 
     vis_des = VisualizationDES(results3)
 

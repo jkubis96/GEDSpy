@@ -601,7 +601,7 @@ def Enrichment_tests():
 
     enr.select_features(list1)
 
-    gene_info = enr.get_gene_info
+    gene_info = enr.get_gene_info()
 
     if not isinstance(gene_info, dict):
         errored.append("select_features")
@@ -610,7 +610,7 @@ def Enrichment_tests():
 
     enr.enriche_specificiti()
 
-    HPA = enr.get_HPA
+    HPA = enr.get_HPA()
 
     if not isinstance(HPA, dict):
         errored.append("enriche_specificiti")
@@ -619,7 +619,7 @@ def Enrichment_tests():
 
     enr.enriche_KEGG()
 
-    KEGG = enr.get_KEGG
+    KEGG = enr.get_KEGG()
 
     if not isinstance(KEGG, dict):
         errored.append("enriche_KEGG")
@@ -628,7 +628,7 @@ def Enrichment_tests():
 
     enr.enriche_GOTERM()
 
-    GOTERM = enr.get_GO_TERM
+    GOTERM = enr.get_GO_TERM()
 
     if not isinstance(GOTERM, dict):
         errored.append("enriche_GOTERM")
@@ -637,7 +637,7 @@ def Enrichment_tests():
 
     enr.enriche_REACTOME()
 
-    REACTOME = enr.get_REACTOME
+    REACTOME = enr.get_REACTOME()
 
     if not isinstance(REACTOME, dict):
         errored.append("enriche_REACTOME")
@@ -646,7 +646,7 @@ def Enrichment_tests():
 
     enr.enriche_DISEASES()
 
-    DISEASES = enr.get_DISEASES
+    DISEASES = enr.get_DISEASES()
 
     if not isinstance(DISEASES, dict):
         errored.append("enriche_DISEASES")
@@ -655,7 +655,7 @@ def Enrichment_tests():
 
     enr.enriche_ViMIC()
 
-    ViMIC = enr.get_ViMIC
+    ViMIC = enr.get_ViMIC()
 
     if not isinstance(ViMIC, dict):
         errored.append("enriche_ViMIC")
@@ -664,7 +664,7 @@ def Enrichment_tests():
 
     enr.enriche_IntAct()
 
-    IntAct = enr.get_IntAct
+    IntAct = enr.get_IntAct()
 
     if not isinstance(IntAct, dict):
         errored.append("enriche_IntAct")
@@ -673,7 +673,7 @@ def Enrichment_tests():
 
     enr.enriche_STRING()
 
-    STRING = enr.get_STRING
+    STRING = enr.get_STRING()
 
     if not isinstance(STRING, dict):
         errored.append("enriche_STRING")
@@ -682,7 +682,7 @@ def Enrichment_tests():
 
     enr.enriche_CellCon()
 
-    CellConnections = enr.get_CellCon
+    CellConnections = enr.get_CellCon()
 
     if not isinstance(CellConnections, dict):
         errored.append("enriche_CellCon")
@@ -691,7 +691,7 @@ def Enrichment_tests():
 
     enr.enriche_RNA_SEQ()
 
-    RNASEQ = enr.get_RNA_SEQ
+    RNASEQ = enr.get_RNA_SEQ()
 
     if not isinstance(RNASEQ, dict):
         errored.append("enriche_RNA_SEQ")
@@ -912,7 +912,7 @@ def AnVis_tests():
 
     results = None
 
-    results = enr.get_results
+    results = enr.get_results()
 
     if not isinstance(results, dict):
         errored.append("full_enrichment")
@@ -921,15 +921,15 @@ def AnVis_tests():
 
     ans = Analysis(results)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
-    ans.interactions_metadata
+    ans.interactions_metadata()
 
     ans.set_p_value(value=0.05)
     ans.set_test(test="FISH")
     ans.set_correction(correction=None)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
     #########################################################################
 
@@ -938,7 +938,7 @@ def AnVis_tests():
 
     go = None
 
-    go = ans.get_GO_statistics
+    go = ans.get_GO_statistics()
 
     if not isinstance(go, dict):
         errored.append("GO_overrepresentation")
@@ -950,7 +950,7 @@ def AnVis_tests():
 
     kegg = None
 
-    kegg = ans.get_KEGG_statistics
+    kegg = ans.get_KEGG_statistics()
 
     if not isinstance(kegg, dict):
         errored.append("KEGG_overrepresentation")
@@ -962,7 +962,7 @@ def AnVis_tests():
 
     reactome = None
 
-    reactome = ans.get_REACTOME_statistics
+    reactome = ans.get_REACTOME_statistics()
 
     if not isinstance(reactome, dict):
         errored.append("REACTOME_overrepresentation")
@@ -974,7 +974,7 @@ def AnVis_tests():
 
     vimic = None
 
-    vimic = ans.get_ViMIC_statistics
+    vimic = ans.get_ViMIC_statistics()
 
     if not isinstance(vimic, dict):
         errored.append("ViMIC_overrepresentation")
@@ -986,7 +986,7 @@ def AnVis_tests():
 
     diseases = None
 
-    diseases = ans.get_DISEASE_statistics
+    diseases = ans.get_DISEASE_statistics()
 
     if not isinstance(diseases, dict):
         errored.append("DISEASES_overrepresentation")
@@ -998,7 +998,7 @@ def AnVis_tests():
 
     spec = None
 
-    spec = ans.get_specificity_statistics
+    spec = ans.get_specificity_statistics()
 
     if not isinstance(spec, dict):
         errored.append("features_specificity")
@@ -1010,7 +1010,7 @@ def AnVis_tests():
 
     inter = None
 
-    inter = ans.get_features_interactions_statistics
+    inter = ans.get_features_interactions_statistics()
 
     if not isinstance(inter, dict):
         errored.append("gene_interaction")
@@ -1022,7 +1022,7 @@ def AnVis_tests():
 
     reactome_net = None
 
-    reactome_net = ans.get_REACTOME_network
+    reactome_net = ans.get_REACTOME_network()
 
     if not isinstance(reactome_net, dict):
         errored.append("REACTOME_network")
@@ -1033,7 +1033,7 @@ def AnVis_tests():
 
     kegg_net = None
 
-    kegg_net = ans.get_KEGG_network
+    kegg_net = ans.get_KEGG_network()
 
     if not isinstance(kegg_net, dict):
         errored.append("KEGG_network")
@@ -1044,7 +1044,7 @@ def AnVis_tests():
 
     go_net = None
 
-    go_net = ans.get_GO_network
+    go_net = ans.get_GO_network()
 
     if not isinstance(go_net, dict):
         errored.append("GO_network")
@@ -1057,7 +1057,7 @@ def AnVis_tests():
 
     results2 = None
 
-    results2 = ans.get_full_results
+    results2 = ans.get_full_results()
 
     if not isinstance(results2, dict):
         errored.append("full_analysis")
@@ -1526,16 +1526,16 @@ def AnDESVis_tests():
 
     results1 = None
 
-    results1 = enr.get_results
+    results1 = enr.get_results()
 
     if not isinstance(results1, dict):
         errored.append("full_enrichment")
 
     ans = Analysis(results1)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
-    ans.interactions_metadata
+    ans.interactions_metadata()
 
     ans.set_p_value(value=0.05)
     ans.set_test(test="FISH")
@@ -1545,7 +1545,7 @@ def AnDESVis_tests():
 
     results1 = None
 
-    results1 = ans.get_full_results
+    results1 = ans.get_full_results()
 
     if not isinstance(results1, dict):
         errored.append("full_analysis")
@@ -1560,16 +1560,16 @@ def AnDESVis_tests():
 
     results2 = None
 
-    results2 = enr.get_results
+    results2 = enr.get_results()
 
     if not isinstance(results1, dict):
         errored.append("full_enrichment")
 
     ans = Analysis(results2)
 
-    ans.networks_metadata
+    ans.networks_metadata()
 
-    ans.interactions_metadata
+    ans.interactions_metadata()
 
     ans.set_p_value(value=0.05)
     ans.set_test(test="FISH")
@@ -1579,7 +1579,7 @@ def AnDESVis_tests():
 
     results2 = None
 
-    results2 = ans.get_full_results
+    results2 = ans.get_full_results()
 
     if not isinstance(results2, dict):
         errored.append("full_analysis")
@@ -1594,7 +1594,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_GO_diff
+    tmp = dsa_compare.get_GO_diff()
 
     if not isinstance(tmp, dict):
         errored.append("GO_diff")
@@ -1605,7 +1605,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_KEGG_diff
+    tmp = dsa_compare.get_KEGG_diff()
 
     if not isinstance(tmp, dict):
         errored.append("KEGG_diff")
@@ -1616,7 +1616,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_REACTOME_diff
+    tmp = dsa_compare.get_REACTOME_diff()
 
     if not isinstance(tmp, dict):
         errored.append("REACTOME_diff")
@@ -1627,7 +1627,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_specificity_diff
+    tmp = dsa_compare.get_specificity_diff()
 
     if not isinstance(tmp, dict):
         errored.append("spec_diff")
@@ -1638,7 +1638,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_GI_diff
+    tmp = dsa_compare.get_GI_diff()
 
     if not isinstance(tmp, dict):
         errored.append("gi_diff")
@@ -1649,7 +1649,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_networks_diff
+    tmp = dsa_compare.get_networks_diff()
 
     if not isinstance(tmp, dict):
         errored.append("network_diff")
@@ -1660,7 +1660,7 @@ def AnDESVis_tests():
 
     tmp = None
 
-    tmp = dsa_compare.get_inter_terms
+    tmp = dsa_compare.get_inter_terms()
 
     if not isinstance(tmp, dict):
         errored.append("inter_processes")
@@ -1669,7 +1669,7 @@ def AnDESVis_tests():
 
     dsa_compare.connections_diff()
 
-    tmp = dsa_compare.get_set_to_set_con
+    tmp = dsa_compare.get_set_to_set_con()
 
     if not isinstance(tmp, dict):
         errored.append("connections_diff")
@@ -1678,7 +1678,7 @@ def AnDESVis_tests():
 
     dsa_compare.full_analysis()
 
-    results3 = dsa_compare.get_results
+    results3 = dsa_compare.get_results()
 
     from gedspy import VisualizationDES
 
