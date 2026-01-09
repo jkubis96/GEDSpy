@@ -7,18 +7,17 @@ import warnings
 from collections import Counter
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 import networkx as nx
 import numpy as np
 import pandas as pd
 import pkg_resources
+import seaborn as sns
 from matplotlib import rc
 from matplotlib.gridspec import GridSpec
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.stats import binomtest, fisher_exact
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
-
 
 rc("svg", fonttype="path")
 
@@ -713,15 +712,20 @@ class Enrichment(GetData):
         self.RNA_SEQ = None
 
         super().__init__()
-        
-    def reduce_extended_gtf(self, names):
-        return list(set([
-            re.sub(r"\.str.*", "",
-            re.sub(r"\.chr.*", "",
-            re.sub(r"\.var.*", "", n)))
-            for n in names
-        ]))
 
+    def reduce_extended_gtf(self, names):
+        return list(
+            set(
+                [
+                    re.sub(
+                        r"\.str.*",
+                        "",
+                        re.sub(r"\.chr.*", "", re.sub(r"\.var.*", "", n)),
+                    )
+                    for n in names
+                ]
+            )
+        )
 
     def set_gene_species(self, species: list):
         """
@@ -1955,7 +1959,12 @@ class Analysis(Enrichment):
         self.KEGG_net = None
         self.GO_net = None
         self.REACTOME_net = None
-        self.network_stat = {"test": "FISH", "adj": "BH", "p_val": 0.05, 'parent_stat':False}
+        self.network_stat = {
+            "test": "FISH",
+            "adj": "BH",
+            "p_val": 0.05,
+            "parent_stat": False,
+        }
         self.go_grade = 1
         self.occ = None
         self.interaction_strength = 900
@@ -2147,14 +2156,14 @@ class Analysis(Enrichment):
         else:
 
             raise ValueError("\nTest should be included in BIN or FISH")
-            
+
     def set_parent_stats(self, stats):
         """
         This method sets the parent statistical test value used for network creation.
-        
+
             Avaiable values:
-                - True - use test p-value for drop non-significient parents 
-                - False - not use test p-value for drop non-significient parents 
+                - True - use test p-value for drop non-significient parents
+                - False - not use test p-value for drop non-significient parents
 
             Args:
                 test (bool) - bool value [True/False]
@@ -2760,9 +2769,9 @@ class Analysis(Enrichment):
 
             n = len(go_out["parent_pval_BIN"])
 
-            go_out["parent_adj_pval_BIN-BH"] = (go_out["parent_pval_BIN"] * n) / np.arange(
-                1, n + 1
-            )
+            go_out["parent_adj_pval_BIN-BH"] = (
+                go_out["parent_pval_BIN"] * n
+            ) / np.arange(1, n + 1)
 
             go_out = go_out.sort_values(by="parent_pval_FISH", ascending=True)
 
@@ -2789,9 +2798,9 @@ class Analysis(Enrichment):
 
             n = len(go_out["child_pval_BIN"])
 
-            go_out["child_adj_pval_BIN-BH"] = (go_out["child_pval_BIN"] * n) / np.arange(
-                1, n + 1
-            )
+            go_out["child_adj_pval_BIN-BH"] = (
+                go_out["child_pval_BIN"] * n
+            ) / np.arange(1, n + 1)
 
             go_out = go_out.sort_values(by="child_pval_FISH", ascending=True)
 
@@ -2917,9 +2926,9 @@ class Analysis(Enrichment):
 
             n = len(kegg_out["2nd_pval_BIN"])
 
-            kegg_out["2nd_adj_pval_BIN-BH"] = (kegg_out["2nd_pval_BIN"] * n) / np.arange(
-                1, n + 1
-            )
+            kegg_out["2nd_adj_pval_BIN-BH"] = (
+                kegg_out["2nd_pval_BIN"] * n
+            ) / np.arange(1, n + 1)
 
             kegg_out = kegg_out.sort_values(by="2nd_pval_FISH", ascending=True)
 
@@ -2944,9 +2953,9 @@ class Analysis(Enrichment):
 
             n = len(kegg_out["3rd_pval_BIN"])
 
-            kegg_out["3rd_adj_pval_BIN-BH"] = (kegg_out["3rd_pval_BIN"] * n) / np.arange(
-                1, n + 1
-            )
+            kegg_out["3rd_adj_pval_BIN-BH"] = (
+                kegg_out["3rd_pval_BIN"] * n
+            ) / np.arange(1, n + 1)
 
             kegg_out = kegg_out.sort_values(by="3rd_pval_FISH", ascending=True)
 
@@ -3228,9 +3237,9 @@ class Analysis(Enrichment):
 
             n = len(diseases_out["pval_BIN"])
 
-            diseases_out["adj_pval_BIN-BH"] = (diseases_out["pval_BIN"] * n) / np.arange(
-                1, n + 1
-            )
+            diseases_out["adj_pval_BIN-BH"] = (
+                diseases_out["pval_BIN"] * n
+            ) / np.arange(1, n + 1)
 
             diseases_out = diseases_out.sort_values(by="pval_FISH", ascending=True)
 
@@ -3324,7 +3333,9 @@ class Analysis(Enrichment):
 
             n = len(vimic_out["pval_BIN"])
 
-            vimic_out["adj_pval_BIN-BH"] = (vimic_out["pval_BIN"] * n) / np.arange(1, n + 1)
+            vimic_out["adj_pval_BIN-BH"] = (vimic_out["pval_BIN"] * n) / np.arange(
+                1, n + 1
+            )
 
             vimic_out = vimic_out.sort_values(by="pval_FISH", ascending=True)
 
@@ -3564,7 +3575,7 @@ class Analysis(Enrichment):
             print(
                 "\nGene interaction analysis could not be performed due to missing STRING/IntAct information in the input data."
             )
-    
+
     def GO_network(self):
         """
         This method conducts an network analysis of GO-TERM data.
@@ -3588,7 +3599,7 @@ class Analysis(Enrichment):
             }
 
             df_list = []
-            
+
             for i in [
                 "is_a_ids",
                 "part_of_ids",
@@ -3603,26 +3614,23 @@ class Analysis(Enrichment):
                 tmp["color"] = relation_colors[i]
                 if len(tmp.index) > 0:
                     df_list.append(tmp)
-            
+
             full_df = pd.concat(df_list, ignore_index=True)
-            
+
             del df_list
-            
+
             goh = pd.DataFrame(self.input_data["GO-TERM"]["gene_info"])
 
-            found_name_map = dict(
-                zip(goh["GO_id"], goh["found_names"])
-            )
-            
+            found_name_map = dict(zip(goh["GO_id"], goh["found_names"]))
+
             full_df["found_names_x"] = full_df["parent"].map(found_name_map)
-            
+
             full_df["found_names_y"] = full_df["children"].map(found_name_map)
-            
-            full_df["features"] = (
-                full_df["found_names_x"]
-                .combine(full_df["found_names_y"], lambda a, b: list({a, b}))
+
+            full_df["features"] = full_df["found_names_x"].combine(
+                full_df["found_names_y"], lambda a, b: list({a, b})
             )
-            
+
             # sprzątanie
             full_df.drop(columns=["found_names_x", "found_names_y"], inplace=True)
 
@@ -3635,20 +3643,22 @@ class Analysis(Enrichment):
             test_col = self.select_test(
                 self.network_stat["test"], self.network_stat["adj"]
             )
-            
-            if self.network_stat['parent_stat']:
+
+            if self.network_stat["parent_stat"]:
                 go_out_parent = go_out[
                     go_out[f"parent_{test_col}"] <= self.network_stat["p_val"]
                 ]
             else:
                 go_out_parent = go_out
-                
+
             go_out_children = go_out[
                 go_out[f"child_{test_col}"] <= self.network_stat["p_val"]
             ]
 
-            full_list = list(set(go_out_parent["parent"])) + list(set(go_out_children["child"]))
-            
+            full_list = list(set(go_out_parent["parent"])) + list(
+                set(go_out_children["child"])
+            )
+
             full_df = full_df[full_df["parent"].isin(full_list)]
             full_df = full_df[full_df["children"].isin(full_list)]
 
@@ -3662,7 +3672,7 @@ class Analysis(Enrichment):
 
         else:
             print("\nMissing GO information in the input data.")
-            
+
     def KEGG_network(self):
         """
         This method conducts an network analysis of KEGG data.
@@ -3691,8 +3701,8 @@ class Analysis(Enrichment):
             kegg_out = kegg_out[
                 kegg_out[f"3rd_{test_col}"] <= self.network_stat["p_val"]
             ]
-            
-            if self.network_stat['parent_stat']:
+
+            if self.network_stat["parent_stat"]:
                 kegg_out = kegg_out[
                     kegg_out[f"2nd_{test_col}"] <= self.network_stat["p_val"]
                 ]
@@ -3731,13 +3741,13 @@ class Analysis(Enrichment):
             test_col = self.select_test(
                 self.network_stat["test"], self.network_stat["adj"]
             )
-            
-            if self.network_stat['parent_stat']:
+
+            if self.network_stat["parent_stat"]:
                 reactome_out = reactome_out[
                     reactome_out[f"top_level_pathway_{test_col}"]
                     <= self.network_stat["p_val"]
                 ]
-            
+
             reactome_out = reactome_out[
                 reactome_out[f"pathway_{test_col}"] <= self.network_stat["p_val"]
             ]
@@ -3913,7 +3923,6 @@ class Analysis(Enrichment):
         return full_results
 
 
-
 class Visualization:
     """
     The `Visualization` class provides tools for statistical and network analysis of `Analysis` class results obtained using the `self.get_full_results` method.
@@ -3930,15 +3939,14 @@ class Visualization:
         self.parent_stats = False
 
         super().__init__()
-        
-             
+
     def set_parent_stats(self, stats):
         """
         This method sets the parent statistical test value used for graph creation.
 
             Avaiable values:
-                - True - use test p-value for drop non-significient parents 
-                - False - not use test p-value for drop non-significient parents 
+                - True - use test p-value for drop non-significient parents
+                - False - not use test p-value for drop non-significient parents
 
             Args:
                 test (bool) - bool value [True/False]
@@ -3950,7 +3958,6 @@ class Visualization:
         else:
 
             raise ValueError("\nStats should be included in True or False")
-
 
     def select_test(self, test, adj):
         try:
@@ -5915,8 +5922,6 @@ class Visualization:
         return return_dict
 
 
-
-
 class DSA(PathMetadata):
     """
     The 'DSA' class performs Differential Set Analysis by taking the results from two independent feature lists (e.g., upregulated and downregulated genes).
@@ -5932,7 +5937,7 @@ class DSA(PathMetadata):
     def __init__(self, set_1: dict, set_2: dict):
 
         super().__init__()
-        
+
         def merge_dict_values(d1, d2):
             out = d1.copy()
             for k, v in d2.items():
@@ -6014,9 +6019,9 @@ class DSA(PathMetadata):
         self.inter_terms = None
         self.lr_con_set1_set2 = None
         self.lr_con_set2_set1 = None
-        
-        print('Enrichment process...')
-        
+
+        print("Enrichment process...")
+
         def merge_dict_values(d1, d2):
             out = d1.copy()
             for k, v in d2.items():
@@ -6031,13 +6036,12 @@ class DSA(PathMetadata):
                     out[k] = v
             return out
 
-        res = merge_dict_values(self.set_1['enrichment'], self.set_2['enrichment'])
-        
+        res = merge_dict_values(self.set_1["enrichment"], self.set_2["enrichment"])
 
-        print('Calculation process...')
+        print("Calculation process...")
 
         ans = Analysis(res)
-        
+
         del res
 
         ans.network_stat = self.set_1["statistics"]["setup"]["network_stat"]
@@ -6050,38 +6054,37 @@ class DSA(PathMetadata):
 
         ans.interaction_source = self.set_1["statistics"]["setup"]["interaction_source"]
 
-        if 'REACTOME' in self.set_1['statistics'].keys():
+        if "REACTOME" in self.set_1["statistics"].keys():
             ans.REACTOME_overrepresentation()
             self.REACTOME_over = ans.get_REACTOME_statistics()
             ans.REACTOME_network()
             self.REACTOME_net = pd.DataFrame(ans.get_REACTOME_network())
 
-        if 'KEGG' in self.set_1['statistics'].keys():
+        if "KEGG" in self.set_1["statistics"].keys():
             ans.KEGG_overrepresentation()
             self.KEGG_over = ans.get_KEGG_statistics()
             ans.KEGG_network()
             self.KEGG_net = pd.DataFrame(ans.get_KEGG_network())
 
-        if 'GO-TERM' in self.set_1['statistics'].keys():
+        if "GO-TERM" in self.set_1["statistics"].keys():
             ans.GO_overrepresentation()
             self.GO_over = ans.get_GO_statistics()
             ans.GO_network()
             self.GO_net = pd.DataFrame(ans.get_GO_network())
-            
+
         ans.features_specificity()
         self.spec_over = ans.get_specificity_statistics()
-        
+
         ans.gene_interaction()
-        self.features_interactions_statistics = pd.DataFrame(ans.get_features_interactions_statistics())
-        
-        print('Calculating intersections...')
+        self.features_interactions_statistics = pd.DataFrame(
+            ans.get_features_interactions_statistics()
+        )
+
+        print("Calculating intersections...")
 
         self.inter_processes()
-        
+
         del ans
-
-
-
 
     def deserialize_data(self, value):
         try:
@@ -6136,130 +6139,121 @@ class DSA(PathMetadata):
         cell_con["set2->set1"] = self.lr_con_set2_set1
 
         return cell_con
-    
+
     def get_full_GO(self):
-        
         """
         This method returns the concatenated GO-TERM data from set1 and set2.
-        
+
         Returns:
             The concatenated data stored in
             `self.set_1['statistics']['GO-TERM']` and
             `self.set_2['statistics']['GO-TERM']`.
         """
-        
-        t1 = pd.DataFrame(self.set_1['statistics']['GO-TERM'])
-        t1['set'] = 's1'
-        t2 = pd.DataFrame(self.set_2['statistics']['GO-TERM'])
-        t2['set'] = 's2'
-        
-        df = pd.concat([t1,t2]).reset_index(drop = True)
-       
+
+        t1 = pd.DataFrame(self.set_1["statistics"]["GO-TERM"])
+        t1["set"] = "s1"
+        t2 = pd.DataFrame(self.set_2["statistics"]["GO-TERM"])
+        t2["set"] = "s2"
+
+        df = pd.concat([t1, t2]).reset_index(drop=True)
+
         return df
-        
 
     def get_full_KEGG(self):
-        
         """
         This method returns the concatenated KEGG data from set1 and set2.
-        
+
         Returns:
             The concatenated data stored in
             `self.set_1['statistics']['KEGG']` and
             `self.set_2['statistics']['KEGG']`.
         """
-        
-        t1 = pd.DataFrame(self.set_1['statistics']['KEGG'])
-        t1['set'] = 's1'
-        t2 = pd.DataFrame(self.set_2['statistics']['KEGG'])
-        t2['set'] = 's2'
-        
-        df = pd.concat([t1,t2]).reset_index(drop = True)
-        
+
+        t1 = pd.DataFrame(self.set_1["statistics"]["KEGG"])
+        t1["set"] = "s1"
+        t2 = pd.DataFrame(self.set_2["statistics"]["KEGG"])
+        t2["set"] = "s2"
+
+        df = pd.concat([t1, t2]).reset_index(drop=True)
+
         return t2
 
-
     def get_full_REACTOME(self):
-        
         """
         This method returns the concatenated REACTOME data from set1 and set2.
-        
+
         Returns:
             The concatenated data stored in
             `self.set_1['statistics']['REACTOME']` and
             `self.set_2['statistics']['REACTOME']`.
         """
-        
-        t1 = pd.DataFrame(self.set_1['statistics']['REACTOME'])
-        t1['set'] = 's1'
-        t2 = pd.DataFrame(self.set_2['statistics']['REACTOME'])
-        t2['set'] = 's2'
-        
-        df = pd.concat([t1,t2]).reset_index(drop = True)
-        
+
+        t1 = pd.DataFrame(self.set_1["statistics"]["REACTOME"])
+        t1["set"] = "s1"
+        t2 = pd.DataFrame(self.set_2["statistics"]["REACTOME"])
+        t2["set"] = "s2"
+
+        df = pd.concat([t1, t2]).reset_index(drop=True)
+
         return t2
-        
 
     def get_full_DISEASES(self):
-        
         """
         This method returns the concatenated human disease data from set1 and set2.
-        
+
         Returns:
             The concatenated data stored in
             `self.set_1['statistics']['DISEASES']` and
             `self.set_2['statistics']['DISEASES']`.
         """
-        
-        t1 = pd.DataFrame(self.set_1['statistics']['DISEASES'])
-        t1['set'] = 's1'
-        t2 = pd.DataFrame(self.set_2['statistics']['DISEASES'])
-        t2['set'] = 's2'
-        
-        df = pd.concat([t1,t2]).reset_index(drop = True)
-        
+
+        t1 = pd.DataFrame(self.set_1["statistics"]["DISEASES"])
+        t1["set"] = "s1"
+        t2 = pd.DataFrame(self.set_2["statistics"]["DISEASES"])
+        t2["set"] = "s2"
+
+        df = pd.concat([t1, t2]).reset_index(drop=True)
+
         return t2
 
     def get_full_ViMIC(self):
-        
         """
         This method returns the concatenated ViMic viral data from set1 and set2.
-        
+
         Returns:
             The concatenated data stored in
             `self.set_1['statistics']['ViMIC']` and
             `self.set_2['statistics']['ViMIC']`.
         """
-        
-        t1 = pd.DataFrame(self.set_1['statistics']['ViMIC'])
-        t1['set'] = 's1'
-        t2 = pd.DataFrame(self.set_2['statistics']['ViMIC'])
-        t2['set'] = 's2'
-        
-        df = pd.concat([t1,t2]).reset_index(drop = True)
-        
+
+        t1 = pd.DataFrame(self.set_1["statistics"]["ViMIC"])
+        t1["set"] = "s1"
+        t2 = pd.DataFrame(self.set_2["statistics"]["ViMIC"])
+        t2["set"] = "s2"
+
+        df = pd.concat([t1, t2]).reset_index(drop=True)
+
         return t2
-        
+
     def get_full_SPECIFICITY(self):
-        
         """
         This method returns the concatenated HPA specificity data from set1 and set2.
-        
+
         Returns:
             The concatenated data stored in
             `self.set_1['statistics']['specificity']` and
             `self.set_2['statistics']['specificity']`.
         """
-        
-        t1 = pd.DataFrame(self.set_1['statistics']['specificity'])
-        t1['set'] = 's1'
-        t2 = pd.DataFrame(self.set_2['statistics']['specificity'])
-        t2['set'] = 's2'
-        
-        df = pd.concat([t1,t2]).reset_index(drop = True)
-        
+
+        t1 = pd.DataFrame(self.set_1["statistics"]["specificity"])
+        t1["set"] = "s1"
+        t2 = pd.DataFrame(self.set_2["statistics"]["specificity"])
+        t2["set"] = "s2"
+
+        df = pd.concat([t1, t2]).reset_index(drop=True)
+
         return t2
-    
+
     def get_GO_diff(self):
         """
         This method returns the GO-TERM Differential Set Analysis (DSA)
@@ -6369,78 +6363,75 @@ class DSA(PathMetadata):
 
         s1_tmp = pd.DataFrame(self.set_1["statistics"][sets])
         s2_tmp = pd.DataFrame(self.set_2["statistics"][sets])
-        
+
         #######################################################################
-        
-        set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
-        set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
-                                  
-                                  
+
+        set_1_list = self.set_1["enrichment"]["gene_info"]["found_names"]
+        set_2_list = self.set_2["enrichment"]["gene_info"]["found_names"]
+
         inter_tmp = pd.DataFrame(self.inter_terms[sets])
-        
-        inter_tmp = inter_tmp.explode('child_genes')
-        inter_tmp = inter_tmp.explode('parent_genes')
-        
-        
-        inter_tmp['set_parent'] = None
-        inter_tmp['set_children'] = None
-        
-        inter_tmp.loc[inter_tmp['child_genes'].isin(set_1_list), 'set_children'] = 'set1'
-        inter_tmp.loc[inter_tmp['child_genes'].isin(set_2_list), 'set_children'] = 'set2'
 
-        
-        inter_tmp.loc[inter_tmp['parent_genes'].isin(set_1_list), 'set_parent'] = 'set1'
-        inter_tmp.loc[inter_tmp['parent_genes'].isin(set_2_list), 'set_parent'] = 'set2'
-        
+        inter_tmp = inter_tmp.explode("child_genes")
+        inter_tmp = inter_tmp.explode("parent_genes")
 
-        group_cols = ['parent_name', 'child_name', 'set']
+        inter_tmp["set_parent"] = None
+        inter_tmp["set_children"] = None
+
+        inter_tmp.loc[inter_tmp["child_genes"].isin(set_1_list), "set_children"] = (
+            "set1"
+        )
+        inter_tmp.loc[inter_tmp["child_genes"].isin(set_2_list), "set_children"] = (
+            "set2"
+        )
+
+        inter_tmp.loc[inter_tmp["parent_genes"].isin(set_1_list), "set_parent"] = "set1"
+        inter_tmp.loc[inter_tmp["parent_genes"].isin(set_2_list), "set_parent"] = "set2"
+
+        group_cols = ["parent_name", "child_name", "set"]
 
         agg_dict = {
-            'child_genes': lambda x: list(set(x)),
-            'parent_genes': lambda x: list(set(x)),
-            'set_parent': lambda x: list(set(x)),
-            'set_children': lambda x: list(set(x)),
+            "child_genes": lambda x: list(set(x)),
+            "parent_genes": lambda x: list(set(x)),
+            "set_parent": lambda x: list(set(x)),
+            "set_children": lambda x: list(set(x)),
             **{
-                col: 'first'
+                col: "first"
                 for col in inter_tmp.columns
-                if col not in group_cols + ['child_genes', 'parent_genes', 'set_parent', 'set_children']
-            }
+                if col
+                not in group_cols
+                + ["child_genes", "parent_genes", "set_parent", "set_children"]
+            },
         }
-        
-        inter_tmp = (
-            inter_tmp
-            .groupby(group_cols, as_index=False)
-            .agg(agg_dict)
-        )
-        
-        inter_tmp['set'] = inter_tmp['set_parent'] + inter_tmp['set_children']
-        inter_tmp['set'] = [list(set(x)) for x in inter_tmp['set']]
-        inter_tmp = inter_tmp.explode('set_children')
-        
-        inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
-        
+
+        inter_tmp = inter_tmp.groupby(group_cols, as_index=False).agg(agg_dict)
+
+        inter_tmp["set"] = inter_tmp["set_parent"] + inter_tmp["set_children"]
+        inter_tmp["set"] = [list(set(x)) for x in inter_tmp["set"]]
+        inter_tmp = inter_tmp.explode("set_children")
+
+        inter_tmp = inter_tmp[
+            inter_tmp["set"].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)
+        ]
+
         if len(inter_tmp) > 0:
 
-            s1_tmp = (
-                pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
-                  .reset_index(drop=True)
-            )
-            
-            s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-                
-            s2_tmp = (
-                pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
-                  .reset_index(drop=True)
-            )
-            
-            s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+            s1_tmp = pd.concat(
+                [s1_tmp, inter_tmp[inter_tmp["set_children"] == "set1"]]
+            ).reset_index(drop=True)
 
-            
-            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient='list')
-            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient='list')
-        
+            s1_tmp = s1_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+            s2_tmp = pd.concat(
+                [s2_tmp, inter_tmp[inter_tmp["set_children"] == "set2"]]
+            ).reset_index(drop=True)
+
+            s2_tmp = s2_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient="list")
+            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient="list")
+
         #######################################################################
-        
+
         term = []
         norm_n = []
 
@@ -6615,76 +6606,69 @@ class DSA(PathMetadata):
 
         s1_tmp = pd.DataFrame(self.set_1["statistics"][sets])
         s2_tmp = pd.DataFrame(self.set_2["statistics"][sets])
-        
-        
+
         #######################################################################
-        
-        set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
-        set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
-                                  
-                                  
+
+        set_1_list = self.set_1["enrichment"]["gene_info"]["found_names"]
+        set_2_list = self.set_2["enrichment"]["gene_info"]["found_names"]
+
         inter_tmp = pd.DataFrame(self.inter_terms[sets])
-        
-        inter_tmp = inter_tmp.explode('3rd_genes')
-        inter_tmp = inter_tmp.explode('2nd_genes')
-        
-        
-        inter_tmp['set_parent'] = None
-        inter_tmp['set_children'] = None
-        
-        inter_tmp.loc[inter_tmp['3rd_genes'].isin(set_1_list), 'set_children'] = 'set1'
-        inter_tmp.loc[inter_tmp['3rd_genes'].isin(set_2_list), 'set_children'] = 'set2'
 
-        
-        inter_tmp.loc[inter_tmp['2nd_genes'].isin(set_1_list), 'set_parent'] = 'set1'
-        inter_tmp.loc[inter_tmp['2nd_genes'].isin(set_2_list), 'set_parent'] = 'set2'
-        
+        inter_tmp = inter_tmp.explode("3rd_genes")
+        inter_tmp = inter_tmp.explode("2nd_genes")
 
-        group_cols = ['2nd', '3rd', 'set']
+        inter_tmp["set_parent"] = None
+        inter_tmp["set_children"] = None
+
+        inter_tmp.loc[inter_tmp["3rd_genes"].isin(set_1_list), "set_children"] = "set1"
+        inter_tmp.loc[inter_tmp["3rd_genes"].isin(set_2_list), "set_children"] = "set2"
+
+        inter_tmp.loc[inter_tmp["2nd_genes"].isin(set_1_list), "set_parent"] = "set1"
+        inter_tmp.loc[inter_tmp["2nd_genes"].isin(set_2_list), "set_parent"] = "set2"
+
+        group_cols = ["2nd", "3rd", "set"]
 
         agg_dict = {
-            '3rd_genes': lambda x: list(set(x)),
-            '2nd_genes': lambda x: list(set(x)),
-            'set_parent': lambda x: list(set(x)),
-            'set_children': lambda x: list(set(x)),
+            "3rd_genes": lambda x: list(set(x)),
+            "2nd_genes": lambda x: list(set(x)),
+            "set_parent": lambda x: list(set(x)),
+            "set_children": lambda x: list(set(x)),
             **{
-                col: 'first'
+                col: "first"
                 for col in inter_tmp.columns
-                if col not in group_cols + ['3rd_genes', '2nd_genes', 'set_parent', 'set_children']
-            }
+                if col
+                not in group_cols
+                + ["3rd_genes", "2nd_genes", "set_parent", "set_children"]
+            },
         }
-        
-        inter_tmp = (
-            inter_tmp
-            .groupby(group_cols, as_index=False)
-            .agg(agg_dict)
-        )
-        
-        inter_tmp['set'] = inter_tmp['set_parent'] + inter_tmp['set_children']
-        inter_tmp['set'] = [list(set(x)) for x in inter_tmp['set']]
-        inter_tmp = inter_tmp.explode('set_children')
-        
-        inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+
+        inter_tmp = inter_tmp.groupby(group_cols, as_index=False).agg(agg_dict)
+
+        inter_tmp["set"] = inter_tmp["set_parent"] + inter_tmp["set_children"]
+        inter_tmp["set"] = [list(set(x)) for x in inter_tmp["set"]]
+        inter_tmp = inter_tmp.explode("set_children")
+
+        inter_tmp = inter_tmp[
+            inter_tmp["set"].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)
+        ]
 
         if len(inter_tmp) > 0:
-            
-            s1_tmp = (
-                pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
-                  .reset_index(drop=True)
-            )
-            
-            s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-                
-            s2_tmp = (
-                pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
-                  .reset_index(drop=True)
-            )
-            
-            s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-            
-            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient='list')
-            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient='list')
-        
+
+            s1_tmp = pd.concat(
+                [s1_tmp, inter_tmp[inter_tmp["set_children"] == "set1"]]
+            ).reset_index(drop=True)
+
+            s1_tmp = s1_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+            s2_tmp = pd.concat(
+                [s2_tmp, inter_tmp[inter_tmp["set_children"] == "set2"]]
+            ).reset_index(drop=True)
+
+            s2_tmp = s2_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient="list")
+            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient="list")
+
         #######################################################################
 
         term = []
@@ -6861,78 +6845,83 @@ class DSA(PathMetadata):
 
         s1_tmp = pd.DataFrame(self.set_1["statistics"][sets])
         s2_tmp = pd.DataFrame(self.set_2["statistics"][sets])
-        
-        
+
         #######################################################################
-        
-        set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
-        set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
-                                  
-                                  
+
+        set_1_list = self.set_1["enrichment"]["gene_info"]["found_names"]
+        set_2_list = self.set_2["enrichment"]["gene_info"]["found_names"]
+
         inter_tmp = pd.DataFrame(self.inter_terms[sets])
-        
-        inter_tmp = inter_tmp.explode('pathway')
-        inter_tmp = inter_tmp.explode('top_level_pathway')
-        
-        
-        inter_tmp['set_parent'] = None
-        inter_tmp['set_children'] = None
-        
-        inter_tmp.loc[inter_tmp['pathway_genes'].isin(set_1_list), 'set_children'] = 'set1'
-        inter_tmp.loc[inter_tmp['pathway_genes'].isin(set_2_list), 'set_children'] = 'set2'
 
-        
-        inter_tmp.loc[inter_tmp['top_level_pathway_genes'].isin(set_1_list), 'set_parent'] = 'set1'
-        inter_tmp.loc[inter_tmp['top_level_pathway_genes'].isin(set_2_list), 'set_parent'] = 'set2'
-        
+        inter_tmp = inter_tmp.explode("pathway")
+        inter_tmp = inter_tmp.explode("top_level_pathway")
 
-        group_cols = ['pathway', 'top_level_pathway', 'set']
+        inter_tmp["set_parent"] = None
+        inter_tmp["set_children"] = None
+
+        inter_tmp.loc[inter_tmp["pathway_genes"].isin(set_1_list), "set_children"] = (
+            "set1"
+        )
+        inter_tmp.loc[inter_tmp["pathway_genes"].isin(set_2_list), "set_children"] = (
+            "set2"
+        )
+
+        inter_tmp.loc[
+            inter_tmp["top_level_pathway_genes"].isin(set_1_list), "set_parent"
+        ] = "set1"
+        inter_tmp.loc[
+            inter_tmp["top_level_pathway_genes"].isin(set_2_list), "set_parent"
+        ] = "set2"
+
+        group_cols = ["pathway", "top_level_pathway", "set"]
 
         agg_dict = {
-            'pathway_genes': lambda x: list(set(x)),
-            'top_level_pathway_genes': lambda x: list(set(x)),
-            'set_parent': lambda x: list(set(x)),
-            'set_children': lambda x: list(set(x)),
+            "pathway_genes": lambda x: list(set(x)),
+            "top_level_pathway_genes": lambda x: list(set(x)),
+            "set_parent": lambda x: list(set(x)),
+            "set_children": lambda x: list(set(x)),
             **{
-                col: 'first'
+                col: "first"
                 for col in inter_tmp.columns
-                if col not in group_cols + ['pathway_genes', 'top_level_pathway_genes', 'set_parent', 'set_children']
-            }
+                if col
+                not in group_cols
+                + [
+                    "pathway_genes",
+                    "top_level_pathway_genes",
+                    "set_parent",
+                    "set_children",
+                ]
+            },
         }
-        
-        inter_tmp = (
-            inter_tmp
-            .groupby(group_cols, as_index=False)
-            .agg(agg_dict)
-        )
-        
-        inter_tmp['set'] = inter_tmp['set_parent'] + inter_tmp['set_children']
-        inter_tmp['set'] = [list(set(x)) for x in inter_tmp['set']]
-        inter_tmp = inter_tmp.explode('set_children')
-        
-        inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+
+        inter_tmp = inter_tmp.groupby(group_cols, as_index=False).agg(agg_dict)
+
+        inter_tmp["set"] = inter_tmp["set_parent"] + inter_tmp["set_children"]
+        inter_tmp["set"] = [list(set(x)) for x in inter_tmp["set"]]
+        inter_tmp = inter_tmp.explode("set_children")
+
+        inter_tmp = inter_tmp[
+            inter_tmp["set"].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)
+        ]
 
         if len(inter_tmp) > 0:
-            
-            s1_tmp = (
-                pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
-                  .reset_index(drop=True)
-            )
-            
-            s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-                
-            s2_tmp = (
-                pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
-                  .reset_index(drop=True)
-            )
-            
-            s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-            
-            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient='list')
-            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient='list')
-        
+
+            s1_tmp = pd.concat(
+                [s1_tmp, inter_tmp[inter_tmp["set_children"] == "set1"]]
+            ).reset_index(drop=True)
+
+            s1_tmp = s1_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+            s2_tmp = pd.concat(
+                [s2_tmp, inter_tmp[inter_tmp["set_children"] == "set2"]]
+            ).reset_index(drop=True)
+
+            s2_tmp = s2_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient="list")
+            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient="list")
+
         #######################################################################
-        
 
         term = []
         norm_n = []
@@ -7108,65 +7097,58 @@ class DSA(PathMetadata):
         for k in key_list:
             s1_tmp = pd.DataFrame(self.set_1["statistics"][sets][k])
             s2_tmp = pd.DataFrame(self.set_2["statistics"][sets][k])
-            
-            
+
             #######################################################################
-            
-            set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
-            set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
-                                      
-                                      
+
+            set_1_list = self.set_1["enrichment"]["gene_info"]["found_names"]
+            set_2_list = self.set_2["enrichment"]["gene_info"]["found_names"]
+
             inter_tmp = pd.DataFrame(self.inter_terms[sets][k])
-            
-            inter_tmp = inter_tmp.explode('specificity')
-            
-            
-            inter_tmp.loc[inter_tmp['genes'].isin(set_1_list), 'set'] = 'set1'
-            inter_tmp.loc[inter_tmp['genes'].isin(set_2_list), 'set'] = 'set2'
 
+            inter_tmp = inter_tmp.explode("specificity")
 
-            group_cols = ['specificity', 'set']
+            inter_tmp.loc[inter_tmp["genes"].isin(set_1_list), "set"] = "set1"
+            inter_tmp.loc[inter_tmp["genes"].isin(set_2_list), "set"] = "set2"
+
+            group_cols = ["specificity", "set"]
 
             agg_dict = {
-                'genes': lambda x: list(set(x)),
-                'set': lambda x: list(set(x)),
+                "genes": lambda x: list(set(x)),
+                "set": lambda x: list(set(x)),
                 **{
-                    col: 'first'
+                    col: "first"
                     for col in inter_tmp.columns
-                    if col not in group_cols + ['specificity', 'set']
-                }
+                    if col not in group_cols + ["specificity", "set"]
+                },
             }
-            
-            inter_tmp = (
-                inter_tmp
-                .groupby(group_cols, as_index=False)
-                .agg(agg_dict)
-            )
-            
-  
-            inter_tmp = inter_tmp.explode('set')
-            
-            inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+
+            inter_tmp = inter_tmp.groupby(group_cols, as_index=False).agg(agg_dict)
+
+            inter_tmp = inter_tmp.explode("set")
+
+            inter_tmp = inter_tmp[
+                inter_tmp["set"].apply(
+                    lambda x: isinstance(x, (list, set)) and len(x) > 1
+                )
+            ]
 
             if len(inter_tmp) > 0:
-                
-                s1_tmp = (
-                    pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
-                      .reset_index(drop=True)
-                )
-                
-                s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-                    
-                s2_tmp = (
-                    pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
-                      .reset_index(drop=True)
-                )
-                
-                s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
-                
-                self.set_1["statistics"][sets][k] = s1_tmp.to_dict(orient='list')
-                self.set_2["statistics"][sets][k] = s2_tmp.to_dict(orient='list')
-            
+
+                s1_tmp = pd.concat(
+                    [s1_tmp, inter_tmp[inter_tmp["set_children"] == "set1"]]
+                ).reset_index(drop=True)
+
+                s1_tmp = s1_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+                s2_tmp = pd.concat(
+                    [s2_tmp, inter_tmp[inter_tmp["set_children"] == "set2"]]
+                ).reset_index(drop=True)
+
+                s2_tmp = s2_tmp.drop(columns=["set_children", "set_parent", "set"])
+
+                self.set_1["statistics"][sets][k] = s1_tmp.to_dict(orient="list")
+                self.set_2["statistics"][sets][k] = s2_tmp.to_dict(orient="list")
+
             #######################################################################
 
             term = []
@@ -7248,7 +7230,6 @@ class DSA(PathMetadata):
             To retrieve the results, use the `self.get_GI_diff` method.
         """
 
-
         full_ans = pd.DataFrame(self.features_interactions_statistics)
 
         s1_ans = pd.DataFrame(self.set_1["statistics"]["interactions"])
@@ -7266,7 +7247,6 @@ class DSA(PathMetadata):
         ] = "s2"
 
         self.GI = full_ans
-        
 
     def network_diff(self):
         """
@@ -7297,29 +7277,26 @@ class DSA(PathMetadata):
             kn["parent"].isin(list(s2_ans["parent"]))
             & kn["children"].isin(list(s2_ans["children"]))
         ] = "s2"
-        
+
         s1_ans = s1_ans[
             ~s1_ans["parent"].isin(list(kn["parent"]))
             & ~s1_ans["children"].isin(list(kn["children"]))
-        ] 
-        
-        s1_ans['set'] = 's1'
-        
+        ]
+
+        s1_ans["set"] = "s1"
+
         s2_ans = s2_ans[
             ~s2_ans["parent"].isin(list(kn["parent"]))
             & ~s2_ans["children"].isin(list(kn["children"]))
-        ] 
-        
-        s2_ans['set'] = 's2'
-        
-        kn = pd.concat([kn,s1_ans, s2_ans])
+        ]
 
+        s2_ans["set"] = "s2"
 
-    
+        kn = pd.concat([kn, s1_ans, s2_ans])
+
         networks["KEGG"] = kn.to_dict(orient="list")
 
         kn = pd.DataFrame(self.REACTOME_net)
-
 
         s1_ans = pd.DataFrame(self.set_1["networks"]["REACTOME"])
         s2_ans = pd.DataFrame(self.set_2["networks"]["REACTOME"])
@@ -7334,23 +7311,23 @@ class DSA(PathMetadata):
             kn["parent"].isin(list(s2_ans["parent"]))
             & kn["children"].isin(list(s2_ans["children"]))
         ] = "s2"
-        
+
         s1_ans = s1_ans[
             ~s1_ans["parent"].isin(list(kn["parent"]))
             & ~s1_ans["children"].isin(list(kn["children"]))
-        ] 
-        
-        s1_ans['set'] = 's1'
-        
+        ]
+
+        s1_ans["set"] = "s1"
+
         s2_ans = s2_ans[
             ~s2_ans["parent"].isin(list(kn["parent"]))
             & ~s2_ans["children"].isin(list(kn["children"]))
-        ] 
-        
-        s2_ans['set'] = 's2'
-        
-        kn = pd.concat([kn,s1_ans, s2_ans])
-        
+        ]
+
+        s2_ans["set"] = "s2"
+
+        kn = pd.concat([kn, s1_ans, s2_ans])
+
         networks["REACTOME"] = kn.to_dict(orient="list")
 
         kn = pd.DataFrame(self.GO_net)
@@ -7368,23 +7345,23 @@ class DSA(PathMetadata):
             kn["parent"].isin(list(s2_ans["parent"]))
             & kn["children"].isin(list(s2_ans["children"]))
         ] = "s2"
-        
+
         s1_ans = s1_ans[
             ~s1_ans["parent"].isin(list(kn["parent"]))
             & ~s1_ans["children"].isin(list(kn["children"]))
-        ] 
-        
-        s1_ans['set'] = 's1'
-        
+        ]
+
+        s1_ans["set"] = "s1"
+
         s2_ans = s2_ans[
             ~s2_ans["parent"].isin(list(kn["parent"]))
             & ~s2_ans["children"].isin(list(kn["children"]))
-        ] 
-        
-        s2_ans['set'] = 's2'
-        
-        kn = pd.concat([kn,s1_ans, s2_ans])
-        
+        ]
+
+        s2_ans["set"] = "s2"
+
+        kn = pd.concat([kn, s1_ans, s2_ans])
+
         networks["GO-TERM"] = kn.to_dict(orient="list")
 
         self.networks = networks
@@ -7668,7 +7645,6 @@ class DSA(PathMetadata):
 
         print("\nInter Terms (IT) searching...")
 
-
         print("\nInter CellConnections (ICC) searching...")
 
         self.connections_diff()
@@ -7729,7 +7705,6 @@ class VisualizationDES(Visualization):
         self.input_data = input_data
         self.show_plot = False
         self.parent_stats = False
-
 
     ###########################################################################
     # Single set analysis visualization
@@ -7909,10 +7884,10 @@ class VisualizationDES(Visualization):
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data[f"set_{set_num}"]["statistics"][sets])
-        
+
         if self.parent_stats:
             tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
-            
+
         tmp_in = tmp_in[tmp_in[f"child_{test_string}"] <= p_val]
         tmp_in[f"child_{test_string}"] = (
             tmp_in[f"child_{test_string}"]
@@ -11538,49 +11513,35 @@ class VisualizationDES(Visualization):
         return fig
 
 
-
-def enrichment_heatmap(data:pd.DataFrame, 
-                       stat_col:str, 
-                       term_col:str,
-                       set_col:str,
-                       sets:dict | list,
-                       title:str = '',
-                       fig_size:tuple = (8,10),
-                       font_size = 14,
-                       scale:bool = False):
-    
+def enrichment_heatmap(
+    data: pd.DataFrame,
+    stat_col: str,
+    term_col: str,
+    set_col: str,
+    sets: dict | list,
+    title: str = "",
+    fig_size: tuple = (8, 10),
+    font_size=14,
+    scale: bool = False,
+):
     """
-    This method generates a pie chart visualizing the distribution of gene types based on enrichment data.
-
-    Args:
-        cmap (str) - colormap used for the pie chart. Default is 'summer'
-        image_width (int) - width of the plot in inches. Default is 6
-        image_high (int) - height of the plot in inches. Default is 6
-        font_size (int) - font size. Default is 15
-
-    Returns:
-        fig (matplotlib.figure.Figure) - figure object containing a pie chart that visualizes the distribution of gene type occurrences as percentages
-    """
-    
-
-    """
-    This method generates a heatmap showing statistical significance (e.g., -log10(p-value)) 
+    This method generates a heatmap showing statistical significance (e.g., -log10(p-value))
     for different terms/pathways across multiple sets.
 
     Args:
         data : pd.DataFrame
             DataFrame containing columns for statistical values, terms, and sets.
         stat_col : str
-            Name of the column in `data` containing statistical values 
+            Name of the column in `data` containing statistical values
             (e.g., p-values) that will be transformed to -log10.
         term_col : str
             Name of the column in `data` containing unique terms or features.
             Duplicate values in this column will raise a ValueError.
         set_col : str
-            Name of the column in `data` containing set names, which will become 
+            Name of the column in `data` containing set names, which will become
             the columns of the heatmap.
         sets : dict or list
-            Either a list of set names to display or a dictionary mapping 
+            Either a list of set names to display or a dictionary mapping
             {original_name: new_name} for renaming columns.
         title : str, optional
             Title of the heatmap (default is empty string).
@@ -11594,7 +11555,7 @@ def enrichment_heatmap(data:pd.DataFrame,
     Returns:
         ig (matplotlib.figure.Figure) - matplotlib figure object containing the generated heatmap.
 
-   
+
     Example:
         >>> enrichment_heatmap(
         ...     data=df,
@@ -11605,55 +11566,61 @@ def enrichment_heatmap(data:pd.DataFrame,
         ...     title='GO:TERM'
         ... )
     """
-    
-    data['-log(p_value)'] = -np.log10(data[stat_col])
-    
+
+    scale_label = "-log10(p_value)"
+
+    data["-log(p_value)"] = -np.log10(data[stat_col])
+
     if data[term_col].duplicated().any():
-        raise ValueError(f'Duplicated values occur in column: {term_col}')
-    
+        raise ValueError(f"Duplicated values occur in column: {term_col}")
+
     if isinstance(sets, dict):
         sets_list = list(set(sets.keys()))
-        
-    heatmap_data = data.pivot(index=term_col, columns=set_col, values='-log(p_value)').fillna(0)
+
+    heatmap_data = data.pivot(
+        index=term_col, columns=set_col, values="-log(p_value)"
+    ).fillna(0)
     if set(heatmap_data.columns) != sets_list:
-        list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns) ]
-        for d in list_unvalid: 
+        list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns)]
+        for d in list_unvalid:
             heatmap_data[d] = 0
-    
+
     if isinstance(sets, dict):
         heatmap_data = heatmap_data.rename(columns=sets)
 
-        
     if scale:
+        scale_label = f"scaled({scale_label})"
         scaler = MinMaxScaler()
         heatmap_data = pd.DataFrame(
             scaler.fit_transform(heatmap_data),
             index=heatmap_data.index,
-            columns=heatmap_data.columns
+            columns=heatmap_data.columns,
         )
 
     fig, ax = plt.subplots(figsize=fig_size)
     sns.heatmap(
-        heatmap_data, 
-        ax=ax,                               
-        cmap='viridis',
-        linewidths=0.5, 
-        linecolor='gray', 
-        cbar_kws={'label': 'scaled(-log10(p_value))'},
-        fmt=".2f"
-    )       
+        heatmap_data,
+        ax=ax,
+        cmap="viridis",
+        linewidths=0.5,
+        linecolor="gray",
+        cbar_kws={"label": scale_label},
+        fmt=".2f",
+    )
     ax.set_xticks(np.arange(len(heatmap_data.columns)) + 0.5)
     ax.set_yticks(np.arange(len(heatmap_data.index)) + 0.5)
     ax.set_ylabel(title, fontsize=font_size)
     ax.set_xlabel("Set", fontsize=font_size)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha='right', fontsize=font_size*0.8)
-    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size*0.8)
-    
+    ax.set_xticklabels(
+        ax.get_xticklabels(), rotation=30, ha="right", fontsize=font_size * 0.8
+    )
+    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size * 0.8)
+
     # colorbar fontsize
     cbar = ax.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=font_size*0.8)
-    
+    cbar.ax.tick_params(labelsize=font_size * 0.8)
+
     plt.tight_layout()
     plt.show()
-    
+
     return fig
