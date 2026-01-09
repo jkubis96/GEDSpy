@@ -1,11 +1,13 @@
 # Requirements import
 import json
 import os
+import re
 import sqlite3
 import warnings
 from collections import Counter
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -14,7 +16,9 @@ from matplotlib import rc
 from matplotlib.gridspec import GridSpec
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.stats import binomtest, fisher_exact
+from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
+
 
 rc("svg", fonttype="path")
 
@@ -709,6 +713,15 @@ class Enrichment(GetData):
         self.RNA_SEQ = None
 
         super().__init__()
+        
+    def reduce_extended_gtf(self, names):
+        return list(set([
+            re.sub(r"\.str.*", "",
+            re.sub(r"\.chr.*", "",
+            re.sub(r"\.var.*", "", n)))
+            for n in names
+        ]))
+
 
     def set_gene_species(self, species: list):
         """
@@ -764,15 +777,12 @@ class Enrichment(GetData):
                 "\nValues in list should be included in STRING, Affinomics, Alzheimers, BioCreative, Cancer, Cardiac, Chromatin, Coronavirus, Diabetes, Huntington`s, IBD, Neurodegeneration, Parkinsons"
             )
 
-    @property
     def show_founded_features(self):
         return self.found_genes["found_genes"]
 
-    @property
     def show_non_founded_features(self):
         return self.found_genes["not_found"]
 
-    @property
     def get_gene_info(self):
 
         if isinstance(self.genome, pd.DataFrame):
@@ -782,7 +792,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of Genome data...")
 
-    @property
     def get_RNA_SEQ(self):
         """
         This method returns the RNAseq information.
@@ -802,7 +811,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of RNA-SEQ data...")
 
-    @property
     def get_HPA(self):
         """
         This method returns the Human Protein Atlas (HPA) information.
@@ -829,7 +837,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of HPA data...")
 
-    @property
     def get_STRING(self):
         """
         This method returns the STRING information.
@@ -845,7 +852,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of STRING data...")
 
-    @property
     def get_GO_TERM(self):
         """
         This method returns the GeneOntology (GO-TERM) information.
@@ -861,7 +867,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of GO-TERM data...")
 
-    @property
     def get_REACTOME(self):
         """
         This method returns the Reactome information.
@@ -877,7 +882,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of REACTOME data...")
 
-    @property
     def get_CellCon(self):
         """
         This method returns the CellPhone / CellTalk information.
@@ -893,7 +897,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of CellCon data...")
 
-    @property
     def get_IntAct(self):
         """
         This method returns the IntAct information.
@@ -925,7 +928,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of IntAct data...")
 
-    @property
     def get_KEGG(self):
         """
         This method returns the Kyoto Encyclopedia of Genes and Genomes (KEGG) information.
@@ -941,7 +943,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of KEGG data...")
 
-    @property
     def get_DISEASES(self):
         """
         This method returns the Human Diseases information.
@@ -957,7 +958,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of Diseases data...")
 
-    @property
     def get_ViMIC(self):
         """
         This method returns the Viral Diseases (ViMIC) information.
@@ -973,7 +973,6 @@ class Enrichment(GetData):
         else:
             raise ValueError("\nLack of enrichment of ViMIC data...")
 
-    @property
     def get_columns_names(self):
         conn = sqlite3.connect(os.path.join(self.path_in_inside, "GEDS_db.db"))
 
@@ -987,21 +986,20 @@ class Enrichment(GetData):
         for table in tables:
             print(table[0])
 
-    @property
     def get_results(self):
         """
         This method returns the full enrichment analysis dictionary containing on keys:
-            - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info` property]
-            - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA' property]
-            - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG' property]
-            - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM' property]
-            - 'REACTOME' - Reactome [see 'self.get_REACTOME' property]
-            - 'DISEASES' - Human Diseases [see 'self.get_DISEASES' property]
-            - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC' property]
-            - 'IntAct' - IntAct [see 'self.get_IntAct' property]
-            - 'STRING' - STRING [see 'self.get_STRING' property]
-            - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon' property]
-            - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ' property]
+            - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info`]
+            - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA']
+            - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG']
+            - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM']
+            - 'REACTOME' - Reactome [see 'self.get_REACTOME']
+            - 'DISEASES' - Human Diseases [see 'self.get_DISEASES']
+            - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC']
+            - 'IntAct' - IntAct [see 'self.get_IntAct']
+            - 'STRING' - STRING [see 'self.get_STRING']
+            - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon']
+            - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ']
 
         Returns:
             dict (dict) - full enrichment data
@@ -1010,57 +1008,57 @@ class Enrichment(GetData):
         results = {}
 
         try:
-            results["gene_info"] = self.get_gene_info
+            results["gene_info"] = self.get_gene_info()
         except:
             pass
 
         try:
-            results["HPA"] = self.get_HPA
+            results["HPA"] = self.get_HPA()
         except:
             pass
 
         try:
-            results["STRING"] = self.get_STRING
+            results["STRING"] = self.get_STRING()
         except:
             pass
 
         try:
-            results["GO-TERM"] = self.get_GO_TERM
+            results["GO-TERM"] = self.get_GO_TERM()
         except:
             pass
 
         try:
-            results["REACTOME"] = self.get_REACTOME
+            results["REACTOME"] = self.get_REACTOME()
         except:
             pass
 
         try:
-            results["CellConnections"] = self.get_CellCon
+            results["CellConnections"] = self.get_CellCon()
         except:
             pass
 
         try:
-            results["IntAct"] = self.get_IntAct
+            results["IntAct"] = self.get_IntAct()
         except:
             pass
 
         try:
-            results["KEGG"] = self.get_KEGG
+            results["KEGG"] = self.get_KEGG()
         except:
             pass
 
         try:
-            results["DISEASES"] = self.get_DISEASES
+            results["DISEASES"] = self.get_DISEASES()
         except:
             pass
 
         try:
-            results["ViMIC"] = self.get_ViMIC
+            results["ViMIC"] = self.get_ViMIC()
         except:
             pass
 
         try:
-            results["RNA-SEQ"] = self.get_RNA_SEQ
+            results["RNA-SEQ"] = self.get_RNA_SEQ()
         except:
             pass
 
@@ -1846,7 +1844,7 @@ class Enrichment(GetData):
 
         """
 
-        self.features_list = features_list
+        self.features_list = self.reduce_extended_gtf(features_list)
 
         self.load_genome()
         self.spec_dic()
@@ -1858,7 +1856,7 @@ class Enrichment(GetData):
         self.return_dictionary()
         self.add_found_names()
 
-        nf = self.show_non_founded_features
+        nf = self.show_non_founded_features()
 
         if len(nf) > 0:
             print("\nSome features were not found in Database:")
@@ -1957,7 +1955,7 @@ class Analysis(Enrichment):
         self.KEGG_net = None
         self.GO_net = None
         self.REACTOME_net = None
-        self.network_stat = {"test": "BIN", "adj": "BF", "p_val": 0.05}
+        self.network_stat = {"test": "FISH", "adj": "BH", "p_val": 0.05, 'parent_stat':False}
         self.go_grade = 1
         self.occ = None
         self.interaction_strength = 900
@@ -1979,7 +1977,6 @@ class Analysis(Enrichment):
 
         super().__init__()
 
-    @property
     def interactions_metadata(self):
         """
         This method returns current interactions parameters:
@@ -2090,7 +2087,6 @@ class Analysis(Enrichment):
                 "\nValues in list should be included in STRING, Affinomics, Alzheimers, BioCreative, Cancer, Cardiac, Chromatin, Coronavirus, Diabetes, Huntington`s, IBD, Neurodegeneration, Parkinsons"
             )
 
-    @property
     def networks_metadata(self):
         """
         This method returns current networks creation parameters:
@@ -2151,6 +2147,25 @@ class Analysis(Enrichment):
         else:
 
             raise ValueError("\nTest should be included in BIN or FISH")
+            
+    def set_parent_stats(self, stats):
+        """
+        This method sets the parent statistical test value used for network creation.
+        
+            Avaiable values:
+                - True - use test p-value for drop non-significient parents 
+                - False - not use test p-value for drop non-significient parents 
+
+            Args:
+                test (bool) - bool value [True/False]
+        """
+
+        if stats in [True, False]:
+            self.network_stat["parent_stat"] = stats
+
+        else:
+
+            raise ValueError("\nStats should be included in True or False")
 
     def set_correction(self, correction):
         """
@@ -2177,7 +2192,6 @@ class Analysis(Enrichment):
 
                 raise ValueError("\nTest should be included in BF or BH")
 
-    @property
     def get_KEGG_statistics(self):
         """
         This method returns the KEGG overrepresentation statistics.
@@ -2193,7 +2207,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_REACTOME_statistics(self):
         """
         This method returns the Reactome overrepresentation statistics.
@@ -2209,7 +2222,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_GO_statistics(self):
         """
         This method returns the GO-TERM overrepresentation statistics.
@@ -2225,7 +2237,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_DISEASE_statistics(self):
         """
         This method returns the Human Diseases overrepresentation statistics.
@@ -2241,7 +2252,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_ViMIC_statistics(self):
         """
         This method returns the ViMIC overrepresentation statistics.
@@ -2257,7 +2267,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_features_interactions_statistics(self):
         """
         This method returns the Genes Interactions (GI) data.
@@ -2273,7 +2282,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_specificity_statistics(self):
         """
         This method returns the tissue specificity [Human Protein Atlas (HPA)] overrepresentation statistics.
@@ -2289,7 +2297,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_KEGG_network(self):
         """
         This method returns the KEGG network analysis results.
@@ -2305,7 +2312,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_REACTOME_network(self):
         """
         This method returns the Reactome network analysis results.
@@ -2321,7 +2327,6 @@ class Analysis(Enrichment):
         else:
             raise ValueError("\nNo data to return...")
 
-    @property
     def get_GO_network(self):
         """
         This method returns the GO-TERM network analysis results.
@@ -2755,7 +2760,7 @@ class Analysis(Enrichment):
 
             n = len(go_out["parent_pval_BIN"])
 
-            go_out["parent_pval_BIN-BH"] = (go_out["parent_pval_BIN"] * n) / np.arange(
+            go_out["parent_adj_pval_BIN-BH"] = (go_out["parent_pval_BIN"] * n) / np.arange(
                 1, n + 1
             )
 
@@ -2768,7 +2773,7 @@ class Analysis(Enrichment):
             go_out["parent_adj_pval_FISH-BH"][
                 go_out["parent_adj_pval_FISH-BH"] >= 1
             ] = 1
-            go_out["parent_pval_BIN-BH"][go_out["parent_pval_BIN-BH"] >= 1] = 1
+            go_out["parent_adj_pval_BIN-BH"][go_out["parent_adj_pval_BIN-BH"] >= 1] = 1
 
             # child adjustment
             go_out["child_adj_pval_BIN-BF"] = go_out["child_pval_BIN"] * len(
@@ -2784,7 +2789,7 @@ class Analysis(Enrichment):
 
             n = len(go_out["child_pval_BIN"])
 
-            go_out["child_pval_BIN-BH"] = (go_out["child_pval_BIN"] * n) / np.arange(
+            go_out["child_adj_pval_BIN-BH"] = (go_out["child_pval_BIN"] * n) / np.arange(
                 1, n + 1
             )
 
@@ -2795,7 +2800,7 @@ class Analysis(Enrichment):
             ) / np.arange(1, n + 1)
 
             go_out["child_adj_pval_FISH-BH"][go_out["child_adj_pval_FISH-BH"] >= 1] = 1
-            go_out["child_pval_BIN-BH"][go_out["child_pval_BIN-BH"] >= 1] = 1
+            go_out["child_adj_pval_BIN-BH"][go_out["child_adj_pval_BIN-BH"] >= 1] = 1
 
             conn.close()
 
@@ -2912,7 +2917,7 @@ class Analysis(Enrichment):
 
             n = len(kegg_out["2nd_pval_BIN"])
 
-            kegg_out["2nd_pval_BIN-BH"] = (kegg_out["2nd_pval_BIN"] * n) / np.arange(
+            kegg_out["2nd_adj_pval_BIN-BH"] = (kegg_out["2nd_pval_BIN"] * n) / np.arange(
                 1, n + 1
             )
 
@@ -2923,7 +2928,7 @@ class Analysis(Enrichment):
             ) / np.arange(1, n + 1)
 
             kegg_out["2nd_adj_pval_FISH-BH"][kegg_out["2nd_adj_pval_FISH-BH"] >= 1] = 1
-            kegg_out["2nd_pval_BIN-BH"][kegg_out["2nd_pval_BIN-BH"] >= 1] = 1
+            kegg_out["2nd_adj_pval_BIN-BH"][kegg_out["2nd_adj_pval_BIN-BH"] >= 1] = 1
 
             # 3rd adjustment
             kegg_out["3rd_adj_pval_BIN-BF"] = kegg_out["3rd_pval_BIN"] * len(
@@ -2939,7 +2944,7 @@ class Analysis(Enrichment):
 
             n = len(kegg_out["3rd_pval_BIN"])
 
-            kegg_out["3rd_pval_BIN-BH"] = (kegg_out["3rd_pval_BIN"] * n) / np.arange(
+            kegg_out["3rd_adj_pval_BIN-BH"] = (kegg_out["3rd_pval_BIN"] * n) / np.arange(
                 1, n + 1
             )
 
@@ -2950,7 +2955,7 @@ class Analysis(Enrichment):
             ) / np.arange(1, n + 1)
 
             kegg_out["3rd_adj_pval_FISH-BH"][kegg_out["3rd_adj_pval_FISH-BH"] >= 1] = 1
-            kegg_out["3rd_pval_BIN-BH"][kegg_out["3rd_pval_BIN-BH"] >= 1] = 1
+            kegg_out["3rd_adj_pval_BIN-BH"][kegg_out["3rd_adj_pval_BIN-BH"] >= 1] = 1
 
             conn.close()
 
@@ -3085,7 +3090,7 @@ class Analysis(Enrichment):
 
             n = len(reactome_out["top_level_pathway_pval_BIN"])
 
-            reactome_out["top_level_pathway_pval_BIN-BH"] = (
+            reactome_out["top_level_pathway_adj_pval_BIN-BH"] = (
                 reactome_out["top_level_pathway_pval_BIN"] * n
             ) / np.arange(1, n + 1)
 
@@ -3100,8 +3105,8 @@ class Analysis(Enrichment):
             reactome_out["top_level_pathway_adj_pval_FISH-BH"][
                 reactome_out["top_level_pathway_adj_pval_FISH-BH"] >= 1
             ] = 1
-            reactome_out["top_level_pathway_pval_BIN-BH"][
-                reactome_out["top_level_pathway_pval_BIN-BH"] >= 1
+            reactome_out["top_level_pathway_adj_pval_BIN-BH"][
+                reactome_out["top_level_pathway_adj_pval_BIN-BH"] >= 1
             ] = 1
 
             # pathway adjustment
@@ -3124,7 +3129,7 @@ class Analysis(Enrichment):
 
             n = len(reactome_out["pathway_pval_BIN"])
 
-            reactome_out["pathway_pval_BIN-BH"] = (
+            reactome_out["pathway_adj_pval_BIN-BH"] = (
                 reactome_out["pathway_pval_BIN"] * n
             ) / np.arange(1, n + 1)
 
@@ -3139,8 +3144,8 @@ class Analysis(Enrichment):
             reactome_out["pathway_adj_pval_FISH-BH"][
                 reactome_out["pathway_adj_pval_FISH-BH"] >= 1
             ] = 1
-            reactome_out["pathway_pval_BIN-BH"][
-                reactome_out["pathway_pval_BIN-BH"] >= 1
+            reactome_out["pathway_adj_pval_BIN-BH"][
+                reactome_out["pathway_adj_pval_BIN-BH"] >= 1
             ] = 1
 
             conn.close()
@@ -3223,7 +3228,7 @@ class Analysis(Enrichment):
 
             n = len(diseases_out["pval_BIN"])
 
-            diseases_out["pval_BIN-BH"] = (diseases_out["pval_BIN"] * n) / np.arange(
+            diseases_out["adj_pval_BIN-BH"] = (diseases_out["pval_BIN"] * n) / np.arange(
                 1, n + 1
             )
 
@@ -3234,7 +3239,7 @@ class Analysis(Enrichment):
             ) / np.arange(1, n + 1)
 
             diseases_out["adj_pval_FISH-BH"][diseases_out["adj_pval_FISH-BH"] >= 1] = 1
-            diseases_out["pval_BIN-BH"][diseases_out["pval_BIN-BH"] >= 1] = 1
+            diseases_out["adj_pval_BIN-BH"][diseases_out["adj_pval_BIN-BH"] >= 1] = 1
 
             conn.close()
 
@@ -3319,7 +3324,7 @@ class Analysis(Enrichment):
 
             n = len(vimic_out["pval_BIN"])
 
-            vimic_out["pval_BIN-BH"] = (vimic_out["pval_BIN"] * n) / np.arange(1, n + 1)
+            vimic_out["adj_pval_BIN-BH"] = (vimic_out["pval_BIN"] * n) / np.arange(1, n + 1)
 
             vimic_out = vimic_out.sort_values(by="pval_FISH", ascending=True)
 
@@ -3328,7 +3333,7 @@ class Analysis(Enrichment):
             )
 
             vimic_out["adj_pval_FISH-BH"][vimic_out["adj_pval_FISH-BH"] >= 1] = 1
-            vimic_out["pval_BIN-BH"][vimic_out["pval_BIN-BH"] >= 1] = 1
+            vimic_out["adj_pval_BIN-BH"][vimic_out["adj_pval_BIN-BH"] >= 1] = 1
 
             conn.close()
 
@@ -3424,7 +3429,7 @@ class Analysis(Enrichment):
 
                     n = len(tmp_out["pval_BIN"])
 
-                    tmp_out["pval_BIN-BH"] = (tmp_out["pval_BIN"] * n) / np.arange(
+                    tmp_out["adj_pval_BIN-BH"] = (tmp_out["pval_BIN"] * n) / np.arange(
                         1, n + 1
                     )
 
@@ -3435,7 +3440,7 @@ class Analysis(Enrichment):
                     ) / np.arange(1, n + 1)
 
                     tmp_out["adj_pval_FISH-BH"][tmp_out["adj_pval_FISH-BH"] >= 1] = 1
-                    tmp_out["pval_BIN-BH"][tmp_out["pval_BIN-BH"] >= 1] = 1
+                    tmp_out["adj_pval_BIN-BH"][tmp_out["adj_pval_BIN-BH"] >= 1] = 1
 
                     HPA_out[k] = tmp_out.to_dict(orient="list")
 
@@ -3559,7 +3564,7 @@ class Analysis(Enrichment):
             print(
                 "\nGene interaction analysis could not be performed due to missing STRING/IntAct information in the input data."
             )
-
+    
     def GO_network(self):
         """
         This method conducts an network analysis of GO-TERM data.
@@ -3582,7 +3587,8 @@ class Analysis(Enrichment):
                 "positively_regulates_ids": "brown",
             }
 
-            full_df = pd.DataFrame()
+            df_list = []
+            
             for i in [
                 "is_a_ids",
                 "part_of_ids",
@@ -3596,36 +3602,29 @@ class Analysis(Enrichment):
                 tmp.columns = ["parent", "children"]
                 tmp["color"] = relation_colors[i]
                 if len(tmp.index) > 0:
-                    full_df = pd.concat([full_df, tmp])
-
+                    df_list.append(tmp)
+            
+            full_df = pd.concat(df_list, ignore_index=True)
+            
+            del df_list
+            
             goh = pd.DataFrame(self.input_data["GO-TERM"]["gene_info"])
 
-            full_df = pd.merge(
-                full_df,
-                goh[["GO_id", "found_names"]],
-                left_on="parent",
-                right_on="GO_id",
-                how="left",
+            found_name_map = dict(
+                zip(goh["GO_id"], goh["found_names"])
             )
-            full_df.pop("GO_id")
-
-            full_df = pd.merge(
-                full_df,
-                goh[["GO_id", "found_names"]],
-                left_on="children",
-                right_on="GO_id",
-                how="left",
+            
+            full_df["found_names_x"] = full_df["parent"].map(found_name_map)
+            
+            full_df["found_names_y"] = full_df["children"].map(found_name_map)
+            
+            full_df["features"] = (
+                full_df["found_names_x"]
+                .combine(full_df["found_names_y"], lambda a, b: list({a, b}))
             )
-            full_df.pop("GO_id")
-
-            full_df = full_df.reset_index(drop=True)
-
-            full_df["features"] = full_df[["found_names_x", "found_names_y"]].apply(
-                lambda row: list(set(row)), axis=1
-            )
-
-            full_df.pop("found_names_x")
-            full_df.pop("found_names_y")
+            
+            # sprzątanie
+            full_df.drop(columns=["found_names_x", "found_names_y"], inplace=True)
 
             del goh
 
@@ -3636,20 +3635,22 @@ class Analysis(Enrichment):
             test_col = self.select_test(
                 self.network_stat["test"], self.network_stat["adj"]
             )
-
-            go_out_parent = go_out[
-                go_out[f"parent_{test_col}"] <= self.network_stat["p_val"]
-            ]
+            
+            if self.network_stat['parent_stat']:
+                go_out_parent = go_out[
+                    go_out[f"parent_{test_col}"] <= self.network_stat["p_val"]
+                ]
+            else:
+                go_out_parent = go_out
+                
             go_out_children = go_out[
                 go_out[f"child_{test_col}"] <= self.network_stat["p_val"]
             ]
 
-            full_names = list(set(go_out_parent["parent"])) + list(
-                set(go_out_children["child"])
-            )
-
-            full_df = full_df[full_df["parent"].isin(full_names)]
-            full_df = full_df[full_df["children"].isin(full_names)]
+            full_list = list(set(go_out_parent["parent"])) + list(set(go_out_children["child"]))
+            
+            full_df = full_df[full_df["parent"].isin(full_list)]
+            full_df = full_df[full_df["children"].isin(full_list)]
 
             gn = pd.DataFrame(self.input_data["GO-TERM"]["go_names"])
 
@@ -3661,7 +3662,7 @@ class Analysis(Enrichment):
 
         else:
             print("\nMissing GO information in the input data.")
-
+            
     def KEGG_network(self):
         """
         This method conducts an network analysis of KEGG data.
@@ -3690,9 +3691,11 @@ class Analysis(Enrichment):
             kegg_out = kegg_out[
                 kegg_out[f"3rd_{test_col}"] <= self.network_stat["p_val"]
             ]
-            kegg_out = kegg_out[
-                kegg_out[f"2nd_{test_col}"] <= self.network_stat["p_val"]
-            ]
+            
+            if self.network_stat['parent_stat']:
+                kegg_out = kegg_out[
+                    kegg_out[f"2nd_{test_col}"] <= self.network_stat["p_val"]
+                ]
 
             full_df = full_df[full_df["parent"].isin(kegg_out["2nd"])]
             full_df = full_df[full_df["children"].isin(kegg_out["3rd"])]
@@ -3728,11 +3731,13 @@ class Analysis(Enrichment):
             test_col = self.select_test(
                 self.network_stat["test"], self.network_stat["adj"]
             )
-
-            reactome_out = reactome_out[
-                reactome_out[f"top_level_pathway_{test_col}"]
-                <= self.network_stat["p_val"]
-            ]
+            
+            if self.network_stat['parent_stat']:
+                reactome_out = reactome_out[
+                    reactome_out[f"top_level_pathway_{test_col}"]
+                    <= self.network_stat["p_val"]
+                ]
+            
             reactome_out = reactome_out[
                 reactome_out[f"pathway_{test_col}"] <= self.network_stat["p_val"]
             ]
@@ -3796,36 +3801,35 @@ class Analysis(Enrichment):
 
         print("\nComplete!")
 
-    @property
     def get_full_results(self):
         """
         This method returns the full analysis dictionary containing on keys:
             * 'enrichment':
-                - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info` property]
-                - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA' property]
-                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG' property]
-                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM' property]
-                - 'REACTOME' - Reactome [see 'self.get_REACTOME' property]
-                - 'DISEASES' - Human Diseases [see 'self.get_DISEASES' property]
-                - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC' property]
-                - 'IntAct' - IntAct [see 'self.get_IntAct' property]
-                - 'STRING' - STRING [see 'self.get_STRING' property]
-                - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon' property]
-                - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ' property]
+                - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info`]
+                - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA']
+                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG']
+                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM']
+                - 'REACTOME' - Reactome [see 'self.get_REACTOME']
+                - 'DISEASES' - Human Diseases [see 'self.get_DISEASES']
+                - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC']
+                - 'IntAct' - IntAct [see 'self.get_IntAct']
+                - 'STRING' - STRING [see 'self.get_STRING']
+                - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon']
+                - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ']
 
              * 'statistics':
-                 - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_statistics' property]
-                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_statistics' property]
-                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_statistics' property]
-                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_statistics' property]
-                 - 'DISEASES' - Human Diseases [see 'self.get_DISEASE_statistics' property]
-                 - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC_statistics' property]
-                 - 'interactions' - STRING / IntAct [see 'self.get_features_interactions_statistics' property]
+                 - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_statistics']
+                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_statistics']
+                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_statistics']
+                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_statistics']
+                 - 'DISEASES' - Human Diseases [see 'self.get_DISEASE_statistics']
+                 - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC_statistics']
+                 - 'interactions' - STRING / IntAct [see 'self.get_features_interactions_statistics']
 
              * 'networks':
-                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_network' property]
-                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_network' property]
-                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_network' property]
+                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_network']
+                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_network']
+                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_network']
 
         Returns:
             dict (dict) - full analysis data
@@ -3839,52 +3843,52 @@ class Analysis(Enrichment):
         networks = {}
 
         try:
-            stats["KEGG"] = self.get_KEGG_statistics
+            stats["KEGG"] = self.get_KEGG_statistics()
         except:
             pass
 
         try:
-            stats["REACTOME"] = self.get_REACTOME_statistics
+            stats["REACTOME"] = self.get_REACTOME_statistics()
         except:
             pass
 
         try:
-            stats["GO-TERM"] = self.get_GO_statistics
+            stats["GO-TERM"] = self.get_GO_statistics()
         except:
             pass
 
         try:
-            stats["ViMIC"] = self.get_ViMIC_statistics
+            stats["ViMIC"] = self.get_ViMIC_statistics()
         except:
             pass
 
         try:
-            stats["DISEASES"] = self.get_DISEASE_statistics
+            stats["DISEASES"] = self.get_DISEASE_statistics()
         except:
             pass
 
         try:
-            stats["specificity"] = self.get_specificity_statistics
+            stats["specificity"] = self.get_specificity_statistics()
         except:
             pass
 
         try:
-            stats["interactions"] = self.get_features_interactions_statistics
+            stats["interactions"] = self.get_features_interactions_statistics()
         except:
             pass
 
         try:
-            networks["KEGG"] = self.get_KEGG_network
+            networks["KEGG"] = self.get_KEGG_network()
         except:
             pass
 
         try:
-            networks["REACTOME"] = self.get_REACTOME_network
+            networks["REACTOME"] = self.get_REACTOME_network()
         except:
             pass
 
         try:
-            networks["GO-TERM"] = self.get_GO_network
+            networks["GO-TERM"] = self.get_GO_network()
         except:
             pass
 
@@ -3909,6 +3913,7 @@ class Analysis(Enrichment):
         return full_results
 
 
+
 class Visualization:
     """
     The `Visualization` class provides tools for statistical and network analysis of `Analysis` class results obtained using the `self.get_full_results` method.
@@ -3922,8 +3927,30 @@ class Visualization:
 
         self.input_data = input_data
         self.show_plot = False
+        self.parent_stats = False
 
         super().__init__()
+        
+             
+    def set_parent_stats(self, stats):
+        """
+        This method sets the parent statistical test value used for graph creation.
+
+            Avaiable values:
+                - True - use test p-value for drop non-significient parents 
+                - False - not use test p-value for drop non-significient parents 
+
+            Args:
+                test (bool) - bool value [True/False]
+        """
+
+        if stats in [True, False]:
+            self.parent_stats = stats
+
+        else:
+
+            raise ValueError("\nStats should be included in True or False")
+
 
     def select_test(self, test, adj):
         try:
@@ -4306,7 +4333,8 @@ class Visualization:
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"child_{test_string}"] <= p_val]
         tmp_in[f"child_{test_string}"] = (
             tmp_in[f"child_{test_string}"]
@@ -4457,7 +4485,8 @@ class Visualization:
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"3rd_{test_string}"] <= p_val]
         tmp_in[f"3rd_{test_string}"] = (
             tmp_in[f"3rd_{test_string}"]
@@ -4607,7 +4636,8 @@ class Visualization:
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"pathway_{test_string}"] <= p_val]
         tmp_in[f"pathway_{test_string}"] = (
             tmp_in[f"pathway_{test_string}"]
@@ -5885,6 +5915,8 @@ class Visualization:
         return return_dict
 
 
+
+
 class DSA(PathMetadata):
     """
     The 'DSA' class performs Differential Set Analysis by taking the results from two independent feature lists (e.g., upregulated and downregulated genes).
@@ -5900,6 +5932,20 @@ class DSA(PathMetadata):
     def __init__(self, set_1: dict, set_2: dict):
 
         super().__init__()
+        
+        def merge_dict_values(d1, d2):
+            out = d1.copy()
+            for k, v in d2.items():
+                if k in out:
+                    if isinstance(out[k], dict) and isinstance(v, dict):
+                        out[k] = merge_dict_values(out[k], v)
+                    elif isinstance(out[k], list) and isinstance(v, list):
+                        out[k] = out[k] + v
+                    else:
+                        out[k] = v
+                else:
+                    out[k] = v
+            return out
 
         self.set_1 = set_1
         self.set_2 = set_2
@@ -5952,7 +5998,7 @@ class DSA(PathMetadata):
                 "The 'self.interaction_source' attribute used for analysis differed between set_1 and set_2."
             )
 
-        self.min_fc = 1.5
+        self.min_fc = 1.25
         self.s1_genes = len(self.set_1["enrichment"]["gene_info"]["sid"])
         self.s2_genes = len(self.set_2["enrichment"]["gene_info"]["sid"])
         self.GO = None
@@ -5968,6 +6014,74 @@ class DSA(PathMetadata):
         self.inter_terms = None
         self.lr_con_set1_set2 = None
         self.lr_con_set2_set1 = None
+        
+        print('Enrichment process...')
+        
+        def merge_dict_values(d1, d2):
+            out = d1.copy()
+            for k, v in d2.items():
+                if k in out:
+                    if isinstance(out[k], dict) and isinstance(v, dict):
+                        out[k] = merge_dict_values(out[k], v)
+                    elif isinstance(out[k], list) and isinstance(v, list):
+                        out[k] = out[k] + v
+                    else:
+                        out[k] = v
+                else:
+                    out[k] = v
+            return out
+
+        res = merge_dict_values(self.set_1['enrichment'], self.set_2['enrichment'])
+        
+
+        print('Calculation process...')
+
+        ans = Analysis(res)
+        
+        del res
+
+        ans.network_stat = self.set_1["statistics"]["setup"]["network_stat"]
+
+        ans.go_grade = self.set_1["statistics"]["setup"]["go_grade"]
+
+        ans.interaction_strength = self.set_1["statistics"]["setup"][
+            "interaction_strength"
+        ]
+
+        ans.interaction_source = self.set_1["statistics"]["setup"]["interaction_source"]
+
+        if 'REACTOME' in self.set_1['statistics'].keys():
+            ans.REACTOME_overrepresentation()
+            self.REACTOME_over = ans.get_REACTOME_statistics()
+            ans.REACTOME_network()
+            self.REACTOME_net = pd.DataFrame(ans.get_REACTOME_network())
+
+        if 'KEGG' in self.set_1['statistics'].keys():
+            ans.KEGG_overrepresentation()
+            self.KEGG_over = ans.get_KEGG_statistics()
+            ans.KEGG_network()
+            self.KEGG_net = pd.DataFrame(ans.get_KEGG_network())
+
+        if 'GO-TERM' in self.set_1['statistics'].keys():
+            ans.GO_overrepresentation()
+            self.GO_over = ans.get_GO_statistics()
+            ans.GO_network()
+            self.GO_net = pd.DataFrame(ans.get_GO_network())
+            
+        ans.features_specificity()
+        self.spec_over = ans.get_specificity_statistics()
+        
+        ans.gene_interaction()
+        self.features_interactions_statistics = pd.DataFrame(ans.get_features_interactions_statistics())
+        
+        print('Calculating intersections...')
+
+        self.inter_processes()
+        
+        del ans
+
+
+
 
     def deserialize_data(self, value):
         try:
@@ -6009,7 +6123,6 @@ class DSA(PathMetadata):
         else:
             self.min_fc = fc
 
-    @property
     def get_set_to_set_con(self):
         """
         This method returns the CellTalk/CellPhone (CellConnecctions) Differential Set Analysis (DSA)
@@ -6023,8 +6136,130 @@ class DSA(PathMetadata):
         cell_con["set2->set1"] = self.lr_con_set2_set1
 
         return cell_con
+    
+    def get_full_GO(self):
+        
+        """
+        This method returns the concatenated GO-TERM data from set1 and set2.
+        
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['GO-TERM']` and
+            `self.set_2['statistics']['GO-TERM']`.
+        """
+        
+        t1 = pd.DataFrame(self.set_1['statistics']['GO-TERM'])
+        t1['set'] = 's1'
+        t2 = pd.DataFrame(self.set_2['statistics']['GO-TERM'])
+        t2['set'] = 's2'
+        
+        df = pd.concat([t1,t2]).reset_index(drop = True)
+       
+        return df
+        
 
-    @property
+    def get_full_KEGG(self):
+        
+        """
+        This method returns the concatenated KEGG data from set1 and set2.
+        
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['KEGG']` and
+            `self.set_2['statistics']['KEGG']`.
+        """
+        
+        t1 = pd.DataFrame(self.set_1['statistics']['KEGG'])
+        t1['set'] = 's1'
+        t2 = pd.DataFrame(self.set_2['statistics']['KEGG'])
+        t2['set'] = 's2'
+        
+        df = pd.concat([t1,t2]).reset_index(drop = True)
+        
+        return t2
+
+
+    def get_full_REACTOME(self):
+        
+        """
+        This method returns the concatenated REACTOME data from set1 and set2.
+        
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['REACTOME']` and
+            `self.set_2['statistics']['REACTOME']`.
+        """
+        
+        t1 = pd.DataFrame(self.set_1['statistics']['REACTOME'])
+        t1['set'] = 's1'
+        t2 = pd.DataFrame(self.set_2['statistics']['REACTOME'])
+        t2['set'] = 's2'
+        
+        df = pd.concat([t1,t2]).reset_index(drop = True)
+        
+        return t2
+        
+
+    def get_full_DISEASES(self):
+        
+        """
+        This method returns the concatenated human disease data from set1 and set2.
+        
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['DISEASES']` and
+            `self.set_2['statistics']['DISEASES']`.
+        """
+        
+        t1 = pd.DataFrame(self.set_1['statistics']['DISEASES'])
+        t1['set'] = 's1'
+        t2 = pd.DataFrame(self.set_2['statistics']['DISEASES'])
+        t2['set'] = 's2'
+        
+        df = pd.concat([t1,t2]).reset_index(drop = True)
+        
+        return t2
+
+    def get_full_ViMIC(self):
+        
+        """
+        This method returns the concatenated ViMic viral data from set1 and set2.
+        
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['ViMIC']` and
+            `self.set_2['statistics']['ViMIC']`.
+        """
+        
+        t1 = pd.DataFrame(self.set_1['statistics']['ViMIC'])
+        t1['set'] = 's1'
+        t2 = pd.DataFrame(self.set_2['statistics']['ViMIC'])
+        t2['set'] = 's2'
+        
+        df = pd.concat([t1,t2]).reset_index(drop = True)
+        
+        return t2
+        
+    def get_full_SPECIFICITY(self):
+        
+        """
+        This method returns the concatenated HPA specificity data from set1 and set2.
+        
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['specificity']` and
+            `self.set_2['statistics']['specificity']`.
+        """
+        
+        t1 = pd.DataFrame(self.set_1['statistics']['specificity'])
+        t1['set'] = 's1'
+        t2 = pd.DataFrame(self.set_2['statistics']['specificity'])
+        t2['set'] = 's2'
+        
+        df = pd.concat([t1,t2]).reset_index(drop = True)
+        
+        return t2
+    
     def get_GO_diff(self):
         """
         This method returns the GO-TERM Differential Set Analysis (DSA)
@@ -6035,7 +6270,6 @@ class DSA(PathMetadata):
 
         return self.GO.to_dict(orient="list")
 
-    @property
     def get_KEGG_diff(self):
         """
         This method returns the KEGG Differential Set Analysis (DSA)
@@ -6046,7 +6280,6 @@ class DSA(PathMetadata):
 
         return self.KEGG.to_dict(orient="list")
 
-    @property
     def get_REACTOME_diff(self):
         """
         This method returns the Reactome Differential Set Analysis (DSA)
@@ -6057,7 +6290,6 @@ class DSA(PathMetadata):
 
         return self.REACTOME.to_dict(orient="list")
 
-    @property
     def get_specificity_diff(self):
         """
         This method returns the specificity (HPA) Differential Set Analysis (DSA)
@@ -6068,7 +6300,6 @@ class DSA(PathMetadata):
 
         return self.specificity.to_dict(orient="list")
 
-    @property
     def get_GI_diff(self):
         """
         This method returns the Genes Interactions (GI) Differential Set Analysis (DSA)
@@ -6079,7 +6310,6 @@ class DSA(PathMetadata):
 
         return self.GI.to_dict(orient="list")
 
-    @property
     def get_networks_diff(self):
         """
         This method returns the network Differential Set Analysis (DSA)
@@ -6090,7 +6320,6 @@ class DSA(PathMetadata):
 
         return self.networks
 
-    @property
     def get_inter_terms(self):
         """
         This method returns the Inter Terms analysis results.
@@ -6140,7 +6369,78 @@ class DSA(PathMetadata):
 
         s1_tmp = pd.DataFrame(self.set_1["statistics"][sets])
         s2_tmp = pd.DataFrame(self.set_2["statistics"][sets])
+        
+        #######################################################################
+        
+        set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
+        set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
+                                  
+                                  
+        inter_tmp = pd.DataFrame(self.inter_terms[sets])
+        
+        inter_tmp = inter_tmp.explode('child_genes')
+        inter_tmp = inter_tmp.explode('parent_genes')
+        
+        
+        inter_tmp['set_parent'] = None
+        inter_tmp['set_children'] = None
+        
+        inter_tmp.loc[inter_tmp['child_genes'].isin(set_1_list), 'set_children'] = 'set1'
+        inter_tmp.loc[inter_tmp['child_genes'].isin(set_2_list), 'set_children'] = 'set2'
 
+        
+        inter_tmp.loc[inter_tmp['parent_genes'].isin(set_1_list), 'set_parent'] = 'set1'
+        inter_tmp.loc[inter_tmp['parent_genes'].isin(set_2_list), 'set_parent'] = 'set2'
+        
+
+        group_cols = ['parent_name', 'child_name', 'set']
+
+        agg_dict = {
+            'child_genes': lambda x: list(set(x)),
+            'parent_genes': lambda x: list(set(x)),
+            'set_parent': lambda x: list(set(x)),
+            'set_children': lambda x: list(set(x)),
+            **{
+                col: 'first'
+                for col in inter_tmp.columns
+                if col not in group_cols + ['child_genes', 'parent_genes', 'set_parent', 'set_children']
+            }
+        }
+        
+        inter_tmp = (
+            inter_tmp
+            .groupby(group_cols, as_index=False)
+            .agg(agg_dict)
+        )
+        
+        inter_tmp['set'] = inter_tmp['set_parent'] + inter_tmp['set_children']
+        inter_tmp['set'] = [list(set(x)) for x in inter_tmp['set']]
+        inter_tmp = inter_tmp.explode('set_children')
+        
+        inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+        
+        if len(inter_tmp) > 0:
+
+            s1_tmp = (
+                pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
+                  .reset_index(drop=True)
+            )
+            
+            s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+                
+            s2_tmp = (
+                pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
+                  .reset_index(drop=True)
+            )
+            
+            s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+
+            
+            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient='list')
+            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient='list')
+        
+        #######################################################################
+        
         term = []
         norm_n = []
 
@@ -6189,7 +6489,7 @@ class DSA(PathMetadata):
                 elif fc_value <= 1 / self.min_fc:
                     decision = "s2"
                 else:
-                    decision = "equal"
+                    decision = "inter"
             elif g in terms_s1:
                 fc_value = norm_s1[g] / min_value
                 decision = "s1"
@@ -6257,7 +6557,7 @@ class DSA(PathMetadata):
                 elif fc_value <= 1 / self.min_fc:
                     decision = "s2"
                 else:
-                    decision = "equal"
+                    decision = "inter"
             elif g in terms_s1:
                 fc_value = norm_s1[g] / min_value
                 decision = "s1"
@@ -6315,6 +6615,77 @@ class DSA(PathMetadata):
 
         s1_tmp = pd.DataFrame(self.set_1["statistics"][sets])
         s2_tmp = pd.DataFrame(self.set_2["statistics"][sets])
+        
+        
+        #######################################################################
+        
+        set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
+        set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
+                                  
+                                  
+        inter_tmp = pd.DataFrame(self.inter_terms[sets])
+        
+        inter_tmp = inter_tmp.explode('3rd_genes')
+        inter_tmp = inter_tmp.explode('2nd_genes')
+        
+        
+        inter_tmp['set_parent'] = None
+        inter_tmp['set_children'] = None
+        
+        inter_tmp.loc[inter_tmp['3rd_genes'].isin(set_1_list), 'set_children'] = 'set1'
+        inter_tmp.loc[inter_tmp['3rd_genes'].isin(set_2_list), 'set_children'] = 'set2'
+
+        
+        inter_tmp.loc[inter_tmp['2nd_genes'].isin(set_1_list), 'set_parent'] = 'set1'
+        inter_tmp.loc[inter_tmp['2nd_genes'].isin(set_2_list), 'set_parent'] = 'set2'
+        
+
+        group_cols = ['2nd', '3rd', 'set']
+
+        agg_dict = {
+            '3rd_genes': lambda x: list(set(x)),
+            '2nd_genes': lambda x: list(set(x)),
+            'set_parent': lambda x: list(set(x)),
+            'set_children': lambda x: list(set(x)),
+            **{
+                col: 'first'
+                for col in inter_tmp.columns
+                if col not in group_cols + ['3rd_genes', '2nd_genes', 'set_parent', 'set_children']
+            }
+        }
+        
+        inter_tmp = (
+            inter_tmp
+            .groupby(group_cols, as_index=False)
+            .agg(agg_dict)
+        )
+        
+        inter_tmp['set'] = inter_tmp['set_parent'] + inter_tmp['set_children']
+        inter_tmp['set'] = [list(set(x)) for x in inter_tmp['set']]
+        inter_tmp = inter_tmp.explode('set_children')
+        
+        inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+
+        if len(inter_tmp) > 0:
+            
+            s1_tmp = (
+                pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
+                  .reset_index(drop=True)
+            )
+            
+            s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+                
+            s2_tmp = (
+                pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
+                  .reset_index(drop=True)
+            )
+            
+            s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+            
+            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient='list')
+            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient='list')
+        
+        #######################################################################
 
         term = []
         norm_n = []
@@ -6364,7 +6735,7 @@ class DSA(PathMetadata):
                 elif fc_value <= 1 / self.min_fc:
                     decision = "s2"
                 else:
-                    decision = "equal"
+                    decision = "inter"
             elif g in terms_s1:
                 fc_value = norm_s1[g] / min_value
                 decision = "s1"
@@ -6432,7 +6803,7 @@ class DSA(PathMetadata):
                 elif fc_value <= 1 / self.min_fc:
                     decision = "s2"
                 else:
-                    decision = "equal"
+                    decision = "inter"
             elif g in terms_s1:
                 fc_value = norm_s1[g] / min_value
                 decision = "s1"
@@ -6490,6 +6861,78 @@ class DSA(PathMetadata):
 
         s1_tmp = pd.DataFrame(self.set_1["statistics"][sets])
         s2_tmp = pd.DataFrame(self.set_2["statistics"][sets])
+        
+        
+        #######################################################################
+        
+        set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
+        set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
+                                  
+                                  
+        inter_tmp = pd.DataFrame(self.inter_terms[sets])
+        
+        inter_tmp = inter_tmp.explode('pathway')
+        inter_tmp = inter_tmp.explode('top_level_pathway')
+        
+        
+        inter_tmp['set_parent'] = None
+        inter_tmp['set_children'] = None
+        
+        inter_tmp.loc[inter_tmp['pathway_genes'].isin(set_1_list), 'set_children'] = 'set1'
+        inter_tmp.loc[inter_tmp['pathway_genes'].isin(set_2_list), 'set_children'] = 'set2'
+
+        
+        inter_tmp.loc[inter_tmp['top_level_pathway_genes'].isin(set_1_list), 'set_parent'] = 'set1'
+        inter_tmp.loc[inter_tmp['top_level_pathway_genes'].isin(set_2_list), 'set_parent'] = 'set2'
+        
+
+        group_cols = ['pathway', 'top_level_pathway', 'set']
+
+        agg_dict = {
+            'pathway_genes': lambda x: list(set(x)),
+            'top_level_pathway_genes': lambda x: list(set(x)),
+            'set_parent': lambda x: list(set(x)),
+            'set_children': lambda x: list(set(x)),
+            **{
+                col: 'first'
+                for col in inter_tmp.columns
+                if col not in group_cols + ['pathway_genes', 'top_level_pathway_genes', 'set_parent', 'set_children']
+            }
+        }
+        
+        inter_tmp = (
+            inter_tmp
+            .groupby(group_cols, as_index=False)
+            .agg(agg_dict)
+        )
+        
+        inter_tmp['set'] = inter_tmp['set_parent'] + inter_tmp['set_children']
+        inter_tmp['set'] = [list(set(x)) for x in inter_tmp['set']]
+        inter_tmp = inter_tmp.explode('set_children')
+        
+        inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+
+        if len(inter_tmp) > 0:
+            
+            s1_tmp = (
+                pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
+                  .reset_index(drop=True)
+            )
+            
+            s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+                
+            s2_tmp = (
+                pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
+                  .reset_index(drop=True)
+            )
+            
+            s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+            
+            self.set_1["statistics"][sets] = s1_tmp.to_dict(orient='list')
+            self.set_2["statistics"][sets] = s2_tmp.to_dict(orient='list')
+        
+        #######################################################################
+        
 
         term = []
         norm_n = []
@@ -6539,7 +6982,7 @@ class DSA(PathMetadata):
                 elif fc_value <= 1 / self.min_fc:
                     decision = "s2"
                 else:
-                    decision = "equal"
+                    decision = "inter"
             elif g in terms_s1:
                 fc_value = norm_s1[g] / min_value
                 decision = "s1"
@@ -6603,11 +7046,11 @@ class DSA(PathMetadata):
             if g in terms_s1 and g in terms_s2:
                 fc_value = norm_s1[g] / norm_s2[g]
                 if fc_value >= self.min_fc:
-                    decision = "s1"
+                    decision = "self"
                 elif fc_value <= 1 / self.min_fc:
                     decision = "s2"
                 else:
-                    decision = "equal"
+                    decision = "inter"
             elif g in terms_s1:
                 fc_value = norm_s1[g] / min_value
                 decision = "s1"
@@ -6665,6 +7108,66 @@ class DSA(PathMetadata):
         for k in key_list:
             s1_tmp = pd.DataFrame(self.set_1["statistics"][sets][k])
             s2_tmp = pd.DataFrame(self.set_2["statistics"][sets][k])
+            
+            
+            #######################################################################
+            
+            set_1_list = self.set_1["enrichment"]["gene_info"]['found_names']
+            set_2_list = self.set_2["enrichment"]["gene_info"]['found_names']
+                                      
+                                      
+            inter_tmp = pd.DataFrame(self.inter_terms[sets][k])
+            
+            inter_tmp = inter_tmp.explode('specificity')
+            
+            
+            inter_tmp.loc[inter_tmp['genes'].isin(set_1_list), 'set'] = 'set1'
+            inter_tmp.loc[inter_tmp['genes'].isin(set_2_list), 'set'] = 'set2'
+
+
+            group_cols = ['specificity', 'set']
+
+            agg_dict = {
+                'genes': lambda x: list(set(x)),
+                'set': lambda x: list(set(x)),
+                **{
+                    col: 'first'
+                    for col in inter_tmp.columns
+                    if col not in group_cols + ['specificity', 'set']
+                }
+            }
+            
+            inter_tmp = (
+                inter_tmp
+                .groupby(group_cols, as_index=False)
+                .agg(agg_dict)
+            )
+            
+  
+            inter_tmp = inter_tmp.explode('set')
+            
+            inter_tmp = inter_tmp[inter_tmp['set'].apply(lambda x: isinstance(x, (list, set)) and len(x) > 1)]
+
+            if len(inter_tmp) > 0:
+                
+                s1_tmp = (
+                    pd.concat([s1_tmp, inter_tmp[inter_tmp['set_children'] == 'set1']])
+                      .reset_index(drop=True)
+                )
+                
+                s1_tmp = s1_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+                    
+                s2_tmp = (
+                    pd.concat([s2_tmp, inter_tmp[inter_tmp['set_children'] == 'set2']])
+                      .reset_index(drop=True)
+                )
+                
+                s2_tmp = s2_tmp.drop(columns=['set_children', 'set_parent', 'set'])
+                
+                self.set_1["statistics"][sets][k] = s1_tmp.to_dict(orient='list')
+                self.set_2["statistics"][sets][k] = s2_tmp.to_dict(orient='list')
+            
+            #######################################################################
 
             term = []
             norm_n = []
@@ -6714,7 +7217,7 @@ class DSA(PathMetadata):
                     elif fc_value <= 1 / self.min_fc:
                         decision = "s2"
                     else:
-                        decision = "equal"
+                        decision = "inter"
                 elif g in terms_s1:
                     fc_value = norm_s1[g] / min_value
                     decision = "s1"
@@ -6745,42 +7248,8 @@ class DSA(PathMetadata):
             To retrieve the results, use the `self.get_GI_diff` method.
         """
 
-        enr = Enrichment()
 
-        enr.species_genes = self.set_1["enrichment"]["species"]["species_genes"]
-
-        enr.species_study = self.set_1["enrichment"]["species"]["species_study"]
-
-        enr.genome = pd.concat(
-            [
-                pd.DataFrame(self.set_1["enrichment"]["gene_info"]),
-                pd.DataFrame(self.set_2["enrichment"]["gene_info"]),
-            ]
-        )
-
-        enr.enriche_IntAct()
-
-        enr.enriche_STRING()
-
-        res = enr.get_results
-
-        del enr
-
-        ans = Analysis(res)
-
-        ans.network_stat = self.set_1["statistics"]["setup"]["network_stat"]
-
-        ans.go_grade = self.set_1["statistics"]["setup"]["go_grade"]
-
-        ans.interaction_strength = self.set_1["statistics"]["setup"][
-            "interaction_strength"
-        ]
-
-        ans.interaction_source = self.set_1["statistics"]["setup"]["interaction_source"]
-
-        ans.gene_interaction()
-
-        full_ans = pd.DataFrame(ans.get_features_interactions_statistics)
+        full_ans = pd.DataFrame(self.features_interactions_statistics)
 
         s1_ans = pd.DataFrame(self.set_1["statistics"]["interactions"])
         s2_ans = pd.DataFrame(self.set_2["statistics"]["interactions"])
@@ -6797,6 +7266,7 @@ class DSA(PathMetadata):
         ] = "s2"
 
         self.GI = full_ans
+        
 
     def network_diff(self):
         """
@@ -6812,56 +7282,7 @@ class DSA(PathMetadata):
 
         networks = {}
 
-        enr = Enrichment()
-
-        enr.species_genes = self.set_1["enrichment"]["species"]["species_genes"]
-
-        enr.species_study = self.set_1["enrichment"]["species"]["species_study"]
-
-        enr.genome = pd.concat(
-            [
-                pd.DataFrame(self.set_1["enrichment"]["gene_info"]),
-                pd.DataFrame(self.set_2["enrichment"]["gene_info"]),
-            ]
-        )
-
-        enr.enriche_GOTERM()
-
-        enr.enriche_KEGG()
-
-        enr.enriche_REACTOME()
-
-        enr.enriche_specificiti()
-
-        res = enr.get_results
-
-        del enr
-
-        ans = Analysis(res)
-
-        ans.network_stat = self.set_1["statistics"]["setup"]["network_stat"]
-
-        ans.go_grade = self.set_1["statistics"]["setup"]["go_grade"]
-
-        ans.interaction_strength = self.set_1["statistics"]["setup"][
-            "interaction_strength"
-        ]
-
-        ans.interaction_source = self.set_1["statistics"]["setup"]["interaction_source"]
-
-        ans.REACTOME_overrepresentation()
-        self.REACTOME_over = ans.get_REACTOME_statistics
-        ans.REACTOME_network()
-
-        ans.KEGG_overrepresentation()
-        self.KEGG_over = ans.get_KEGG_statistics
-        ans.KEGG_network()
-
-        ans.GO_overrepresentation()
-        self.GO_over = ans.get_GO_statistics
-        ans.GO_network()
-
-        kn = pd.DataFrame(ans.get_KEGG_network)
+        kn = pd.DataFrame(self.KEGG_net)
 
         s1_ans = pd.DataFrame(self.set_1["networks"]["KEGG"])
         s2_ans = pd.DataFrame(self.set_2["networks"]["KEGG"])
@@ -6876,10 +7297,29 @@ class DSA(PathMetadata):
             kn["parent"].isin(list(s2_ans["parent"]))
             & kn["children"].isin(list(s2_ans["children"]))
         ] = "s2"
+        
+        s1_ans = s1_ans[
+            ~s1_ans["parent"].isin(list(kn["parent"]))
+            & ~s1_ans["children"].isin(list(kn["children"]))
+        ] 
+        
+        s1_ans['set'] = 's1'
+        
+        s2_ans = s2_ans[
+            ~s2_ans["parent"].isin(list(kn["parent"]))
+            & ~s2_ans["children"].isin(list(kn["children"]))
+        ] 
+        
+        s2_ans['set'] = 's2'
+        
+        kn = pd.concat([kn,s1_ans, s2_ans])
 
+
+    
         networks["KEGG"] = kn.to_dict(orient="list")
 
-        kn = pd.DataFrame(ans.get_REACTOME_network)
+        kn = pd.DataFrame(self.REACTOME_net)
+
 
         s1_ans = pd.DataFrame(self.set_1["networks"]["REACTOME"])
         s2_ans = pd.DataFrame(self.set_2["networks"]["REACTOME"])
@@ -6894,10 +7334,26 @@ class DSA(PathMetadata):
             kn["parent"].isin(list(s2_ans["parent"]))
             & kn["children"].isin(list(s2_ans["children"]))
         ] = "s2"
-
+        
+        s1_ans = s1_ans[
+            ~s1_ans["parent"].isin(list(kn["parent"]))
+            & ~s1_ans["children"].isin(list(kn["children"]))
+        ] 
+        
+        s1_ans['set'] = 's1'
+        
+        s2_ans = s2_ans[
+            ~s2_ans["parent"].isin(list(kn["parent"]))
+            & ~s2_ans["children"].isin(list(kn["children"]))
+        ] 
+        
+        s2_ans['set'] = 's2'
+        
+        kn = pd.concat([kn,s1_ans, s2_ans])
+        
         networks["REACTOME"] = kn.to_dict(orient="list")
 
-        kn = pd.DataFrame(ans.get_GO_network)
+        kn = pd.DataFrame(self.GO_net)
 
         s1_ans = pd.DataFrame(self.set_1["networks"]["GO-TERM"])
         s2_ans = pd.DataFrame(self.set_2["networks"]["GO-TERM"])
@@ -6912,13 +7368,24 @@ class DSA(PathMetadata):
             kn["parent"].isin(list(s2_ans["parent"]))
             & kn["children"].isin(list(s2_ans["children"]))
         ] = "s2"
-
+        
+        s1_ans = s1_ans[
+            ~s1_ans["parent"].isin(list(kn["parent"]))
+            & ~s1_ans["children"].isin(list(kn["children"]))
+        ] 
+        
+        s1_ans['set'] = 's1'
+        
+        s2_ans = s2_ans[
+            ~s2_ans["parent"].isin(list(kn["parent"]))
+            & ~s2_ans["children"].isin(list(kn["children"]))
+        ] 
+        
+        s2_ans['set'] = 's2'
+        
+        kn = pd.concat([kn,s1_ans, s2_ans])
+        
         networks["GO-TERM"] = kn.to_dict(orient="list")
-
-        # specificity
-
-        ans.features_specificity()
-        self.spec_over = ans.get_specificity_statistics
 
         self.networks = networks
 
@@ -7201,13 +7668,11 @@ class DSA(PathMetadata):
 
         print("\nInter Terms (IT) searching...")
 
-        self.inter_processes()
 
         print("\nInter CellConnections (ICC) searching...")
 
         self.connections_diff()
 
-    @property
     def get_results(self):
         """
         This method returns the full analysis dictionary containing on keys:
@@ -7238,21 +7703,21 @@ class DSA(PathMetadata):
 
         results["regulations"] = {}
 
-        results["regulations"]["GO-TERM"] = self.get_GO_diff
+        results["regulations"]["GO-TERM"] = self.get_GO_diff()
 
-        results["regulations"]["KEGG"] = self.get_KEGG_diff
+        results["regulations"]["KEGG"] = self.get_KEGG_diff()
 
-        results["regulations"]["REACTOME"] = self.get_REACTOME_diff
+        results["regulations"]["REACTOME"] = self.get_REACTOME_diff()
 
-        results["regulations"]["specificity"] = self.get_specificity_diff
+        results["regulations"]["specificity"] = self.get_specificity_diff()
 
-        results["GI"] = self.get_GI_diff
+        results["GI"] = self.get_GI_diff()
 
-        results["networks"] = self.get_networks_diff
+        results["networks"] = self.get_networks_diff()
 
-        results["inter_terms"] = self.get_inter_terms
+        results["inter_terms"] = self.get_inter_terms()
 
-        results["inter_cell_conections"] = self.get_set_to_set_con
+        results["inter_cell_conections"] = self.get_set_to_set_con()
 
         return results
 
@@ -7263,6 +7728,8 @@ class VisualizationDES(Visualization):
 
         self.input_data = input_data
         self.show_plot = False
+        self.parent_stats = False
+
 
     ###########################################################################
     # Single set analysis visualization
@@ -7442,7 +7909,10 @@ class VisualizationDES(Visualization):
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data[f"set_{set_num}"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
+        
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
+            
         tmp_in = tmp_in[tmp_in[f"child_{test_string}"] <= p_val]
         tmp_in[f"child_{test_string}"] = (
             tmp_in[f"child_{test_string}"]
@@ -7578,7 +8048,8 @@ class VisualizationDES(Visualization):
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data[f"set_{set_num}"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"3rd_{test_string}"] <= p_val]
         tmp_in[f"3rd_{test_string}"] = (
             tmp_in[f"3rd_{test_string}"]
@@ -7726,7 +8197,8 @@ class VisualizationDES(Visualization):
         test_string = self.select_test(test, adj)
 
         tmp_in = pd.DataFrame(self.input_data[f"set_{set_num}"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"pathway_{test_string}"] <= p_val]
         tmp_in[f"pathway_{test_string}"] = (
             tmp_in[f"pathway_{test_string}"]
@@ -9385,7 +9857,8 @@ class VisualizationDES(Visualization):
         # set1
 
         tmp_in = pd.DataFrame(self.input_data["set_1"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"child_{test_string}"] <= p_val]
         tmp_in[f"child_{test_string}"] = (
             tmp_in[f"child_{test_string}"]
@@ -9427,7 +9900,8 @@ class VisualizationDES(Visualization):
         # set2
 
         tmp_in = pd.DataFrame(self.input_data["set_2"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"parent_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"child_{test_string}"] <= p_val]
         tmp_in[f"child_{test_string}"] = (
             tmp_in[f"child_{test_string}"]
@@ -9548,7 +10022,8 @@ class VisualizationDES(Visualization):
         # set1
 
         tmp_in = pd.DataFrame(self.input_data["set_1"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"3rd_{test_string}"] <= p_val]
         tmp_in[f"3rd_{test_string}"] = (
             tmp_in[f"3rd_{test_string}"]
@@ -9586,7 +10061,8 @@ class VisualizationDES(Visualization):
         # set2
 
         tmp_in = pd.DataFrame(self.input_data["set_2"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"2nd_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"3rd_{test_string}"] <= p_val]
         tmp_in[f"3rd_{test_string}"] = (
             tmp_in[f"3rd_{test_string}"]
@@ -9699,7 +10175,8 @@ class VisualizationDES(Visualization):
         # set1
 
         tmp_in = pd.DataFrame(self.input_data["set_1"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"pathway_{test_string}"] <= p_val]
         tmp_in[f"pathway_{test_string}"] = (
             tmp_in[f"pathway_{test_string}"]
@@ -9741,7 +10218,8 @@ class VisualizationDES(Visualization):
         # set2
 
         tmp_in = pd.DataFrame(self.input_data["set_2"]["statistics"][sets])
-        tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
+        if self.parent_stats:
+            tmp_in = tmp_in[tmp_in[f"top_level_pathway_{test_string}"] <= p_val]
         tmp_in = tmp_in[tmp_in[f"pathway_{test_string}"] <= p_val]
         tmp_in[f"pathway_{test_string}"] = (
             tmp_in[f"pathway_{test_string}"]
@@ -11058,3 +11536,124 @@ class VisualizationDES(Visualization):
             plt.close(fig)
 
         return fig
+
+
+
+def enrichment_heatmap(data:pd.DataFrame, 
+                       stat_col:str, 
+                       term_col:str,
+                       set_col:str,
+                       sets:dict | list,
+                       title:str = '',
+                       fig_size:tuple = (8,10),
+                       font_size = 14,
+                       scale:bool = False):
+    
+    """
+    This method generates a pie chart visualizing the distribution of gene types based on enrichment data.
+
+    Args:
+        cmap (str) - colormap used for the pie chart. Default is 'summer'
+        image_width (int) - width of the plot in inches. Default is 6
+        image_high (int) - height of the plot in inches. Default is 6
+        font_size (int) - font size. Default is 15
+
+    Returns:
+        fig (matplotlib.figure.Figure) - figure object containing a pie chart that visualizes the distribution of gene type occurrences as percentages
+    """
+    
+
+    """
+    This method generates a heatmap showing statistical significance (e.g., -log10(p-value)) 
+    for different terms/pathways across multiple sets.
+
+    Args:
+        data : pd.DataFrame
+            DataFrame containing columns for statistical values, terms, and sets.
+        stat_col : str
+            Name of the column in `data` containing statistical values 
+            (e.g., p-values) that will be transformed to -log10.
+        term_col : str
+            Name of the column in `data` containing unique terms or features.
+            Duplicate values in this column will raise a ValueError.
+        set_col : str
+            Name of the column in `data` containing set names, which will become 
+            the columns of the heatmap.
+        sets : dict or list
+            Either a list of set names to display or a dictionary mapping 
+            {original_name: new_name} for renaming columns.
+        title : str, optional
+            Title of the heatmap (default is empty string).
+        fig_size : tuple, optional
+            Figure size in inches (width, height), default is (8, 10).
+        font_size : int or float, optional
+            Font size for axis labels and colorbar, default is 14.
+        scale : bool, optional
+            If True, scales heatmap values between 0 and 1.
+
+    Returns:
+        ig (matplotlib.figure.Figure) - matplotlib figure object containing the generated heatmap.
+
+   
+    Example:
+        >>> enrichment_heatmap(
+        ...     data=df,
+        ...     stat_col='p_value',
+        ...     term_col='Gene',
+        ...     set_col='Pathway',
+        ...     sets=['up', 'down'],
+        ...     title='GO:TERM'
+        ... )
+    """
+    
+    data['-log(p_value)'] = -np.log10(data[stat_col])
+    
+    if data[term_col].duplicated().any():
+        raise ValueError(f'Duplicated values occur in column: {term_col}')
+    
+    if isinstance(sets, dict):
+        sets_list = list(set(sets.keys()))
+        
+    heatmap_data = data.pivot(index=term_col, columns=set_col, values='-log(p_value)').fillna(0)
+    if set(heatmap_data.columns) != sets_list:
+        list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns) ]
+        for d in list_unvalid: 
+            heatmap_data[d] = 0
+    
+    if isinstance(sets, dict):
+        heatmap_data = heatmap_data.rename(columns=sets)
+
+        
+    if scale:
+        scaler = MinMaxScaler()
+        heatmap_data = pd.DataFrame(
+            scaler.fit_transform(heatmap_data),
+            index=heatmap_data.index,
+            columns=heatmap_data.columns
+        )
+
+    fig, ax = plt.subplots(figsize=fig_size)
+    sns.heatmap(
+        heatmap_data, 
+        ax=ax,                               
+        cmap='viridis',
+        linewidths=0.5, 
+        linecolor='gray', 
+        cbar_kws={'label': 'scaled(-log10(p_value))'},
+        fmt=".2f"
+    )       
+    ax.set_xticks(np.arange(len(heatmap_data.columns)) + 0.5)
+    ax.set_yticks(np.arange(len(heatmap_data.index)) + 0.5)
+    ax.set_ylabel(title, fontsize=font_size)
+    ax.set_xlabel("Set", fontsize=font_size)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha='right', fontsize=font_size*0.8)
+    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size*0.8)
+    
+    # colorbar fontsize
+    cbar = ax.collections[0].colorbar
+    cbar.ax.tick_params(labelsize=font_size*0.8)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return fig
