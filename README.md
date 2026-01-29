@@ -1,5 +1,8 @@
 # GEDSpy (Gene Enrichment for Drug Searching) - python library
 
+![Python version](https://img.shields.io/badge/python-%E2%89%A53.12-blue?logo=python&logoColor=white.png) ![License](https://img.shields.io/badge/license-GPLv3-blue) ![Docs](https://img.shields.io/badge/docs-available-blueviolet)
+
+
 #### GEDSpy is the python library for gene list enrichment with genes ontology, pathways, tissue & cell type specificity, genes interactions and cell connections
 
 <p align="right">
@@ -132,7 +135,9 @@ In the case of enrichment analysis, it is recommended to use the  [JVectorGraph]
 5.1.8 [GOPa - network](#gopasav5) \
 5.1.9 [Genes Interactions (GI) - network](#gisav5) \
 5.1.10 [GOPa AutoML - network](#gopaml5) \
-5.1.11 [RNAseq tissue - scatter plot](#rnaseq5) 
+5.1.11 [RNAseq tissue - scatter plot](#rnaseq5) \
+5.1.12 [Adjusted Terms - Heatmap](#rnaseq6)
+
 6. [GetRawData](#grd7) \
 6.1 [Get combined genome](#gdcg6) \
 6.2 [Get annotated RNAseq data](#gard6) \
@@ -2474,6 +2479,90 @@ plot  =  vis.gene_scatter(
 
 
 
+##### 5.1.12 Adjusted Terms - Heatmap <a id="rnaseq6"></a>
+
+This module allows manual adjustment of enrichment or over-representation results and visualizes differences between term sets using a heatmap.
+
+##### Features
+- Manual curation of enrichment / over-representation terms  
+- Comparison of multiple datasets or conditions  
+- Visualization of similarities and differences between term sets  
+- Clear and interpretable heatmap output  
+
+##### Example Workflow
+1. Load enrichment or over-representation results  
+2. Manually adjust selected terms  
+3. Generate a heatmap to compare adjusted term sets across datasets  
+
+##### Input
+- Enrichment / over-representation analysis results (e.g. GO, KEGG, Reactome)
+
+##### Output
+- Heatmap displaying adjusted terms across datasets
+
+
+<br />
+
+
+```
+figure = enrichment_heatmap(data = data, 
+                       stat_col = stat_col, 
+                       term_col = term_col,
+                       set_col = set_col,
+                       sets = sets,
+                       title = title,
+                       fig_size = fig_size,
+                       font_size = 16,
+                       scale = True) 
+```
+
+
+    Generate an enrichment heatmap from statistical significance values
+    (e.g. p-values) across multiple sets and terms.
+
+    The function reshapes the input data into a term × set matrix, applies
+    a -log10 transformation to the statistical values, optionally scales the
+    data, performs hierarchical clustering on rows and columns, and visualizes
+    the result using a seaborn heatmap.
+
+    Args:
+        data (pd.DataFrame) - DataFrame containing enrichment analysis results.
+        stat_col (str) - name of the column containing statistical values (e.g. p-values).
+        term_col (str) - name of the column containing term identifiers (e.g. pathways, GO terms).
+        set_col (str) - name of the column specifying the set or group eg. cell_names / sample_names.
+        sets (dict | list | None) - optional:
+            Sets to include in the heatmap.
+            - list: ensures presence of the specified sets,
+            - dict: additionally renames columns (key → new name),
+            - None: uses all sets found in the data.
+        title (str) - label for the Y-axis (term description).
+        fig_size (tuple) - figure size in inches (width, height).
+        font_size (int) - base font size used in the plot.
+        scale (bool) - default: False
+            If True, values are scaled to the range [0, 1] using MinMaxScaler.
+        clustering (str | None) - default 'ward'
+            Hierarchical clustering method (e.g. 'ward', 'average', 'complete').
+            If None, clustering is disabled.
+
+    Returns:
+        fig (matplotlib.figure.Figure) - figure object containing the heatmap.
+
+    Raises:
+        ValueError
+            If duplicated (term, set) pairs are found in the input data.
+
+    Notes:
+        - Statistical values are transformed using -log10(p-value).
+        - Missing term–set combinations are filled with zeros.
+        - Row and column clustering are performed independently.
+        
+        
+        
+                    
+<br />
+
+
+
 <br />
 
 ### 6. GetData<a id="gd6"></a>
@@ -4550,6 +4639,52 @@ graph3.edit()
 
 [Example 2 - file](examples/example_2.py)
 
+
+<br />
+
+
+#### Heatmap - adjusted data
+
+```
+Get data - example:
+
+data = dsa_compare.get_full_GO()
+
+# Adjust terms in the data (optional)
+
+term_col = 'child_name'
+set_col = 'set'
+sets = {'s1':'down','s2':'up'}
+title= 'BP : developmental process'
+fig_size = (8,15)
+
+figure = enrichment_heatmap(data = data, 
+                       stat_col = stat_col, 
+                       term_col = term_col,
+                       set_col = set_col,
+                       sets = sets,
+                       title = title,
+                       fig_size = fig_size,
+                       font_size = 16,
+                       scale = True) 
+
+
+figure.savefig(
+    "heatmap.svg",
+    format="svg",
+    dpi=300,
+    bbox_inches="tight"
+)
+```
+
+
+<p align="center">
+<img  src="https://raw.githubusercontent.com/jkubis96/GEDSpy/refs/heads/main/fig/heatmap.svg" alt="drawing" width="450" />
+</p>
+
+        
+                    
+<br />
 
 <br />
 

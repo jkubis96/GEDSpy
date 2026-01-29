@@ -12,7 +12,7 @@ pattern = r"""
 print(pattern)
 
 print()
-print("Welcome in GEDSpy v.2.1.7 library")
+print("Welcome in GEDSpy v.2.1.9 library")
 print()
 print("Loading required packages...")
 
