@@ -11513,114 +11513,156 @@ class VisualizationDES(Visualization):
         return fig
 
 
-def enrichment_heatmap(
-    data: pd.DataFrame,
-    stat_col: str,
-    term_col: str,
-    set_col: str,
-    sets: dict | list,
-    title: str = "",
-    fig_size: tuple = (8, 10),
-    font_size=14,
-    scale: bool = False,
-):
-    """
-    This method generates a heatmap showing statistical significance (e.g., -log10(p-value))
-    for different terms/pathways across multiple sets.
+
+
+ """
+This method generates a pie chart visualizing the distribution of gene types based on set1 and set2 enrichment data.
 
     Args:
-        data : pd.DataFrame
-            DataFrame containing columns for statistical values, terms, and sets.
-        stat_col : str
-            Name of the column in `data` containing statistical values
-            (e.g., p-values) that will be transformed to -log10.
-        term_col : str
-            Name of the column in `data` containing unique terms or features.
-            Duplicate values in this column will raise a ValueError.
-        set_col : str
-            Name of the column in `data` containing set names, which will become
-            the columns of the heatmap.
-        sets : dict or list
-            Either a list of set names to display or a dictionary mapping
-            {original_name: new_name} for renaming columns.
-        title : str, optional
-            Title of the heatmap (default is empty string).
-        fig_size : tuple, optional
-            Figure size in inches (width, height), default is (8, 10).
-        font_size : int or float, optional
-            Font size for axis labels and colorbar, default is 14.
-        scale : bool, optional
-            If True, scales heatmap values between 0 and 1.
+        set1_name (str) - name for the set1 data. Default is 'Set 1',
+        set2_name (str) - name for the set2 data. Default is 'Set 2',
+        image_width (int) - width of the plot in inches. Default is 12
+        image_high (int) - height of the plot in inches. Default is 6
+        font_size (int) - font size. Default is 15
 
     Returns:
-        ig (matplotlib.figure.Figure) - matplotlib figure object containing the generated heatmap.
-
-
-    Example:
-        >>> enrichment_heatmap(
-        ...     data=df,
-        ...     stat_col='p_value',
-        ...     term_col='Gene',
-        ...     set_col='Pathway',
-        ...     sets=['up', 'down'],
-        ...     title='GO:TERM'
-        ... )
+        fig (matplotlib.figure.Figure) - figure object containing a pie chart that visualizes the distribution of gene type occurrences as percentages
     """
 
-    scale_label = "-log10(p_value)"
 
-    data["-log(p_value)"] = -np.log10(data[stat_col])
 
-    if data[term_col].duplicated().any():
-        raise ValueError(f"Duplicated values occur in column: {term_col}")
 
+def enrichment_heatmap(data:pd.DataFrame, 
+                       stat_col:str, 
+                       term_col:str,
+                       set_col:str,
+                       sets:dict | list | None = None,
+                       title:str = '',
+                       fig_size:tuple = (8,10),
+                       font_size = 14,
+                       scale:bool = False,
+                       clustering: str | None = 'ward'):
+
+    """
+    Generate an enrichment heatmap from statistical significance values
+    (e.g. p-values) across multiple sets and terms.
+
+    The function reshapes the input data into a term × set matrix, applies
+    a -log10 transformation to the statistical values, optionally scales the
+    data, performs hierarchical clustering on rows and columns, and visualizes
+    the result using a seaborn heatmap.
+
+    Args:
+        data (pd.DataFrame) - DataFrame containing enrichment analysis results.
+        stat_col (str) - name of the column containing statistical values (e.g. p-values).
+        term_col (str) - name of the column containing term identifiers (e.g. pathways, GO terms).
+        set_col (str) - name of the column specifying the set or group eg. cell_names / sample_names.
+        sets (dict | list | None) - optional:
+            Sets to include in the heatmap.
+            - list: ensures presence of the specified sets,
+            - dict: additionally renames columns (key → new name),
+            - None: uses all sets found in the data.
+        title (str) - label for the Y-axis (term description).
+        fig_size (tuple) - figure size in inches (width, height).
+        font_size (int) - base font size used in the plot.
+        scale (bool) - default: False
+            If True, values are scaled to the range [0, 1] using MinMaxScaler.
+        clustering (str | None) - default 'ward'
+            Hierarchical clustering method (e.g. 'ward', 'average', 'complete').
+            If None, clustering is disabled.
+
+    Returns:
+        fig (matplotlib.figure.Figure) - figure object containing the heatmap.
+
+    Raises:
+        ValueError
+            If duplicated (term, set) pairs are found in the input data.
+
+    Notes:
+        - Statistical values are transformed using -log10(p-value).
+        - Missing term–set combinations are filled with zeros.
+        - Row and column clustering are performed independently.
+    """
+    
+    scale_label = '-log10(p_value)'
+    
+    data['-log(p_value)'] = -np.log10(data[stat_col])
+    
+    if data[[term_col,set_col]].duplicated().any():
+        raise ValueError(f'Duplicated values occur in column: {term_col}')
+    
     if isinstance(sets, dict):
         sets_list = list(set(sets.keys()))
-
-    heatmap_data = data.pivot(
-        index=term_col, columns=set_col, values="-log(p_value)"
-    ).fillna(0)
-    if set(heatmap_data.columns) != sets_list:
-        list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns)]
-        for d in list_unvalid:
-            heatmap_data[d] = 0
-
+    elif isinstance(sets, list):
+        sets_list = list(sets)
+    else:
+        sets_list = None
+        
+        
+    heatmap_data = (
+    data
+    .pivot_table(
+        index=term_col,
+        columns=set_col,
+        values='-log(p_value)',
+        aggfunc='max'
+    )
+    .fillna(0)
+    )
+    
+    
+    if sets_list is not None:
+        if set(heatmap_data.columns) != set(sets_list):
+            list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns) ]
+            for d in list_unvalid: 
+                heatmap_data[d] = 0
+    
     if isinstance(sets, dict):
         heatmap_data = heatmap_data.rename(columns=sets)
 
+    
+
     if scale:
-        scale_label = f"scaled({scale_label})"
+        scale_label = f'scaled({scale_label})'
         scaler = MinMaxScaler()
         heatmap_data = pd.DataFrame(
             scaler.fit_transform(heatmap_data),
             index=heatmap_data.index,
-            columns=heatmap_data.columns,
+            columns=heatmap_data.columns
         )
 
+    
+    if clustering is not None:
+        Z_rows = linkage(heatmap_data.values, method=clustering)
+        row_order = leaves_list(Z_rows)
+        
+        Z_cols = linkage(heatmap_data.values.T, method=clustering)
+        col_order = leaves_list(Z_cols)
+        
+        heatmap_data = heatmap_data.iloc[row_order, col_order]
+        
     fig, ax = plt.subplots(figsize=fig_size)
     sns.heatmap(
-        heatmap_data,
-        ax=ax,
-        cmap="viridis",
-        linewidths=0.5,
-        linecolor="gray",
-        cbar_kws={"label": scale_label},
-        fmt=".2f",
-    )
+        heatmap_data, 
+        ax=ax,                               
+        cmap='viridis',
+        linewidths=0.5, 
+        linecolor='gray', 
+        cbar_kws={'label': scale_label},
+        fmt=".2f"
+    )       
     ax.set_xticks(np.arange(len(heatmap_data.columns)) + 0.5)
     ax.set_yticks(np.arange(len(heatmap_data.index)) + 0.5)
     ax.set_ylabel(title, fontsize=font_size)
     ax.set_xlabel("Set", fontsize=font_size)
-    ax.set_xticklabels(
-        ax.get_xticklabels(), rotation=30, ha="right", fontsize=font_size * 0.8
-    )
-    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size * 0.8)
-
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=90, ha='right', fontsize=font_size*0.8)
+    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size*0.8)
+    
     # colorbar fontsize
     cbar = ax.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=font_size * 0.8)
-
+    cbar.ax.tick_params(labelsize=font_size*0.8)
+    
     plt.tight_layout()
     plt.show()
-
+    
     return fig
