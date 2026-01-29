@@ -14,7 +14,7 @@ import pkg_resources
 import seaborn as sns
 from matplotlib import rc
 from matplotlib.gridspec import GridSpec
-from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import dendrogram, leaves_list, linkage
 from scipy.stats import binomtest, fisher_exact
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
@@ -11513,36 +11513,18 @@ class VisualizationDES(Visualization):
         return fig
 
 
-
-
- """
-This method generates a pie chart visualizing the distribution of gene types based on set1 and set2 enrichment data.
-
-    Args:
-        set1_name (str) - name for the set1 data. Default is 'Set 1',
-        set2_name (str) - name for the set2 data. Default is 'Set 2',
-        image_width (int) - width of the plot in inches. Default is 12
-        image_high (int) - height of the plot in inches. Default is 6
-        font_size (int) - font size. Default is 15
-
-    Returns:
-        fig (matplotlib.figure.Figure) - figure object containing a pie chart that visualizes the distribution of gene type occurrences as percentages
-    """
-
-
-
-
-def enrichment_heatmap(data:pd.DataFrame, 
-                       stat_col:str, 
-                       term_col:str,
-                       set_col:str,
-                       sets:dict | list | None = None,
-                       title:str = '',
-                       fig_size:tuple = (8,10),
-                       font_size = 14,
-                       scale:bool = False,
-                       clustering: str | None = 'ward'):
-
+def enrichment_heatmap(
+    data: pd.DataFrame,
+    stat_col: str,
+    term_col: str,
+    set_col: str,
+    sets: dict | list | None = None,
+    title: str = "",
+    fig_size: tuple = (8, 10),
+    font_size=14,
+    scale: bool = False,
+    clustering: str | None = "ward",
+):
     """
     Generate an enrichment heatmap from statistical significance values
     (e.g. p-values) across multiple sets and terms.
@@ -11583,86 +11565,76 @@ def enrichment_heatmap(data:pd.DataFrame,
         - Missing term–set combinations are filled with zeros.
         - Row and column clustering are performed independently.
     """
-    
-    scale_label = '-log10(p_value)'
-    
-    data['-log(p_value)'] = -np.log10(data[stat_col])
-    
-    if data[[term_col,set_col]].duplicated().any():
-        raise ValueError(f'Duplicated values occur in column: {term_col}')
-    
+
+    scale_label = "-log10(p_value)"
+
+    data["-log(p_value)"] = -np.log10(data[stat_col])
+
+    if data[[term_col, set_col]].duplicated().any():
+        raise ValueError(f"Duplicated values occur in column: {term_col}")
+
     if isinstance(sets, dict):
         sets_list = list(set(sets.keys()))
     elif isinstance(sets, list):
         sets_list = list(sets)
     else:
         sets_list = None
-        
-        
-    heatmap_data = (
-    data
-    .pivot_table(
-        index=term_col,
-        columns=set_col,
-        values='-log(p_value)',
-        aggfunc='max'
-    )
-    .fillna(0)
-    )
-    
-    
+
+    heatmap_data = data.pivot_table(
+        index=term_col, columns=set_col, values="-log(p_value)", aggfunc="max"
+    ).fillna(0)
+
     if sets_list is not None:
         if set(heatmap_data.columns) != set(sets_list):
-            list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns) ]
-            for d in list_unvalid: 
+            list_unvalid = [x for x in sets_list if x not in set(heatmap_data.columns)]
+            for d in list_unvalid:
                 heatmap_data[d] = 0
-    
+
     if isinstance(sets, dict):
         heatmap_data = heatmap_data.rename(columns=sets)
 
-    
-
     if scale:
-        scale_label = f'scaled({scale_label})'
+        scale_label = f"scaled({scale_label})"
         scaler = MinMaxScaler()
         heatmap_data = pd.DataFrame(
             scaler.fit_transform(heatmap_data),
             index=heatmap_data.index,
-            columns=heatmap_data.columns
+            columns=heatmap_data.columns,
         )
 
-    
     if clustering is not None:
         Z_rows = linkage(heatmap_data.values, method=clustering)
         row_order = leaves_list(Z_rows)
-        
+
         Z_cols = linkage(heatmap_data.values.T, method=clustering)
         col_order = leaves_list(Z_cols)
-        
+
         heatmap_data = heatmap_data.iloc[row_order, col_order]
-        
+
     fig, ax = plt.subplots(figsize=fig_size)
     sns.heatmap(
-        heatmap_data, 
-        ax=ax,                               
-        cmap='viridis',
-        linewidths=0.5, 
-        linecolor='gray', 
-        cbar_kws={'label': scale_label},
-        fmt=".2f"
-    )       
+        heatmap_data,
+        ax=ax,
+        cmap="viridis",
+        linewidths=0.5,
+        linecolor="gray",
+        cbar_kws={"label": scale_label},
+        fmt=".2f",
+    )
     ax.set_xticks(np.arange(len(heatmap_data.columns)) + 0.5)
     ax.set_yticks(np.arange(len(heatmap_data.index)) + 0.5)
     ax.set_ylabel(title, fontsize=font_size)
     ax.set_xlabel("Set", fontsize=font_size)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90, ha='right', fontsize=font_size*0.8)
-    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size*0.8)
-    
+    ax.set_xticklabels(
+        ax.get_xticklabels(), rotation=90, ha="right", fontsize=font_size * 0.8
+    )
+    ax.set_yticklabels(ax.get_yticklabels(), fontsize=font_size * 0.8)
+
     # colorbar fontsize
     cbar = ax.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=font_size*0.8)
-    
+    cbar.ax.tick_params(labelsize=font_size * 0.8)
+
     plt.tight_layout()
     plt.show()
-    
+
     return fig
