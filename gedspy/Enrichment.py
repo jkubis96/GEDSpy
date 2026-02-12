@@ -3,7 +3,6 @@ import json
 import os
 import re
 import sqlite3
-import sys
 import warnings
 from collections import Counter
 
@@ -11569,7 +11568,7 @@ def enrichment_heatmap(
 
     scale_label = "-log10(p_value)"
 
-    data[stat_col] = data[stat_col].replace(0, sys.float_info.min)
+    data[stat_col] = data[stat_col].replace(0, 2**-1074)
 
     data["-log(p_value)"] = -np.log10(data[stat_col])
 
