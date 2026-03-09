@@ -124,7 +124,7 @@ In the case of enrichment analysis, it is recommended to use the  [JVectorGraph]
 4.9 [Inter Terms (IT) - DSA](#itdsa4) \
 4.10 [Full analysis - DSA](#fuldsa4) 
 5. [Differential Set Analysis (DSA) Visualisation](#dsav5) \
-5.1 [Both sets graphs](#dsav5b) \
+5.1 [Both sets and single set graphs](#dsav5b) \
 5.1.1 [Gene type - pie chart](#gtdsav5) \
 5.1.2 [GO-TERMS - bar plot](#godsav5) \
 5.1.3 [KEGG - bar plot](#kdsav5) \
@@ -136,8 +136,8 @@ In the case of enrichment analysis, it is recommended to use the  [JVectorGraph]
 5.1.9 [Genes Interactions (GI) - network](#gisav5) \
 5.1.10 [GOPa AutoML - network](#gopaml5) \
 5.1.11 [RNAseq tissue - scatter plot](#rnaseq5) \
+5.1.12 [Blood markers - bar plot](#rnaseq66) \
 5.1.12 [Adjusted Terms - Heatmap](#rnaseq6)
-
 6. [GetRawData](#grd7) \
 6.1 [Get combined genome](#gdcg6) \
 6.2 [Get annotated RNAseq data](#gard6) \
@@ -264,11 +264,11 @@ enr.enriche_specificiti()
         
         Returns:  
             Updates `self.HPA` with Human Protein Atlas information.  
-            To retrieve the results, use the `self.get_HPA` method.  
+            To retrieve the results, use the `self.get_HPA()` method.  
 <br />
 
 ```
-HPA_data = enr.get_HPA
+HPA_data = enr.get_HPA()
 ```
 
     This method returns the Human Protein Atlas (HPA) information.  
@@ -302,11 +302,11 @@ enr.enriche_KEGG()
      
         Returns:  
             Updates `self.KEGG` with KEGG information.  
-            To retrieve the results, use the `self.get_KEGG` method.  
+            To retrieve the results, use the `self.get_KEGG()` method.  
 <br />
 
 ```
-KEGG_data = enr.get_KEGG
+KEGG_data = enr.get_KEGG()
 ```
 
     This method returns the Kyoto Encyclopedia of Genes and Genomes (KEGG) information.  
@@ -327,12 +327,12 @@ enr.enriche_GOTERM()
         
         Returns:  
             Updates `self.GO` with GO-TERM information.  
-            To retrieve the results, use the `self.get_GO_TERM` method.  
+            To retrieve the results, use the `self.get_GO_TERM()` method.  
 
 <br />
 
 ```
-GO_data = enr.get_GO_TERM
+GO_data = enr.get_GO_TERM()
 ```
 
 
@@ -354,12 +354,12 @@ enr.enriche_REACTOME()
         
         Returns:  
             Updates `self.REACTOME` with Reactome information.  
-            To retrieve the results, use the `self.get_REACTOME` method.  
+            To retrieve the results, use the `self.get_REACTOME()` method.  
 
 <br />
 
 ```
-REACTOME_data = enr.get_REACTOME
+REACTOME_data = enr.get_REACTOME()
 ```
 
     This method returns the Reactome information.  
@@ -380,12 +380,12 @@ enr.enriche_DISEASES()
         
         Returns:  
             Updates `self.Diseases` with Human Diseases information.  
-            To retrieve the results, use the `self.get_DISEASES` method. 
+            To retrieve the results, use the `self.get_DISEASES()` method. 
 
 <br />
 
 ```
-DISEASES_data = enr.get_DISEASES
+DISEASES_data = enr.get_DISEASES()
 ```
 
     This method returns the Human Diseases information.  
@@ -407,13 +407,13 @@ enr.enriche_ViMIC()
         
         Returns:  
             Updates `self.ViMIC` with Viral Disease (ViMIC) information.  
-            To retrieve the results, use the `self.get_ViMIC` method.  
+            To retrieve the results, use the `self.get_ViMIC()` method.  
 
 <br />
 
 
 ```
-ViMIC_data = enr.get_ViMIC
+ViMIC_data = enr.get_ViMIC()
 ```
 
     This method returns the Viral Diseases (ViMIC) information.  
@@ -451,12 +451,12 @@ enr.enriche_IntAct()
     
         Returns:  
             Updates `self.IntAct` with IntAct information.  
-            To retrieve the results, use the `self.get_IntAct` method.  
+            To retrieve the results, use the `self.get_IntAct()` method.  
 
 <br />
 
 ```
-IntAct_data = enr.get_IntAct
+IntAct_data = enr.get_IntAct()
 ```
 
     This method returns the IntAct information.  
@@ -493,13 +493,13 @@ enr.enriche_STRING()
         
         Returns:  
             Updates `self.STRING` with STRING information.  
-            To retrieve the results, use the `self.get_STRING` method.  
+            To retrieve the results, use the `self.get_STRING()` method.  
 
 <br />
 
 
 ```
-STRING_data = enr.get_STRING
+STRING_data = enr.get_STRING()
 ```
 
     This method returns the STRING information.  
@@ -522,14 +522,14 @@ enr.enriche_CellCon()
         
         Returns:  
             Updates `self.CellCon` with CellPhone / CellTalk information.  
-            To retrieve the results, use the `self.get_CellCon` method. 
+            To retrieve the results, use the `self.get_CellCon()` method. 
 
 
 <br />
 
 
 ```
-CellCon_data = enr.get_CellCon
+CellCon_data = enr.get_CellCon()
 ```
 
     This method returns the CellPhone / CellTalk information.  
@@ -556,14 +556,14 @@ enr.enriche_RNA_SEQ()
 
         Returns:  
             Updates `self.RNA_SEQ` with RNAseq information.  
-            To retrieve the results, use the `self.get_RNA_SEQ` method.  
+            To retrieve the results, use the `self.get_RNA_SEQ()` method.  
 
 
 <br />
 
 
 ```
-RNASEQ_data = enr.get_RNA_SEQ
+RNASEQ_data = enr.get_RNA_SEQ()
 ```
 
     This method returns the RNAseq information.  
@@ -598,7 +598,7 @@ enr.full_enrichment()
         - RNAseq data specific to tissues [see self.enriche_RNA_SEQ() method]  
     
         Returns:  
-            To retrieve the results, use the `self.get_results` method.  
+            To retrieve the results, use the `self.get_results()` method.  
 
 
 <br />
@@ -609,17 +609,17 @@ results = enr.get_results()
 ```
 
     This method returns the full enrichment analysis dictionary containing on keys:  
-        - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info` property]
-        - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA' property]  
-        - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG' property]  
-        - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM' property]  
-        - 'REACTOME' - Reactome [see 'self.get_REACTOME' property]  
-        - 'DISEASES' - Human Diseases [see 'self.get_DISEASES' property]  
-        - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC' property]  
-        - 'IntAct' - IntAct [see 'self.get_IntAct' property]  
-        - 'STRING' - STRING [see 'self.get_STRING' property]  
-        - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon' property]  
-        - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ' property]  
+        - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info()`]
+        - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA()']  
+        - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG()']  
+        - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM()']  
+        - 'REACTOME' - Reactome [see 'self.get_REACTOME()']  
+        - 'DISEASES' - Human Diseases [see 'self.get_DISEASES()']  
+        - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC()']  
+        - 'IntAct' - IntAct [see 'self.get_IntAct()']  
+        - 'STRING' - STRING [see 'self.get_STRING()']  
+        - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon()']  
+        - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ()']  
 
         Returns:  
             dict (dict) - full enrichment data
@@ -637,10 +637,10 @@ ans = Analysis(input_data)
 ```
 
 
-    The `Analysis` class provides tools for statistical and network analysis of `Enrichment` class results obtained using the `self.get_results` method.
+    The `Analysis` class provides tools for statistical and network analysis of `Enrichment` class results obtained using the `self.get_results()` method.
     
         Args:
-            input_data (dict) - output data from the `Enrichment` class `self.get_results` method
+            input_data (dict) - output data from the `Enrichment` class `self.get_results()` method
             
 <br />
 
@@ -833,13 +833,13 @@ ans.GO_overrepresentation()
         
         Returns:
             Updates `self.GO_stat` with overrepresentation statistics for GO-TERM information.
-            To retrieve the results, use the `self.get_GO_statistics` method.
+            To retrieve the results, use the `self.get_GO_statistics()` method.
 
 
 <br />
 
 ```
-GO_results = ans.get_GO_statistics
+GO_results = ans.get_GO_statistics()
 ```
 
     This method returns the GO-TERM overrepresentation statistics.
@@ -861,12 +861,12 @@ ans.KEGG_overrepresentation()
         
         Returns:
             Updates `self.KEGG_stat` with overrepresentation statistics for KEGG information.
-            To retrieve the results, use the `self.get_KEGG_statistics` method.
+            To retrieve the results, use the `self.get_KEGG_statistics()` method.
 
 <br />
 
 ```
-KEGG_results = ans.get_KEGG_statistics
+KEGG_results = ans.get_KEGG_statistics()
 ```
 
     This method returns the KEGG overrepresentation statistics.
@@ -889,11 +889,11 @@ ans.REACTOME_overrepresentation()
         
         Returns:
             Updates `self.REACTOME_stat` with overrepresentation statistics for Reactome information.
-            To retrieve the results, use the `self.get_REACTOME_statistics` method.
+            To retrieve the results, use the `self.get_REACTOME_statistics()` method.
 <br />
 
 ```
-REACTOME_results = ans.get_REACTOME_statistics
+REACTOME_results = ans.get_REACTOME_statistics()
 ```
 
     This method returns the Reactome overrepresentation statistics.
@@ -917,14 +917,14 @@ ans.ViMIC_overrepresentation()
         
         Returns:
             Updates `self.ViMIC_stat` with overrepresentation statistics for ViMIC information.
-            To retrieve the results, use the `self.get_ViMIC_statistics` method.
+            To retrieve the results, use the `self.get_ViMIC_statistics()` method.
 
 
 <br />
 
 
 ```
-ViMIC_results = ans.get_ViMIC_statistics
+ViMIC_results = ans.get_ViMIC_statistics()
 ```
     This method returns the ViMIC overrepresentation statistics.
         
@@ -946,13 +946,13 @@ ans.DISEASES_overrepresentation()
         
         Returns:
             Updates `self.DISEASE_stat` with overrepresentation statistics for Human Diseases information.
-            To retrieve the results, use the `self.get_DISEASE_statistics` method.
+            To retrieve the results, use the `self.get_DISEASE_statistics()` method.
 
 <br />
 
 
 ```
-DISEASES_results = ans.get_DISEASE_statistics
+DISEASES_results = ans.get_DISEASE_statistics()
 ```
     This method returns the Human Diseases overrepresentation statistics.
         
@@ -974,13 +974,13 @@ ans.features_specificity()
         
         Returns:
             Updates `self.specificity_stat` with overrepresentation statistics for specificity information.
-            To retrieve the results, use the `self.get_specificity_statistics` method.
+            To retrieve the results, use the `self.get_specificity_statistics()` method.
 
 <br />
 
 
 ```
-specificity_results = ans.get_specificity_statistics
+specificity_results = ans.get_specificity_statistics()
 ```
 
   
@@ -1009,13 +1009,13 @@ ans.gene_interaction()
         
         Returns:
             Updates `self.features_interactions` with overrepresentation statistics for GI information.
-            To retrieve the results, use the `self.get_features_interactions_statistics` method.
+            To retrieve the results, use the `self.get_features_interactions_statistics()` method.
 
 
 <br />
 
 ```
-GI_results = ans.get_features_interactions_statistics
+GI_results = ans.get_features_interactions_statistics()
 ```
 
     This method returns the Genes Interactions (GI) data.
@@ -1043,13 +1043,13 @@ ans.REACTOME_network()
         
         Returns:
             Updates `self.REACTOME_net` with Reactome network data.
-            To retrieve the results, use the `self.get_REACTOME_network` method.
+            To retrieve the results, use the `self.get_REACTOME_network()` method.
 
 
 <br />
 
 ```
-Reactome_network = ans.get_REACTOME_network
+Reactome_network = ans.get_REACTOME_network()
 ```
 
     This method returns the Reactome network analysis results.
@@ -1072,13 +1072,13 @@ ans.KEGG_network()
         
         Returns:
             Updates `self.KEGG_net` with Reactome network data.
-            To retrieve the results, use the `self.get_KEGG_network` method.
+            To retrieve the results, use the `self.get_KEGG_network()` method.
 
 
 <br />
 
 ```
-KEGG_network = ans.get_KEGG_network
+KEGG_network = ans.get_KEGG_network()
 ```
 
     This method returns the KEGG network analysis results.
@@ -1101,13 +1101,13 @@ ans.GO_network()
         
         Returns:
             Updates `self.GO_net` with GO-TERM network data.
-            To retrieve the results, use the `self.get_GO_network` method.
+            To retrieve the results, use the `self.get_GO_network()` method.
 
 
 <br />
 
 ```
-GO_network = ans.get_GO_network
+GO_network = ans.get_GO_network()
 ```
 
     This method returns the GO-TERM network analysis results.
@@ -1131,7 +1131,7 @@ GO_network = ans.get_GO_network
 ans.full_analysis()
 ```
 
-    This method conducts a full analysis of `Enrichment` class results obtained using the `self.get_results` method:
+    This method conducts a full analysis of `Enrichment` class results obtained using the `self.get_results()` method:
 
             * statistics:
                 - Human Protein Atlas (HPA) [see self.features_specificity() method]  
@@ -1147,43 +1147,43 @@ ans.full_analysis()
                 
                 
         Returns:  
-            To retrieve the results, use the `self.get_full_results` method. 
+            To retrieve the results, use the `self.get_full_results()` method. 
 
 
 <br />
 
 
 ```
-full_results = ans.get_full_results
+full_results = ans.get_full_results()
 ```
 
     This method returns the full analysis dictionary containing on keys: 
             * 'enrichment':
-                - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info` property]
-                - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA' property]  
-                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG' property]  
-                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM' property]  
-                - 'REACTOME' - Reactome [see 'self.get_REACTOME' property]  
-                - 'DISEASES' - Human Diseases [see 'self.get_DISEASES' property]  
-                - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC' property]  
-                - 'IntAct' - IntAct [see 'self.get_IntAct' property]  
-                - 'STRING' - STRING [see 'self.get_STRING' property]  
-                - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon' property]  
-                - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ' property]  
+                - 'gene_info' - genome information for the selected gene set [see `self.get_gene_info()`]
+                - 'HPA' - Human Protein Atlas (HPA) [see 'self.get_HPA()']  
+                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG()']  
+                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_TERM()']  
+                - 'REACTOME' - Reactome [see 'self.get_REACTOME()']  
+                - 'DISEASES' - Human Diseases [see 'self.get_DISEASES()']  
+                - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC()']  
+                - 'IntAct' - IntAct [see 'self.get_IntAct()']  
+                - 'STRING' - STRING [see 'self.get_STRING()']  
+                - 'CellConnections' - CellConnections (CellPhone / CellTalk) [see 'self.get_CellCon()']  
+                - 'RNA-SEQ' - RNAseq data specific to tissues [see 'self.get_RNA_SEQ()']  
                 
              * 'statistics':
-                 - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_statistics' property]  
-                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_statistics' property]  
-                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_statistics' property]  
-                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_statistics' property]  
-                 - 'DISEASES' - Human Diseases [see 'self.get_DISEASE_statistics' property]  
-                 - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC_statistics' property]  
-                 - 'interactions' - STRING / IntAct [see 'self.get_features_interactions_statistics' property]  
+                 - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_statistics()']  
+                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_statistics()']  
+                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_statistics()']  
+                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_statistics()']  
+                 - 'DISEASES' - Human Diseases [see 'self.get_DISEASE_statistics()']  
+                 - 'ViMIC' - Viral Diseases (ViMIC) [see 'self.get_ViMIC_statistics()']  
+                 - 'interactions' - STRING / IntAct [see 'self.get_features_interactions_statistics()']  
                  
              * 'networks':
-                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_network' property]  
-                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_network' property]  
-                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_network' property]  
+                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_network()']  
+                 - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_network()']  
+                 - 'REACTOME' - Reactome [see 'self.get_REACTOME_network()']  
     
         Returns:  
             dict (dict) - full analysis data
@@ -1206,10 +1206,10 @@ vis = Visualization(input_data)
 ```
 
 
-    The `Visualization` class provides tools for statistical and network analysis of `Analysis` class results obtained using the `self.get_full_results` method.
+    The `Visualization` class provides tools for statistical and network analysis of `Analysis` class results obtained using the `self.get_full_results()` method.
     
         Args:
-            input_data (dict) - output data from the `Analysis` class `self.get_full_results` method
+            input_data (dict) - output data from the `Analysis` class `self.get_full_results()` method
         
             
 <br />
@@ -1475,7 +1475,7 @@ plot  =  vis.ViMIC_plot(
 
 
 ```
-plot  =  vis.blod_markers_plot(   
+plot  =  vis.blood_markers_plot(   
                     n = 10, 
                     side = 'right', 
                     color = 'red', 
@@ -1586,9 +1586,8 @@ plot  =  vis.AUTO_ML_network(
             selected_parents (list) - specific parent terms to include in the network. If empty, all parents are considered. Default is []
             selected_genes (list) - specific genes to include in the network. If empty, all genes are considered. Default is []
      
-        Returns
-           Returns:
-               fig (networkx.Graph) - NetworkX Graph object representing the GO and pathway network
+        Returns:
+            fig (networkx.Graph) - NetworkX Graph object representing the GO and pathway network
         
         
                     
@@ -1612,7 +1611,7 @@ plot  =  vis.gene_scatter(
 
 
     Visualizes RNA-SEQ enrichment data using scatter plots with hierarchical clustering.
-        
+
         RNA-SEQ data including:
            -human_tissue_expression_HPA
            -human_tissue_expression_RNA_total_tissue
@@ -1628,7 +1627,7 @@ plot  =  vis.gene_scatter(
             x_lab (str) - label for the x-axis. Default is 'Genes'
             legend_lab (str,) - label for the color bar legend. Default is 'log(TPM + 1)'
             selected_list (list) - list of specific genes to include in the visualization. If left empty, all genes from the dataset will be displayed. Default is []
-    
+
         Returns:
             return_dict (dict) - dictionary with dataset names as keys and their corresponding matplotlib figures as values. Each figure shows a scatter plot of the different RNAseq data
         
@@ -1651,12 +1650,12 @@ dsa_compare = DSA(set1, set2)
 
     The 'DSA' class performs Differential Set Analysis by taking the results from two independent feature lists (e.g., upregulated and downregulated genes). 
     It utilizes input data derived from independent gene sets obtained through statistical and network analyses, which are part of the Analysis class results. 
-    These results are accessed using the 'self.get_full_results' method.
+    These results are accessed using the 'self.get_full_results()' method.
 
 
         Args:
-            set1 (dict)- output data from the `Analysis` class `self.get_full_results` method of genes set eg. ['KIT', 'EDNRB', 'PAX3'] 
-            set2 (dict)- output data from the `Analysis` class `self.get_full_results` method of genes set eg. ['MC4R', 'MITF', 'SLC2A4'] 
+            set1 (dict)- output data from the `Analysis` class `self.get_full_results()` method of genes set eg. ['KIT', 'EDNRB', 'PAX3'] 
+            set2 (dict)- output data from the `Analysis` class `self.get_full_results()` method of genes set eg. ['MC4R', 'MITF', 'SLC2A4'] 
         
     
         
@@ -1731,19 +1730,33 @@ dsa_compare.GO_diff()
         
         Returns:
             Updates `self.GO` with Reactome DSA data.
-            To retrieve the results, use the `self.get_GO_diff` method.
+            To retrieve the results, use the `self.get_GO_diff()` method.
 
 
 <br />
 
 ```
-GO_diff_results = ans.get_GO_diff
+GO_diff_results = dsa_compare.get_GO_diff()
 ```
 
     This method returns the GO-TERM Differential Set Analysis (DSA)
     
         Returns:  
             Returns `self.GO` contains GO-TERM DSA obtained using the `self.GO_diff` method.
+
+<br />
+
+
+```
+GO_diff_full_results = dsa_compare.get_full_GO()
+```
+
+    This method returns the concatenated GO-TERM data from set1 and set2.
+
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['GO-TERM']` and
+            `self.set_2['statistics']['GO-TERM']`.
 
 <br />
 
@@ -1777,19 +1790,36 @@ dsa_compare.KEGG_diff()
         
         Returns:
             Updates `self.KEGG` with Reactome DSA data.
-            To retrieve the results, use the `self.get_KEGG_diff` method.
+            To retrieve the results, use the `self.get_KEGG_diff()` method.
 
 
 <br />
 
 ```
-KEGG_diff_results = ans.get_KEGG_diff
+KEGG_diff_results = dsa_compare.get_KEGG_diff()
 ```
 
     This method returns the KEGG Differential Set Analysis (DSA)
     
         Returns:  
             Returns `self.KEGG contains KEGG DSA obtained using the `self.KEGG_diff` method.
+
+<br />
+
+
+
+
+```
+KEGG_diff_full_results = dsa_compare.get_full_KEGG()
+```
+
+
+    This method returns the concatenated KEGG data from set1 and set2.
+
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['KEGG']` and
+            `self.set_2['statistics']['KEGG']`.
 
 <br />
 
@@ -1823,19 +1853,33 @@ dsa_compare.REACTOME_diff()
         
         Returns:
             Updates `self.REACTOME` with Reactome DSA data.
-            To retrieve the results, use the `self.get_REACTOME_diff` method.
+            To retrieve the results, use the `self.get_REACTOME_diff()` method.
 
 
 <br />
 
 ```
-Reactome_diff_results = ans.get_REACTOME_diff
+reactome_diff_results = dsa_compare.get_REACTOME_diff()
 ```
 
     This method returns the Reactome Differential Set Analysis (DSA)
     
         Returns:  
             Returns `self.REACTOME` contains Reactome DSA obtained using the `self.REACTOME_diff` method.
+
+<br />
+
+```
+reactome_diff_full_results = dsa_compare.get_full_REACTOME()
+```
+
+
+    This method returns the concatenated REACTOME data from set1 and set2.
+
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['REACTOME']` and
+            `self.set_2['statistics']['REACTOME']`.
 
 <br />
 
@@ -1869,19 +1913,33 @@ dsa_compare.spec_diff()
         
         Returns:
             Updates `self.specificity` with specificity DSA data.
-            To retrieve the results, use the `self.get_specificity_diff` method.
+            To retrieve the results, use the `self.get_specificity_diff()` method.
 
 
 <br />
 
 ```
-specificity_diff_results = ans.get_specificity_diff
+specificity_diff_results = dsa_compare.get_specificity_diff()
 ```
 
     This method returns the specificity (HPA) Differential Set Analysis (DSA)
     
         Returns:  
-            Returns `self.specificity` contains specificity DSA obtained using the `self.get_specificity_diff` method.
+            Returns `self.specificity` contains specificity DSA obtained using the `self.get_specificity_diff()` method.
+
+<br />
+
+```
+specificity_diff_full_results = dsa_compare.get_full_SPECIFICITY()
+```
+
+
+    This method returns the concatenated HPA specificity data from set1 and set2.
+
+        Returns:
+            The concatenated data stored in
+            `self.set_1['statistics']['specificity']` and
+            `self.set_2['statistics']['specificity']`.
 
 <br />
 
@@ -1899,13 +1957,13 @@ dsa_compare.gi_diff()
         
         Returns:
             Updates `self.GI` with Reactome DSA data.
-            To retrieve the results, use the `self.get_GI_diff` method.
+            To retrieve the results, use the `self.get_GI_diff()` method.
 
 
 <br />
 
 ```
-GI_diff_results = ans.get_GI_diff
+GI_diff_results = dsa_compare.get_GI_diff()
 ```
 
     This method returns the Genes Interactions (GI) Differential Set Analysis (DSA)
@@ -1930,18 +1988,18 @@ dsa_compare.network_diff()
         
         Returns:
             Updates `self.networks` with network DSA data.
-            To retrieve the results, use the `self.get_networks_diff` method.
+            To retrieve the results, use the `self.get_networks_diff()` method.
 
 <br />
 
 ```
-network_diff_results = ans.get_networks_diff
+network_diff_results = dsa_compare.get_networks_diff()
 ```
 
     This method returns the network Differential Set Analysis (DSA)
     
         Returns:  
-            Returns `self.networks` contains networks DSA obtained using the `self.get_networks_diff` method.
+            Returns `self.networks` contains networks DSA obtained using the `self.get_networks_diff()` method.
 
 <br />
 
@@ -1961,12 +2019,12 @@ dsa_compare.connections_diff()
         
         Returns:  
             Updates `self.lr_con_set1_set2` and `self.lr_con_set2_set1` with CellPhone / CellTalk information.  
-            To retrieve the results, use the `self.get_set_to_set_con` method.  
+            To retrieve the results, use the `self.get_set_to_set_con()` method.  
 
 <br />
 
 ```
-connections_diff_results = dsa_compare.get_set_to_set_con
+connections_diff_results = dsa_compare.get_set_to_set_con()
 ```
 
     This method returns the CellTalk/CellPhone (CellConnecctions) Differential Set Analysis (DSA)
@@ -1994,12 +2052,12 @@ dsa_compare.inter_processes()
         
         Returns:
             Updates `self.inter_terms` with Inter Terms DSA data.
-            To retrieve the results, use the `self.get_inter_terms` method.
+            To retrieve the results, use the `self.get_inter_terms()` method.
 
 <br />
 
 ```
-IT_results = dsa_compare.get_inter_terms
+IT_results = dsa_compare.get_inter_terms()
 ```
 
     This method returns the Inter Terms analysis results.
@@ -2030,27 +2088,27 @@ dsa_compare.full_analysis()
             - Networks (GO-TERM, KEGG, Reactome) [see self.network_diff() method]
                 
         Returns:  
-            To retrieve the results, use the `self.get_results` method. 
+            To retrieve the results, use the `self.get_results()` method. 
 
 <br />
 
 ```
-full_dsa_results = dsa_compare.get_results
+full_dsa_results = dsa_compare.get_results()
 ```
 
     This method returns the full analysis dictionary containing on keys: 
-            * 'GI' - Genes Interactions (STRING / IntAct) [see `self.get_GI_diff` property]
-            * 'inter_cell_connections' - Inter CellConnections (CellTalk / CellPhone) [see `self.get_set_to_set_con` property]
-            * 'inter_terms' - Inter Terms (KEGG, REACTOME, GO-TERM) [see `self.get_networks_diff` property]
-            * 'networks' - Network data [see `self.get_inter_terms` property]:
+            * 'GI' - Genes Interactions (STRING / IntAct) [see `self.get_GI_diff()`]
+            * 'inter_cell_connections' - Inter CellConnections (CellTalk / CellPhone) [see `self.get_set_to_set_con()`]
+            * 'inter_terms' - Inter Terms (KEGG, REACTOME, GO-TERM) [see `self.get_networks_diff()`]
+            * 'networks' - Network data [see `self.get_inter_terms()`]:
                 - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) 
                 - 'GO-TERM' - GeneOntology (GO-TERM) 
                 - 'REACTOME' - Reactome 
             * 'regulations' - Terms / Pathways:
-                - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_diff' property]  
-                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_diff' property]  
-                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_diff' property]  
-                - 'REACTOME' - Reactome [see 'self.get_REACTOME_diff' property]  
+                - 'specificity' - Human Protein Atlas (HPA) [see 'self.get_specificity_diff()']  
+                - 'KEGG' - Kyoto Encyclopedia of Genes and Genomes (KEGG) [see 'self.get_KEGG_diff()']  
+                - 'GO-TERM' - GeneOntology (GO-TERM) [see 'self.get_GO_diff()']  
+                - 'REACTOME' - Reactome [see 'self.get_REACTOME_diff()']  
             * 'set1' - input dictionary with results of enrichment and statistical analysis for set1
             * 'set2' - input dictionary with results of enrichment and statistical analysis for set2
                 
@@ -2070,20 +2128,20 @@ full_dsa_results = dsa_compare.get_results
 from gedspy import Visualization
 
 # initiate class
-vis_des = VisualizationDES(input_data)
+vis_des = VisualizationDSA(input_data)
 ```
 
 
-    The `Visualization` class provides tools for statistical and network analysis of `Analysis` class results obtained using the `self.get_full_results` method.
+    The `Visualization` class provides tools for statistical and network analysis of `Analysis` class results obtained using the `self.get_full_results()` method.
     
         Args:
-            input_data (dict) - output data from the `Analysis` class `self.get_full_results` method
+            input_data (dict) - output data from the `Analysis` class `self.get_full_results()` method
         
             
 <br />
 
 
-#### 5.1 Both sets graphs <a id="dsav5b"></a>
+#### 5.1 Both sets and single set graphs <a id="dsav5b"></a>
 ##### 5.1.1 Gene type - pie chart <a id="gtdsav5"></a>
 
 
@@ -2111,6 +2169,31 @@ plot  =  vis_des.diff_gene_type_plot(
                     
 <br />
 
+
+```
+plot  =  vis_des.set_gene_type_plot(
+                    set_num = 1,
+                    cmap = 'summer', 
+                    image_width = 6, 
+                    image_high = 6, 
+                    font_size = 15)
+```
+
+    This method generates a pie chart visualizing the distribution of gene types based on enrichment data for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            cmap (str) - colormap used for the pie chart. Default is 'summer'
+            image_width (int) - width of the plot in inches. Default is 6
+            image_high (int) - height of the plot in inches. Default is 6
+            font_size (int) - font size. Default is 15
+
+        Returns:
+            fig (matplotlib.figure.Figure) - figure object containing a pie chart that visualizes the distribution of gene type occurrences as percentages
+
+
+<br />
+
 ##### 5.1.2 GO-TERMS - bar plot <a id="godsav5"></a>
 
 
@@ -2128,7 +2211,7 @@ plot  =  vis_des.diff_GO_plot(
 ```
 
 
-    This method generates a bar plot for Gene Ontology (GO) Differential Set Analysis (DES) of enrichment and statistical analysis.
+    This method generates a bar plot for Gene Ontology (GO) Differential Set Analysis (DSA) of enrichment and statistical analysis.
     Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
         
         Args:
@@ -2150,11 +2233,10 @@ plot  =  vis_des.diff_GO_plot(
                     
 <br />
 
-##### 5.1.3 KEGG - bar plot <a id="kdsav5"></a>
-
 
 ```
-plot  =  vis_des.diff_KEGG_plot(   
+plot  =  vis_des.set_GO_plot(  
+                        set_num=1, 
                         p_val = 0.05, 
                         test = 'FISH', 
                         adj = 'BH', 
@@ -2167,14 +2249,55 @@ plot  =  vis_des.diff_KEGG_plot(
 ```
 
 
-    This method generates a bar plot for KEGG Differential Set Analysis (DES) of enrichment and statistical analysis.
-    Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
+    This method generates a bar plot for Gene Ontology (GO) term enrichment and statistical analysis for single set included in DSA analysis.
 
         Args:
+            set (int) - number of set for visualization (1 or 2)
             p_val (float) - significance threshold for p-values. Default is 0.05
             test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
             adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
-            n (int) - maximum number of terms to display per category. Default is 25
+            n (int) - maximum number of terms to display per category. Default is 10
+            min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
+            selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'blue'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        
+                    
+<br />
+
+##### 5.1.3 KEGG - bar plot <a id="kdsav5"></a>
+
+
+```
+plot  =  vis_des.set_KEGG_plot( 
+                        set_num=1,  
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 25, 
+                        min_terms = 5,
+                        selected_parent = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'p_val')
+```
+
+
+
+    This method generates a bar plot for KEGG term enrichment and statistical analysis for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 10
             min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
             selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
             side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
@@ -2182,10 +2305,47 @@ plot  =  vis_des.diff_KEGG_plot(
             width (int) - width of the plot in inches. Default is 10
             bar_width (float / int) - width of individual bars. Default is 0.5
             stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
-    
+
         Returns:
             fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
         
+                    
+<br />
+
+
+```
+plot  =  vis_des.set_KEGG_plot( 
+                        set_num=1,  
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 25, 
+                        min_terms = 5,
+                        selected_parent = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'p_val')
+```
+
+
+    This method generates a bar plot for KEGG term enrichment and statistical analysis for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 10
+            min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
+            selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'orange'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
                     
 <br />
 
@@ -2206,7 +2366,7 @@ plot  =  vis_des.diff_REACTOME_plot(
 ```
 
 
-    This method generates a bar plot for Reactome Differential Set Analysis (DES) of enrichment and statistical analysis.
+    This method generates a bar plot for Reactome Differential Set Analysis (DSA) of enrichment and statistical analysis.
     Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
 
         Args:
@@ -2228,6 +2388,45 @@ plot  =  vis_des.diff_REACTOME_plot(
                     
 <br />
 
+```
+plot  =  vis_des.set_REACTOME_plot(   
+                        set_num=1,
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 25, 
+                        min_terms = 5,
+                        selected_parent = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'p_val')
+```
+
+
+
+    This method generates a bar plot for Reactome term enrichment and statistical analysis for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 10
+            min_terms (int) - minimum number of child terms required for a parent term to be included. Default is 5
+            selected_parent (list) - list of specific parent terms to include in the plot. If empty, all parent terms are included. Default is []
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'silver'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        
+                    
+<br />
+
+
 ##### 5.1.5 Specificity - bar plot <a id="sdsav5"></a>
 
 
@@ -2245,7 +2444,7 @@ plot  =  vis_des.diff_SPECIFICITY_plot(
 ```
 
 
-    This method generates a bar plot for tissue specificity [Human Protein Atlas (HPA)] Differential Set Analysis (DES) of enrichment and statistical analysis.
+    This method generates a bar plot for tissue specificity [Human Protein Atlas (HPA)] Differential Set Analysis (DSA) of enrichment and statistical analysis.
     Results for set1 are displayed on the left side of the graph, while results for set2 are shown on the right side.
     
         Args:
@@ -2265,11 +2464,52 @@ plot  =  vis_des.diff_SPECIFICITY_plot(
                     
 <br />
 
+
+```
+plot  =  vis_des.set_SPECIFICITY_plot(
+                        set_num=1,   
+                        p_val = 0.05, 
+                        test = 'FISH', 
+                        adj = 'BH', 
+                        n = 5, 
+                        min_terms = 1,
+                        selected_set = [],
+                        width = 10, 
+                        bar_width = 0.5, 
+                        stat = 'p_val')
+```
+
+
+
+
+    This method generates a bar plot for tissue specificity [Human Protein Atlas (HPA)] enrichment and statistical analysis for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
+            adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
+            n (int) - maximum number of terms to display per category. Default is 5
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'bisque'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+            stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
+
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+
+
+                    
+<br />
+
+
 ##### 5.1.6 Human Diseases - bar plot <a id="hdsav5"></a>
 
 
 ```
-plot  =  vis.DISEASES_plot(   
+plot  =  vis_des.set_DISEASES_plot(
+                set_num=1,   
                 p_val = 0.05, 
                 test = 'FISH', 
                 adj = 'BH', 
@@ -2282,9 +2522,11 @@ plot  =  vis.DISEASES_plot(
 ```
 
 
-    This method generates a bar plot for Human Diseases enrichment and statistical analysis.
+
+    This method generates a bar plot for Human Diseases enrichment and statistical analysis for single set included in DSA analysis.
 
         Args:
+            set (int) - number of set for visualization (1 or 2)
             p_val (float) - significance threshold for p-values. Default is 0.05
             test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
             adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
@@ -2294,7 +2536,7 @@ plot  =  vis.DISEASES_plot(
             width (int) - width of the plot in inches. Default is 10
             bar_width (float / int) - width of individual bars. Default is 0.5
             stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
-    
+
         Returns:
             fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
         
@@ -2306,7 +2548,8 @@ plot  =  vis.DISEASES_plot(
 
 
 ```
-plot  =  vis.ViMIC_plot(   
+plot  =  vis_des.set_ViMIC_plot(  
+                set_num=1, 
                 p_val = 0.05, 
                 test = 'FISH', 
                 adj = 'BH', 
@@ -2319,9 +2562,11 @@ plot  =  vis.ViMIC_plot(
 ```
 
 
-    This method generates a bar plot for Viral Diseases (ViMIC) enrichment and statistical analysis.
+
+    This method generates a bar plot for Viral Diseases (ViMIC) enrichment and statistical analysis for single set included in DSA analysis.
 
         Args:
+            set (int) - number of set for visualization (1 or 2)
             p_val (float) - significance threshold for p-values. Default is 0.05
             test (str) - statistical test to use ('FISH' - Fisher's Exact Test or 'BIN' - binomial test). Default is 'FISH'
             adj (str) - method for p-value adjustment ('BH' - Benjamini-Hochberg, 'BF' - Benjamini-Hochberg). Default is 'BH'
@@ -2331,7 +2576,7 @@ plot  =  vis.ViMIC_plot(
             width (int) - width of the plot in inches. Default is 10
             bar_width (float / int) - width of individual bars. Default is 0.5
             stat (str) - statistic to use for the x-axis ('p_val', 'n', or 'perc'). Default is 'p_val'
-    
+
         Returns:
             fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
         
@@ -2344,7 +2589,7 @@ plot  =  vis.ViMIC_plot(
 
 
 ```
-plot  =  vis.GOPa_network_create( 
+plot  =  vis_des.diff_GOPa_network_create( 
                             data_set = 'GO-TERM', 
                             genes_inc = 10, 
                             gene_int = True, 
@@ -2357,7 +2602,8 @@ plot  =  vis.GOPa_network_create(
 ```
 
 
-    This method creates a network graph for Gene Ontology (GO) or pathway analysis.
+ 
+    This method creates a network graph for Gene Ontology (GO) or pathway analysis, extended by info from DSA analysis.
 
         Args:
             data_set (str) - type of data set to use for the network ['GO-TERM', 'KEGG', 'REACTOME']. Default is 'GO-TERM'
@@ -2369,9 +2615,49 @@ plot  =  vis.GOPa_network_create(
             include_childrend (bool) - whether to include children terms as nodes in the network. Default is True
             selected_parents (list) - specific parent terms to include in the network. If empty, all parents are considered. Default is []
             selected_genes (list) - specific genes to include in the network. If empty, all genes are considered. Default is []
-     
+
         Returns:
             fig (networkx.Graph) - NetworkX Graph object representing the GO or pathway network
+        
+        
+                    
+<br />
+
+
+```
+plot  =  vis_des.set_GOPa_network_create( 
+                            data_set = 'GO-TERM', 
+                            set_num=1,
+                            genes_inc = 10, 
+                            gene_int = True, 
+                            genes_only = True, 
+                            min_con = 2, 
+                            children_con = False,
+                            include_childrend = True,
+                            selected_parents = [],
+                            selected_genes = [])
+```
+
+
+ 
+
+    This method creates a network graph for Gene Ontology (GO) or pathway analysis for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            data_set (str) - type of data set to use for the network ['GO-TERM', 'KEGG', 'REACTOME']. Default is 'GO-TERM'
+            genes_inc (int) - number of top genes to include in the network based on their occurrence. Default is 10
+            gene_int (bool) - whether to include gene-gene interactions in the network. Default is True
+            genes_only (bool) - whether to restrict the network to only include selected genes and their connections. Default is True
+            min_con (int) - minimum number of connections required for a GO term or pathway to be included in the network. Default is 2.
+            children_con (bool) - whether to include child connections in the network. Default is False
+            include_childrend (bool) - whether to include children terms as nodes in the network. Default is True
+            selected_parents (list) - specific parent terms to include in the network. If empty, all parents are considered. Default is []
+            selected_genes (list) - specific genes to include in the network. If empty, all genes are considered. Default is []
+
+        Returns:
+            fig (networkx.Graph) - NetworkX Graph object representing the GO or pathway network
+        
         
                     
 <br />
@@ -2380,18 +2666,38 @@ plot  =  vis.GOPa_network_create(
 
 
 ```
-plot  =  vis.GI_network_create(min_con = 2)
+plot  =  vis_des.diff_GI_network_create(min_con = 2)
 ```
 
 
-    This method creates a gene or protein interaction network graph.
+    This method creates a gene or protein interaction network graph, extended by info from DSA analysis.
 
         Args:
             min_con (int) - minimum number of connections (degree) required for a gene or protein to be included in the network. Default is 2
-    
+
         Returns:
             fig (networkx.Graph) - NetworkX Graph object representing the interaction network, with nodes sized by connection count and edges colored by interaction type
         
+                    
+<br />
+
+
+
+```
+plot  =  vis_des.set_GI_network_create(
+                        set_num=1,
+                        min_con = 2)
+```
+
+
+    This method creates a gene or protein interaction network graph for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            min_con (int) - minimum number of connections (degree) required for a gene or protein to be included in the network. Default is 2
+
+        Returns:
+            fig (networkx.Graph) - NetworkX Graph object representing the interaction network, with nodes sized by connection count and edges colored by interaction type
         
                     
 <br />
@@ -2400,7 +2706,7 @@ plot  =  vis.GI_network_create(min_con = 2)
 
 
 ```
-plot  =  vis.AUTO_ML_network( 
+plot  =  vis_des.diff_AUTO_ML_network( 
                         genes_inc = 10, 
                         gene_int = True, 
                         genes_only = True, 
@@ -2412,7 +2718,8 @@ plot  =  vis.AUTO_ML_network(
 ```
 
 
-    This method creates a machine learning supported multi-layered network of gene or protein interactions using GO-TERM, KEGG, and REACTOME data.
+    This method creates a machine learning supported multi-layered network of gene or protein interactions using GO-TERM, KEGG, and REACTOME data, extended by info from DSA analysis.
+
 
         Args:
             genes_inc (int) - number of top genes to include based on interaction frequency. Default is 10
@@ -2424,20 +2731,56 @@ plot  =  vis.AUTO_ML_network(
             include_childrend (bool) - whether to include children terms as nodes in the network. Default is True
             selected_parents (list) - specific parent terms to include in the network. If empty, all parents are considered. Default is []
             selected_genes (list) - specific genes to include in the network. If empty, all genes are considered. Default is []
-     
-        Returns
-           Returns:
-               fig (networkx.Graph) - NetworkX Graph object representing the GO and pathway network
+        
+        Returns:
+            fig (networkx.Graph) - NetworkX Graph object representing the GO and pathway network
         
         
                     
 <br />
 
+
+```
+plot  =  vis_des.set_AUTO_ML_network( 
+                        set_num=1,
+                        genes_inc = 10, 
+                        gene_int = True, 
+                        genes_only = True, 
+                        min_con = 2, 
+                        children_con = False, 
+                        include_childrend = False,
+                        selected_parents = [],
+                        selected_genes = [])
+```
+
+
+    This method creates a machine learning supported multi-layered network of gene or protein interactions using GO-TERM, KEGG, and REACTOME data for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            genes_inc (int) - number of top genes to include based on interaction frequency. Default is 10
+            genes_inc (int) - number of top genes to include in the network based on their occurrence. Default is 10
+            gene_int (bool) - whether to include gene-gene interactions in the network. Default is True
+            genes_only (bool) - whether to restrict the network to only include selected genes and their connections. Default is True
+            min_con (int) - minimum number of connections required for a GO term or pathway to be included in the network. Default is 2.
+            children_con (bool) - whether to include child connections in the network. Default is False
+            include_childrend (bool) - whether to include children terms as nodes in the network. Default is True
+            selected_parents (list) - specific parent terms to include in the network. If empty, all parents are considered. Default is []
+            selected_genes (list) - specific genes to include in the network. If empty, all genes are considered. Default is []
+
+        
+        Returns:
+            fig (networkx.Graph) - NetworkX Graph object representing the GO and pathway network
+
+                    
+<br />
+
+
 ##### 5.1.11 RNAseq tissue - scatter plot <a id="rnaseq5"></a>
 
 
 ```
-plot  =  vis.gene_scatter( 
+plot  =  vis_des.diff_gene_scatter( 
                      colors = 'viridis', 
                      species = 'human', 
                      hclust = 'complete', 
@@ -2449,27 +2792,26 @@ plot  =  vis.gene_scatter(
                      selected_list = [])
 ```
 
+     Visualizes RNA-SEQ enrichment data using scatter plots with hierarchical clustering of both sets included in DSA analysis.
 
-    Visualizes RNA-SEQ enrichment data using scatter plots with hierarchical clustering.
-        
-        RNA-SEQ data including:
-           -human_tissue_expression_HPA
-           -human_tissue_expression_RNA_total_tissue
-           -human_tissue_expression_fetal_development_circular
+            RNA-SEQ data including:
+                -human_tissue_expression_HPA
+                -human_tissue_expression_RNA_total_tissue
+                -human_tissue_expression_fetal_development_circular
 
-        Args:
-            colors (str) - colormap used for scatter plot points. Default is 'viridis'
-            species (str) - determines the case formatting of tissue labels. Use 'human' for uppercase labels, or other values for title case. Default is 'human'
-            hclust (str) - hierarchical clustering method applied to reorder rows and columns. Options include 'single', 'complete', 'average', etc. Default is 'complete'
-            img_width (int / None) - width of the output image in inches. If None, the width is determined based on the number of genes. Default is None
-            img_high (int / None) - height of the output image in inches. If None, the height is determined based on the number of tissues. Default is None
-            label_size (int / None) - font size for axis labels and tick marks. Calculated dynamically if None. Default is None
-            x_lab (str) - label for the x-axis. Default is 'Genes'
-            legend_lab (str,) - label for the color bar legend. Default is 'log(TPM + 1)'
-            selected_list (list) - list of specific genes to include in the visualization. If left empty, all genes from the dataset will be displayed. Default is []
-    
-        Returns:
-            return_dict (dict) - dictionary with dataset names as keys and their corresponding matplotlib figures as values. Each figure shows a scatter plot of the different RNAseq data
+            Args:
+                colors (str) - colormap used for scatter plot points. Default is 'viridis'
+                species (str) - determines the case formatting of tissue labels. Use 'human' for uppercase labels, or other values for title case. Default is 'human'
+                hclust (str) - hierarchical clustering method applied to reorder rows and columns. Options include 'single', 'complete', 'average', etc. Default is 'complete'
+                img_width (int / None) - width of the output image in inches. If None, the width is determined based on the number of genes. Default is None
+                img_high (int / None) - height of the output image in inches. If None, the height is determined based on the number of tissues. Default is None
+                label_size (int / None) - font size for axis labels and tick marks. Calculated dynamically if None. Default is None
+                x_lab (str) - label for the x-axis. Default is 'Genes'
+                legend_lab (str,) - label for the color bar legend. Default is 'log(TPM + 1)'
+                selected_list (list) - list of specific genes to include in the visualization. If left empty, all genes from the dataset will be displayed. Default is []
+
+            Returns:
+                return_dict (dict) - dictionary with dataset names as keys and their corresponding matplotlib figures as values. Each figure shows a scatter plot of the different RNAseq data
         
         
         
@@ -2477,9 +2819,80 @@ plot  =  vis.gene_scatter(
 <br />
 
 
+```
+plot  =  vis_des.set_gene_scatter( 
+                     set_num=1,
+                     colors = 'viridis', 
+                     species = 'human', 
+                     hclust = 'complete', 
+                     img_width = None, 
+                     img_high = None, 
+                     label_size = None, 
+                     x_lab = 'Genes', 
+                     legend_lab = 'log(TPM + 1)',
+                     selected_list = [])
+```
+
+    Visualizes RNA-SEQ enrichment data using scatter plots with hierarchical clustering for single set included in DSA analysis.
+
+            RNA-SEQ data including:
+                -human_tissue_expression_HPA
+                -human_tissue_expression_RNA_total_tissue
+                -human_tissue_expression_fetal_development_circular
+
+            Args:
+                set (int) - number of set for visualization (1 or 2)
+                colors (str) - colormap used for scatter plot points. Default is 'viridis'
+                species (str) - determines the case formatting of tissue labels. Use 'human' for uppercase labels, or other values for title case. Default is 'human'
+                hclust (str) - hierarchical clustering method applied to reorder rows and columns. Options include 'single', 'complete', 'average', etc. Default is 'complete'
+                img_width (int / None) - width of the output image in inches. If None, the width is determined based on the number of genes. Default is None
+                img_high (int / None) - height of the output image in inches. If None, the height is determined based on the number of tissues. Default is None
+                label_size (int / None) - font size for axis labels and tick marks. Calculated dynamically if None. Default is None
+                x_lab (str) - label for the x-axis. Default is 'Genes'
+                legend_lab (str,) - label for the color bar legend. Default is 'log(TPM + 1)'
+                selected_list (list) - list of specific genes to include in the visualization. If left empty, all genes from the dataset will be displayed. Default is []
+
+            Returns:
+                return_dict (dict) - dictionary with dataset names as keys and their corresponding matplotlib figures as values. Each figure shows a scatter plot of the different RNAseq data
+        
+                    
+<br />
 
 
-##### 5.1.12 Adjusted Terms - Heatmap <a id="rnaseq6"></a>
+
+
+##### 5.1.13 Blood markers - bar plot <a id="rnaseq66"></a>
+
+
+```
+plot  =  vis.set_blood_markers_plot(   
+                    set_num=1,
+                    n = 10, 
+                    side = 'right', 
+                    color = 'red', 
+                    width = 10, 
+                    bar_width = 0.5)
+```
+
+
+    This method generates a bar plot for Blood Markers enrichment analysis for single set included in DSA analysis.
+
+        Args:
+            set (int) - number of set for visualization (1 or 2)
+            p_val (float) - significance threshold for p-values. Default is 0.05
+            n (int) - maximum number of terms to display per category. Default is 5
+            side (str) - side on which the bars are displayed ('left' or 'right'). Default is 'right'
+            color (str) - color of the bars in the plot. Default is 'red'
+            width (int) - width of the plot in inches. Default is 10
+            bar_width (float / int) - width of individual bars. Default is 0.5
+
+        Returns:
+            fig (matplotlib.figure.Figure) - matplotlib Figure object containing the bar plots
+        
+                    
+<br />
+
+##### 5.1.13 Adjusted Terms - Heatmap <a id="rnaseq6"></a>
 
 This module allows manual adjustment of enrichment or over-representation results and visualizes differences between term sets using a heatmap.
 
@@ -2505,6 +2918,8 @@ This module allows manual adjustment of enrichment or over-representation result
 
 
 ```
+from gedspy import enrichment_heatmap
+
 figure = enrichment_heatmap(data = data, 
                        stat_col = stat_col, 
                        term_col = term_col,
@@ -3331,7 +3746,7 @@ enr.select_features(gene_list)
 
 ```
 # get selected genes/proteins info
-gene_info = enr.get_gene_info
+gene_info = enr.get_gene_info()
 ```
 
 <p align="center">
@@ -3348,7 +3763,7 @@ gene_info = enr.get_gene_info
 # Human protein Atlas data
 enr.enriche_specificiti()
 
-HPA = enr.get_HPA
+HPA = enr.get_HPA()
 ```
 
 
@@ -3363,7 +3778,7 @@ HPA = enr.get_HPA
 # KEGG data
 enr.enriche_KEGG()
 
-KEGG = enr.get_KEGG
+KEGG = enr.get_KEGG()
 ```
 
 <p align="center">
@@ -3377,7 +3792,7 @@ KEGG = enr.get_KEGG
 # GO-TERM data
 enr.enriche_GOTERM()
 
-GOTERM = enr.get_GO_TERM
+GOTERM = enr.get_GO_TERM()
 ```
 
 <p align="center">
@@ -3391,7 +3806,7 @@ GOTERM = enr.get_GO_TERM
 # Reactome data
 enr.enriche_REACTOME()
 
-REACTOME = enr.get_REACTOME
+REACTOME = enr.get_REACTOME()
 ```
 
 
@@ -3406,7 +3821,7 @@ REACTOME = enr.get_REACTOME
 # Human Diseases data
 enr.enriche_DISEASES()
 
-DISEASES = enr.get_DISEASES
+DISEASES = enr.get_DISEASES()
 ```
 
 <p align="center">
@@ -3420,7 +3835,7 @@ DISEASES = enr.get_DISEASES
 # ViMic data
 enr.enriche_ViMIC()
 
-ViMIC = enr.get_ViMIC
+ViMIC = enr.get_ViMIC()
 ```
 
 
@@ -3435,7 +3850,7 @@ ViMIC = enr.get_ViMIC
 # IntAct data
 enr.enriche_IntAct()
 
-IntAct = enr.get_IntAct
+IntAct = enr.get_IntAct()
 ```
 
 
@@ -3450,7 +3865,7 @@ IntAct = enr.get_IntAct
 # STRING data
 enr.enriche_STRING()
 
-STRING = enr.get_STRING
+STRING = enr.get_STRING()
 ```
 
 
@@ -3465,7 +3880,7 @@ STRING = enr.get_STRING
 # CellCon data
 enr.enriche_CellCon()
 
-CellConnections = enr.get_CellCon
+CellConnections = enr.get_CellCon()
 ```
 
 <p align="center">
@@ -3479,7 +3894,7 @@ CellConnections = enr.get_CellCon
 # RNAseq data
 enr.enriche_RNA_SEQ()
 
-RNASEQ = enr.get_RNA_SEQ   
+RNASEQ = enr.get_RNA_SEQ()
 ```
 
 <p align="center">
@@ -3496,7 +3911,7 @@ enr.full_enrichment()
 
 
 # get_results can be used for return all data enriched separately like above ^^^
-results = enr.get_results
+results = enr.get_results()
 ```
 
 <p align="center">
@@ -3510,7 +3925,7 @@ results = enr.get_results
 # import the Analysis class from the Enrichment module
 from gedspy import Analysis
 
-# create instance of the Analysis class with results from get_results
+# create instance of the Analysis class with results from get_results()
 ans = Analysis(results)
 
 # adjustment of analysis parameters
@@ -3541,7 +3956,7 @@ ans.networks_metadata
 # GO-TERM
 ans.GO_overrepresentation()
 
-go = ans.get_GO_statistics
+go = ans.get_GO_statistics()
 ```
 
 <p align="center">
@@ -3555,7 +3970,7 @@ go = ans.get_GO_statistics
 # KEGG
 ans.KEGG_overrepresentation()
 
-kegg = ans.get_KEGG_statistics
+kegg = ans.get_KEGG_statistics()
 ```
 
 <p align="center">
@@ -3570,7 +3985,7 @@ kegg = ans.get_KEGG_statistics
 # Reactome
 ans.REACTOME_overrepresentation()
 
-reactome = ans.get_REACTOME_statistics
+reactome = ans.get_REACTOME_statistics()
 ```
 
 <p align="center">
@@ -3585,7 +4000,7 @@ reactome = ans.get_REACTOME_statistics
 # ViMic
 ans.ViMIC_overrepresentation()
 
-vimic = ans.get_ViMIC_statistics
+vimic = ans.get_ViMIC_statistics()
 ```
 
 <p align="center">
@@ -3600,7 +4015,7 @@ vimic = ans.get_ViMIC_statistics
 # Human diseases
 ans.DISEASES_overrepresentation()
 
-diseases = ans.get_DISEASE_statistics
+diseases = ans.get_DISEASE_statistics()
 ```
 
 <p align="center">
@@ -3615,7 +4030,7 @@ diseases = ans.get_DISEASE_statistics
 # Specificity (HPA)
 ans.features_specificity()
 
-spec = ans.get_specificity_statistics
+spec = ans.get_specificity_statistics()
 ```
 
 <p align="center">
@@ -3631,7 +4046,7 @@ spec = ans.get_specificity_statistics
 # Interactions (STRING/IntAct)
 ans.gene_interaction()
 
-inter = ans.get_features_interactions_statistics
+inter = ans.get_features_interactions_statistics()
 ```
 
 <p align="center">
@@ -3646,7 +4061,7 @@ inter = ans.get_features_interactions_statistics
 # Reactome paths network
 ans.REACTOME_network()
 
-reactome_net = ans.get_REACTOME_network
+reactome_net = ans.get_REACTOME_network()
 ```
 
 <p align="center">
@@ -3661,7 +4076,7 @@ reactome_net = ans.get_REACTOME_network
 # KEGG paths network
 ans.KEGG_network()
 
-kegg_net = ans.get_KEGG_network
+kegg_net = ans.get_KEGG_network()
 ```
 
 <p align="center">
@@ -3676,7 +4091,7 @@ kegg_net = ans.get_KEGG_network
 # GO-TERM terms network
 ans.GO_network()
 
-go_net = ans.get_GO_network
+go_net = ans.get_GO_network()
 ```
 
 <p align="center">
@@ -3695,7 +4110,7 @@ ans.full_analysis()
 
 
 # get_results can be used for return all data enriched separately like above ^^^
-results2 = ans.get_full_results
+results2 = ans.get_full_results()
 ```
 
 <p align="center">
@@ -3712,7 +4127,7 @@ from gedspy import Visualization
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
 
-# create instance of the Visualization class with results from get_full_results
+# create instance of the Visualization class with results from get_full_results()
 vis = Visualization(results2)
 ```
 
@@ -3876,7 +4291,7 @@ graph.edit()
 
 ```
 # blood markers
-plot  =  vis.blod_markers_plot()
+plot  =  vis.blood_markers_plot()
 
 graph = JVG.MplEditor(plot)
 graph.edit()
@@ -4103,7 +4518,7 @@ enr.select_features(gene_list)
 enr.full_enrichment()
 
 # get results for first set
-results1 = enr.get_results
+results1 = enr.get_results()
 
     
 # create instance of the Analysis class
@@ -4120,7 +4535,7 @@ ans.set_correction(correction = None)
 ans.full_analysis()
 
 # get full results for first set
-results1 = ans.get_full_results
+results1 = ans.get_full_results()
 ```
 
 
@@ -4139,7 +4554,7 @@ enr.select_features(gene_list2)
 enr.full_enrichment()
 
 # get results for second set
-results2 = enr.get_results
+results2 = enr.get_results()
 
 
 # create instance of the Analysis class
@@ -4157,7 +4572,7 @@ ans.set_correction(correction = None)
 ans.full_analysis()
 
 # get full results for second set
-results2 = ans.get_full_results
+results2 = ans.get_full_results()
 ```
 
 
@@ -4170,7 +4585,7 @@ results2 = ans.get_full_results
 # import the DSA class from the Enrichment module
 from gedspy import DSA
 
-# create instance of the DSA class with results from get_full_results for set1 and set2
+# create instance of the DSA class with results from get_full_results() for set1 and set2
 dsa_compare = DSA(results1, results2)
 ```
 
@@ -4186,7 +4601,7 @@ dsa_compare = DSA(results1, results2)
 # GO-TERM DSA
 dsa_compare.GO_diff()
 
-go = dsa_compare.get_GO_diff
+go = dsa_compare.get_GO_diff()
 ```
 
 <p align="center">
@@ -4202,7 +4617,7 @@ go = dsa_compare.get_GO_diff
 # KEGG DSA
 dsa_compare.KEGG_diff()
 
-kegg = dsa_compare.get_KEGG_diff
+kegg = dsa_compare.get_KEGG_diff()
 ```
 
 <p align="center">
@@ -4218,7 +4633,7 @@ kegg = dsa_compare.get_KEGG_diff
 # Reactome DSA
 dsa_compare.REACTOME_diff()
 
-reactome = dsa_compare.get_REACTOME_diff
+reactome = dsa_compare.get_REACTOME_diff()
 ```
 
 <p align="center">
@@ -4234,7 +4649,7 @@ reactome = dsa_compare.get_REACTOME_diff
 # Specificity (HPA) DSA
 dsa_compare.spec_diff()
 
-hpa = dsa_compare.get_specificity_diff
+hpa = dsa_compare.get_specificity_diff()
 ```
 
 <p align="center">
@@ -4250,7 +4665,7 @@ hpa = dsa_compare.get_specificity_diff
 # Gene interactions DSA
 dsa_compare.gi_diff()
 
-GI = dsa_compare.get_GI_diff
+GI = dsa_compare.get_GI_diff()
 ```
 
 <p align="center">
@@ -4266,7 +4681,7 @@ GI = dsa_compare.get_GI_diff
 # Networks DSA
 dsa_compare.network_diff()
 
-networks = dsa_compare.get_networks_diff
+networks = dsa_compare.get_networks_diff()
 ```
 
 <p align="center">
@@ -4281,7 +4696,7 @@ networks = dsa_compare.get_networks_diff
 # Inter Terms DSA
 dsa_compare.inter_processes()
 
-inter_terms = dsa_compare.get_inter_terms
+inter_terms = dsa_compare.get_inter_terms()
 ```
 
 <p align="center">
@@ -4296,7 +4711,7 @@ inter_terms = dsa_compare.get_inter_terms
 # Connections DSA
 dsa_compare.connections_diff()
 
-connections = dsa_compare.get_set_to_set_con
+connections = dsa_compare.get_set_to_set_con()
 ```
 
 <p align="center">
@@ -4314,7 +4729,7 @@ dsa_compare.full_analysis()
 
 
 # get_results can be used for return all DSA data like above ^^^
-results3 = dsa_compare.get_results
+results3 = dsa_compare.get_results()
 ```
 
 <p align="center">
@@ -4326,14 +4741,14 @@ results3 = dsa_compare.get_results
 <br />
 
 ```
-# import the VisualizationDES class from the Enrichment module
-from gedspy import VisualizationDES
+# import the VisualizationDSA class from the Enrichment module
+from gedspy import VisualizationDSA
 
 # load library JVG - display and adjustment Networks and Bar plots
 from JVG import JVG
 
-# create instance of the VisualizationDES class with results from get_results for set1 and set2 DSA results
-vis_des = VisualizationDES(results3)
+# create instance of the VisualizationDSA class with results from get_results for set1 and set2 DSA results
+vis_des = VisualizationDSA(results3)
 ```
 
 

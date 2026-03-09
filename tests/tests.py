@@ -9,7 +9,7 @@ from gedspy import (
     GetData,
     GetDataRaw,
     Visualization,
-    VisualizationDES,
+    VisualizationDSA,
 )
 
 
@@ -736,7 +736,7 @@ def test_AnVis():
 
     plot = None
 
-    plot = vis.blod_markers_plot()
+    plot = vis.blood_markers_plot()
 
     assert isinstance(plot, figure.Figure)
 
@@ -841,7 +841,7 @@ def test_AnVis():
     del enr
 
 
-def AnDESVis_tests():
+def AnDSAVis_tests():
 
     # DSA
     errored = []
@@ -1167,7 +1167,7 @@ def AnDESVis_tests():
 
     results3 = dsa_compare.get_results()
 
-    vis_des = VisualizationDES(results3)
+    vis_des = VisualizationDSA(results3)
 
     plot = None
 

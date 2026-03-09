@@ -1195,10 +1195,10 @@ def AnVis_tests():
 
     plot = None
 
-    plot = vis.blod_markers_plot()
+    plot = vis.blood_markers_plot()
 
     if not isinstance(plot, figure.Figure):
-        errored.append("blod_markers_plot")
+        errored.append("blood_markers_plot")
 
     del plot
 
@@ -1322,7 +1322,7 @@ def AnVis_tests():
     return errored
 
 
-def AnDESVis_tests():
+def AnDSAVis_tests():
 
     # DSA
     errored = []
@@ -1680,9 +1680,9 @@ def AnDESVis_tests():
 
     results3 = dsa_compare.get_results()
 
-    from gedspy import VisualizationDES
+    from gedspy import VisualizationDSA
 
-    vis_des = VisualizationDES(results3)
+    vis_des = VisualizationDSA(results3)
 
     from matplotlib import figure
 
@@ -1939,9 +1939,9 @@ def testing_mode():
 
     avis = AnVis_tests()
 
-    print("\nTesting - VisualizationDES...")
+    print("\nTesting - VisualizationDSA...")
 
-    adevis = AnDESVis_tests()
+    adevis = AnDSAVis_tests()
 
     full = (
         data_prepare_errors
