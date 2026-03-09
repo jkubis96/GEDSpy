@@ -2883,7 +2883,7 @@ class Analysis(Enrichment):
                         N=self.occ["Genes_Homo_sapiens"],
                         K=len(set(df["id"][df["3rd"] == c])),
                         n=len(set(self.input_data["gene_info"]["sid"])),
-                        k=len(set(kegg["id"][kegg["3rd"] == c])),
+                        k=len(set(kegg["id"][(kegg["3rd"] == c) & (kegg["2nd"] == i)])),
                     )
 
                     kegg_out["2nd"].append(i)
@@ -3033,7 +3033,14 @@ class Analysis(Enrichment):
                         N=self.occ["Genes_Homo_sapiens"],
                         K=len(set(df["id"][df["pathway"] == c])),
                         n=len(set(self.input_data["gene_info"]["sid"])),
-                        k=len(set(reactome["id"][reactome["pathway"] == c])),
+                        k=len(
+                            set(
+                                reactome["id"][
+                                    (reactome["top_level_pathway"] == i)
+                                    & (reactome["pathway"] == c)
+                                ]
+                            )
+                        ),
                     )
 
                     reactome_out["top_level_pathway"].append(i)
@@ -6245,10 +6252,28 @@ class DSA(PathMetadata):
             `self.set_2['statistics']['specificity']`.
         """
 
-        t1 = pd.DataFrame(self.set_1["statistics"]["specificity"])
-        t1["set"] = "s1"
-        t2 = pd.DataFrame(self.set_2["statistics"]["specificity"])
-        t2["set"] = "s2"
+        t1_list = []
+        t1 = self.set_1["statistics"]["specificity"]
+
+        for i in t1.keys():
+            tmp1 = pd.DataFrame(t1[i])
+            tmp1["set"] = "s1"
+            tmp1["data"] = i
+            t1_list.append(tmp1)
+
+        t1 = pd.concat(t1_list)
+
+        t2_list = []
+
+        t2 = self.set_2["statistics"]["specificity"]
+
+        for i in t2.keys():
+            tmp2 = pd.DataFrame(t2[i])
+            tmp2["set"] = "s2"
+            tmp2["data"] = i
+            t2_list.append(tmp2)
+
+        t2 = pd.concat(t2_list)
 
         df = pd.concat([t1, t2]).reset_index(drop=True)
 
