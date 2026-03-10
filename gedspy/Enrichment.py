@@ -7722,7 +7722,7 @@ class DSA(PathMetadata):
         return results
 
 
-class VisualizationDES(Visualization):
+class VisualizationDSA(Visualization):
 
     def __init__(self, input_data: dict):
 
