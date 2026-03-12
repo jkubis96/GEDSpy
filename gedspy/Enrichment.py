@@ -2609,6 +2609,17 @@ class Analysis(Enrichment):
             species = self.input_data["species"]["species_study"]
             species = ", ".join(map(lambda x: f"'{x}'", species))
 
+            species_occ = self.input_data["species"]["species_study"]
+
+            if "Homo sapiens" in species_occ:
+                species_occ_str = "Genes_Homo_sapiens"
+
+            elif "Mus musculus" in species_occ:
+                species_occ_str = "Genes_Mus_musculus"
+
+            elif "Rattus norvegicus" in species_occ:
+                species_occ_str = "Genes_Rattus_norvegicus"
+
             for i in tqdm(set(results["parent"])):
 
                 if i != "Core group":
@@ -2621,7 +2632,7 @@ class Analysis(Enrichment):
                     df = pd.read_sql_query(query, conn).applymap(self.deserialize_data)
 
                     res = self.run_enrichment_tests(
-                        N=self.occ["Genes_Homo_sapiens"],
+                        N=self.occ[species_occ_str],
                         K=len(set(df["id"])),
                         n=len(set(self.input_data["gene_info"]["sid"])),
                         k=len(set(go3["id"][go3["GO_id"] == i])),
@@ -2638,7 +2649,7 @@ class Analysis(Enrichment):
                         )
 
                         res2 = self.run_enrichment_tests(
-                            N=self.occ["Genes_Homo_sapiens"],
+                            N=self.occ[species_occ_str],
                             K=len(set(df["id"][df["GO_id"] == c])),
                             n=len(set(self.input_data["gene_info"]["sid"])),
                             k=len(set(go3["id"][go3["GO_id"] == c])),
@@ -2683,7 +2694,7 @@ class Analysis(Enrichment):
                         )
 
                         res2 = self.run_enrichment_tests(
-                            N=self.occ["Genes_Homo_sapiens"],
+                            N=self.occ[species_occ_str],
                             K=len(set(df["id"][df["GO_id"] == c])),
                             n=len(set(self.input_data["gene_info"]["sid"])),
                             k=len(set(go3["id"][go3["GO_id"] == c])),
@@ -2845,6 +2856,17 @@ class Analysis(Enrichment):
                 ) as json_file:
                     self.occ = json.load(json_file)
 
+            species_occ = self.input_data["species"]["species_study"]
+
+            if "Homo sapiens" in species_occ:
+                species_occ_str = "Genes_Homo_sapiens"
+
+            elif "Mus musculus" in species_occ:
+                species_occ_str = "Genes_Mus_musculus"
+
+            elif "Rattus norvegicus" in species_occ:
+                species_occ_str = "Genes_Rattus_norvegicus"
+
             kegg_out = {}
             kegg = pd.DataFrame(self.input_data["KEGG"])
 
@@ -2871,7 +2893,7 @@ class Analysis(Enrichment):
                 df = pd.read_sql_query(query, conn).applymap(self.deserialize_data)
 
                 res = self.run_enrichment_tests(
-                    N=self.occ["Genes_Homo_sapiens"],
+                    N=self.occ[species_occ_str],
                     K=len(set(df["id"])),
                     n=len(set(self.input_data["gene_info"]["sid"])),
                     k=len(set(kegg["id"][kegg["2nd"] == i])),
@@ -2880,7 +2902,7 @@ class Analysis(Enrichment):
                 for c in set(kegg["3rd"][kegg["2nd"].isin([i])]):
 
                     res2 = self.run_enrichment_tests(
-                        N=self.occ["Genes_Homo_sapiens"],
+                        N=self.occ[species_occ_str],
                         K=len(set(df["id"][df["3rd"] == c])),
                         n=len(set(self.input_data["gene_info"]["sid"])),
                         k=len(set(kegg["id"][(kegg["3rd"] == c) & (kegg["2nd"] == i)])),
@@ -2992,6 +3014,17 @@ class Analysis(Enrichment):
                 ) as json_file:
                     self.occ = json.load(json_file)
 
+            species_occ = self.input_data["species"]["species_study"]
+
+            if "Homo sapiens" in species_occ:
+                species_occ_str = "Genes_Homo_sapiens"
+
+            elif "Mus musculus" in species_occ:
+                species_occ_str = "Genes_Mus_musculus"
+
+            elif "Rattus norvegicus" in species_occ:
+                species_occ_str = "Genes_Rattus_norvegicus"
+
             reactome_out = {}
             reactome = pd.DataFrame(self.input_data["REACTOME"])
 
@@ -3019,7 +3052,7 @@ class Analysis(Enrichment):
                 df = pd.read_sql_query(query, conn).applymap(self.deserialize_data)
 
                 res = self.run_enrichment_tests(
-                    N=self.occ["Genes_Homo_sapiens"],
+                    N=self.occ[species_occ_str],
                     K=len(set(df["id"])),
                     n=len(set(self.input_data["gene_info"]["sid"])),
                     k=len(set(reactome["id"][reactome["top_level_pathway"] == i])),
@@ -3030,7 +3063,7 @@ class Analysis(Enrichment):
                 ):
 
                     res2 = self.run_enrichment_tests(
-                        N=self.occ["Genes_Homo_sapiens"],
+                        N=self.occ[species_occ_str],
                         K=len(set(df["id"][df["pathway"] == c])),
                         n=len(set(self.input_data["gene_info"]["sid"])),
                         k=len(
@@ -3190,6 +3223,17 @@ class Analysis(Enrichment):
                 ) as json_file:
                     self.occ = json.load(json_file)
 
+            species_occ = self.input_data["species"]["species_study"]
+
+            if "Homo sapiens" in species_occ:
+                species_occ_str = "Genes_Homo_sapiens"
+
+            elif "Mus musculus" in species_occ:
+                species_occ_str = "Genes_Mus_musculus"
+
+            elif "Rattus norvegicus" in species_occ:
+                species_occ_str = "Genes_Rattus_norvegicus"
+
             diseases_out = {}
             diseases = pd.DataFrame(self.input_data["DISEASES"])
 
@@ -3209,7 +3253,7 @@ class Analysis(Enrichment):
                 df = pd.read_sql_query(query, conn).applymap(self.deserialize_data)
 
                 res = self.run_enrichment_tests(
-                    N=self.occ["Genes_Homo_sapiens"],
+                    N=self.occ[species_occ_str],
                     K=len(set(df["id"][df["disease"] == i])),
                     n=len(set(self.input_data["gene_info"]["sid"])),
                     k=len(set(diseases["id"][diseases["disease"] == i])),
@@ -3283,6 +3327,17 @@ class Analysis(Enrichment):
                 ) as json_file:
                     self.occ = json.load(json_file)
 
+            species_occ = self.input_data["species"]["species_study"]
+
+            if "Homo sapiens" in species_occ:
+                species_occ_str = "Genes_Homo_sapiens"
+
+            elif "Mus musculus" in species_occ:
+                species_occ_str = "Genes_Mus_musculus"
+
+            elif "Rattus norvegicus" in species_occ:
+                species_occ_str = "Genes_Rattus_norvegicus"
+
             vimic_out = {}
             vimic = pd.DataFrame(self.input_data["ViMIC"])
 
@@ -3304,7 +3359,7 @@ class Analysis(Enrichment):
                 df = pd.read_sql_query(query, conn).applymap(self.deserialize_data)
 
                 res = self.run_enrichment_tests(
-                    N=self.occ["Genes_Homo_sapiens"],
+                    N=self.occ[species_occ_str],
                     K=len(set(df["id"][df["virus"] == i])),
                     n=len(set(self.input_data["gene_info"]["sid"])),
                     k=len(set(vimic["id"][vimic["virus"] == i])),
@@ -3379,6 +3434,17 @@ class Analysis(Enrichment):
                 ) as json_file:
                     self.occ = json.load(json_file)
 
+            species_occ = self.input_data["species"]["species_study"]
+
+            if "Homo sapiens" in species_occ:
+                species_occ_str = "Genes_Homo_sapiens"
+
+            elif "Mus musculus" in species_occ:
+                species_occ_str = "Genes_Mus_musculus"
+
+            elif "Rattus norvegicus" in species_occ:
+                species_occ_str = "Genes_Rattus_norvegicus"
+
             HPA_out = {}
 
             HPA = self.input_data["HPA"]
@@ -3414,7 +3480,7 @@ class Analysis(Enrichment):
                         )
 
                         res = self.run_enrichment_tests(
-                            N=self.occ["Genes_Homo_sapiens"],
+                            N=self.occ[species_occ_str],
                             K=len(set(df["id"][df[col_name] == i])),
                             n=len(set(self.input_data["gene_info"]["sid"])),
                             k=len(set(tmp["id"][tmp[col_name] == i])),
