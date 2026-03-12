@@ -6248,7 +6248,7 @@ class DSA(PathMetadata):
 
         df = pd.concat([t1, t2]).reset_index(drop=True)
 
-        return t2
+        return df
 
     def get_full_REACTOME(self):
         """
@@ -6267,7 +6267,7 @@ class DSA(PathMetadata):
 
         df = pd.concat([t1, t2]).reset_index(drop=True)
 
-        return t2
+        return df
 
     def get_full_DISEASES(self):
         """
@@ -6286,7 +6286,7 @@ class DSA(PathMetadata):
 
         df = pd.concat([t1, t2]).reset_index(drop=True)
 
-        return t2
+        return df
 
     def get_full_ViMIC(self):
         """
@@ -6305,7 +6305,7 @@ class DSA(PathMetadata):
 
         df = pd.concat([t1, t2]).reset_index(drop=True)
 
-        return t2
+        return df
 
     def get_full_SPECIFICITY(self):
         """
@@ -6342,7 +6342,7 @@ class DSA(PathMetadata):
 
         df = pd.concat([t1, t2]).reset_index(drop=True)
 
-        return t2
+        return df
 
     def get_GO_diff(self):
         """
