@@ -2954,7 +2954,7 @@ figure = enrichment_heatmap(data = data,
         fig_size (tuple) - figure size in inches (width, height).
         font_size (int) - base font size used in the plot.
         scale (bool) - default: False
-            If True, values are scaled to the range [0, 1] using MinMaxScaler.
+            If True, values are scaled to the range [0, 1].
         clustering (str | None) - default 'ward'
             Hierarchical clustering method (e.g. 'ward', 'average', 'complete').
             If None, clustering is disabled.

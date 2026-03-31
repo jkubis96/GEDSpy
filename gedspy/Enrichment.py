@@ -16,7 +16,6 @@ from matplotlib import rc
 from matplotlib.gridspec import GridSpec
 from scipy.cluster.hierarchy import dendrogram, leaves_list, linkage
 from scipy.stats import binomtest, fisher_exact
-from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 
 rc("svg", fonttype="path")
@@ -11875,7 +11874,7 @@ def enrichment_heatmap(
         fig_size (tuple) - figure size in inches (width, height).
         font_size (int) - base font size used in the plot.
         scale (bool) - default: False
-            If True, values are scaled to the range [0, 1] using MinMaxScaler.
+            If True, values are scaled to the range [0, 1].
         clustering (str | None) - default 'ward'
             Hierarchical clustering method (e.g. 'ward', 'average', 'complete').
             If None, clustering is disabled.
@@ -11924,11 +11923,14 @@ def enrichment_heatmap(
 
     if scale:
         scale_label = f"scaled({scale_label})"
-        scaler = MinMaxScaler()
+        column_max = heatmap_data.max()
+
+        heatmap_data = (
+            heatmap_data.div(column_max).replace([np.inf, -np.inf], np.nan).fillna(0)
+        )
+
         heatmap_data = pd.DataFrame(
-            scaler.fit_transform(heatmap_data),
-            index=heatmap_data.index,
-            columns=heatmap_data.columns,
+            heatmap_data, index=heatmap_data.index, columns=heatmap_data.columns
         )
 
     if clustering is not None:
